@@ -10,8 +10,8 @@ document.addEventListener("DOMContentLoaded", function () {
     "network-security",
   ];
 
-  // Initialize with only the first topic completed
-  const completedQuizzes = ["application-security"];
+  // Initialize with no topics completed
+  const completedQuizzes = [];
 
   function isTopicAccessible(topicId) {
     const topicIndex = topicOrder.indexOf(topicId);
