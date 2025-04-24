@@ -7,11 +7,13 @@
     <link rel="stylesheet" href="cyberindex.css" />
     <link rel="stylesheet" href="learn.css" />
     <link rel="stylesheet" href="css/learn.css" />
+    <link rel="stylesheet" href="css/profile-dropdown.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <link rel="icon" type="image/png" href="/img/favicon.png" />
+    <link rel="stylesheet" href="css/responsive.css" />
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -37,7 +39,12 @@
         </div>
       </div>
       <nav>
-        <ul>
+        <div class="hamburger-menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <ul class="nav-links">
           <li>
             <a href="index.html" class="nav-link"
               ><i class="fas fa-home"></i> Home</a
@@ -413,10 +420,6 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="js/learn.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // No login checks needed, removed auth-related code
-      });
-    </script>
+    <script src="js/mobile-menu.js"></script>
   </body>
 </html>

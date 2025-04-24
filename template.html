@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cybersec Academy - Page Title</title>
+    <link rel="stylesheet" href="cyberindex.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="icon" type="image/png" href="/img/favicon.png" />
+
+    <!-- Page-specific CSS -->
+    <link rel="stylesheet" href="css/page-specific.css" />
+
+    <!-- Common CSS files -->
+    <link rel="stylesheet" href="css/profile-dropdown.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+    <script src="firebase-config.js"></script>
+  </head>
+  <body>
+    <!-- Visual effects -->
+    <div class="scanner-lines"></div>
+    <div class="noise-overlay"></div>
+
+    <!-- Header -->
+    <header>
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="logo-text">
+          <span class="cyber">CYBER</span><span class="sec">SEC</span>
+          <span class="academy">Academy</span>
+        </div>
+      </div>
+      <nav>
+        <div class="hamburger-menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <ul class="nav-links">
+          <li>
+            <a href="index.html" class="nav-link"
+              ><i class="fas fa-home"></i> Home</a
+            >
+          </li>
+          <li>
+            <a href="learn.html" class="nav-link"
+              ><i class="fas fa-graduation-cap"></i> Learn</a
+            >
+          </li>
+          <li>
+            <a href="about-us.html" class="nav-link"
+              ><i class="fas fa-info-circle"></i> About Us</a
+            >
+          </li>
+          <li id="auth-nav-item">
+            <a href="login.html" class="nav-link" id="login-link">
+              <i class="fas fa-user"></i> Login
+            </a>
+            <div
+              class="profile-container"
+              id="profile-container"
+              style="display: none"
+            >
+              <div class="profile-link">
+                <div class="profile-avatar" id="profile-avatar">
+                  <span id="profile-initial"></span>
+                </div>
+                <span class="profile-name" id="profile-name"></span>
+                <i class="fas fa-chevron-down dropdown-icon"></i>
+              </div>
+              <div class="profile-dropdown">
+                <a href="profile.html"
+                  ><i class="fas fa-user-circle"></i> View Profile</a
+                >
+                <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                <a href="#" class="logout-link" id="logout-btn"
+                  ><i class="fas fa-sign-out-alt"></i> Logout</a
+                >
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+      <!-- Page content goes here -->
+      <section class="page-hero">
+        <div class="container">
+          <h1>Page Title</h1>
+          <p>Page description text goes here.</p>
+        </div>
+      </section>
+
+      <section class="page-content">
+        <div class="container">
+          <!-- Your content here -->
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-container">
+        <div class="footer-logo">
+          <div class="logo-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <span class="cyber">CYBER</span><span class="sec">SEC</span>
+          <span class="academy">Academy</span>
+        </div>
+
+        <div class="footer-links">
+          <div class="link-group">
+            <h4>Platform</h4>
+            <ul>
+              <li><a href="#">Courses</a></li>
+              <li><a href="#">Labs</a></li>
+              <li><a href="#">Certifications</a></li>
+              <li><a href="#">Resources</a></li>
+            </ul>
+          </div>
+
+          <div class="link-group">
+            <h4>Company</h4>
+            <ul>
+              <li><a href="about-us.html">About Us</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Partners</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+
+          <div class="link-group">
+            <h4>Legal</h4>
+            <ul>
+              <li><a href="#">Terms</a></li>
+              <li><a href="#">Privacy</a></li>
+              <li><a href="#">Cookies</a></li>
+            </ul>
+          </div>
+
+          <div class="link-group">
+            <h4>Connect</h4>
+            <div class="social-links">
+              <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="social-link"
+                ><i class="fab fa-linkedin"></i
+              ></a>
+              <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+              <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 Cybersec Academy. All rights reserved.</p>
+        <div class="tech-badge">
+          <span><i class="fas fa-code"></i> Secure Code</span>
+          <span><i class="fas fa-lock"></i> Encrypted</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <!-- Page-specific scripts -->
+    <script src="js/page-specific.js"></script>
+
+    <!-- Common scripts -->
+    <script src="js/mobile-menu.js"></script>
+    <script src="js/auth.js"></script>
+  </body>
+</html>

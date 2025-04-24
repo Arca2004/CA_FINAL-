@@ -15,6 +15,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
     <!-- Firebase Config -->
     <script src="firebase-config.js"></script>
+    <link rel="stylesheet" href="css/responsive.css" />
     <style>
       * {
         margin: 0;
@@ -174,7 +175,7 @@
       <div class="form-container">
         <h2>Cyber Academy</h2>
         <p>Welcome to Cyber Academy</p>
-        <input type="text" id="username" placeholder="Enter Username" />
+        <input type="text" id="username" placeholder="Enter Email" />
         <input type="password" id="password" placeholder="Enter Password" />
         <p class="error-message" id="error-msg">Incorrect credentials!</p>
         <div class="options">
@@ -197,8 +198,11 @@
       document.addEventListener("DOMContentLoaded", function () {
         firebase.auth().onAuthStateChanged(function (user) {
           if (user) {
-            // User is signed in, redirect to index
-            window.location.href = "index.html";
+            // User is signed in, redirect to index (add a slight delay)
+            console.log("User detected, redirecting shortly..."); // Added for debugging
+            setTimeout(() => {
+              window.location.href = "index.html";
+            }, 100); // Small delay (100ms) to allow state propagation
           }
 
           // Check remembered user from localStorage for transition support

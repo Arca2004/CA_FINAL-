@@ -12,6 +12,7 @@
     />
     <link rel="icon" type="image/png" href="/img/favicon.png" />
     <link rel="stylesheet" href="css/profile-dropdown.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -37,7 +38,12 @@
         </div>
       </div>
       <nav>
-        <ul>
+        <div class="hamburger-menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <ul class="nav-links">
           <li>
             <a href="index.html" class="nav-link"
               ><i class="fas fa-home"></i> Home</a
@@ -352,7 +358,7 @@
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; 2025 Cybersecurity Academy. All rights reserved.</p>
+        <p>&copy; 2025 Cybersec Academy. All rights reserved.</p>
         <div class="tech-badge">
           <span><i class="fas fa-code"></i> Secure Code</span>
           <span><i class="fas fa-lock"></i> Encrypted</span>
@@ -362,5 +368,6 @@
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="js/profile.js"></script>
+    <script src="js/mobile-menu.js"></script>
   </body>
 </html>
