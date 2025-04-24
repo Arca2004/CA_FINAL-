@@ -13,6 +13,7 @@ git status
 ```
 
 This will show you:
+
 - Modified files (changes to existing files)
 - Untracked files (new files you've added)
 - Deleted files (files you've removed)
@@ -46,6 +47,7 @@ Upload your committed changes to the remote repository:
 ```bash
 git push origin master
 ```
+
 (Replace "master" with your branch name if different)
 
 ## Handling Specific Scenarios

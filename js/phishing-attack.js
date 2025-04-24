@@ -1,4 +1,63 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // Check if user is logged in and update navigation
+  const authNavItem = document.getElementById("auth-nav-item");
+
+  if (authNavItem) {
+    // Check for Firebase auth state
+    if (typeof firebase !== "undefined" && firebase.auth) {
+      firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+          // User is signed in - show profile link and logout
+          authNavItem.innerHTML = `
+            <div class="nav-dropdown">
+              <a href="user-profile.html" class="nav-link">
+                <i class="fas fa-user-shield"></i> ${
+                  user.displayName || user.email
+                }
+              </a>
+              <div class="dropdown-content">
+                <a href="user-profile.html"><i class="fas fa-id-card"></i> My Profile</a>
+                <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+              </div>
+            </div>
+          `;
+
+          // Store in localStorage for backward compatibility
+          localStorage.setItem(
+            "currentUser",
+            JSON.stringify({
+              username: user.email,
+              fullname: user.displayName || "Cyber Academy User",
+            })
+          );
+        } else {
+          // No user signed in - show login link
+          authNavItem.innerHTML = `
+            <a href="login.html" class="nav-link">
+              <i class="fas fa-user"></i> Login
+            </a>
+          `;
+        }
+      });
+    } else {
+      // Fallback for older version
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      if (currentUser) {
+        authNavItem.innerHTML = `
+          <div class="nav-dropdown">
+            <a href="user-profile.html" class="nav-link">
+              <i class="fas fa-user-shield"></i> ${currentUser.username}
+            </a>
+            <div class="dropdown-content">
+              <a href="user-profile.html"><i class="fas fa-id-card"></i> My Profile</a>
+              <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+          </div>
+        `;
+      }
+    }
+  }
+
   // Initialize variables for completed sections and quizzes
   let completedSections = [];
   let completedQuizzes = [];
@@ -566,49 +625,64 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const resetProgressBtn = document.getElementById("reset-progress");
   resetProgressBtn.addEventListener("click", function () {
-    if (
-      confirm(
-        "Are you sure you want to reset all progress? This cannot be undone."
-      )
-    ) {
-      localStorage.removeItem("phishingCompletedSections");
-      localStorage.removeItem("phishingCompletedQuizzes");
+    const confirmReset = confirm(
+      "Are you sure you want to reset your progress on this module?"
+    );
+    if (confirmReset) {
+      // Clear local storage related to this module
       completedSections = [];
       completedQuizzes = [];
-      updateProgress();
 
-      document.querySelectorAll(".complete-btn").forEach((button) => {
-        button.textContent = "Mark as Complete";
-        button.disabled = false;
+      // Update localStorage
+      localStorage.setItem(
+        "phishingCompletedSections",
+        JSON.stringify(completedSections)
+      );
+      localStorage.setItem(
+        "phishingCompletedQuizzes",
+        JSON.stringify(completedQuizzes)
+      );
+
+      // Update the UI
+      document.querySelectorAll(".target-card").forEach((card) => {
+        card.classList.remove("completed");
       });
 
-      document.querySelectorAll(".topic-quiz-btn").forEach((button) => {
-        button.textContent = "Check Answer";
-        button.classList.remove("success");
-        button.disabled = false;
+      document.querySelectorAll(".topic-quiz-btn").forEach((btn) => {
+        btn.classList.remove("success");
+        btn.disabled = false;
+        btn.textContent = "Check Answer";
+      });
+
+      document.querySelectorAll(".option").forEach((option) => {
+        option.classList.remove("selected", "correct", "incorrect");
       });
 
       document.querySelectorAll(".topic-quiz-results").forEach((result) => {
         result.style.display = "none";
       });
 
-      document.querySelectorAll(".target-card").forEach((card) => {
-        card.classList.remove("completed");
+      document.querySelectorAll(".progress-node").forEach((node) => {
+        node.classList.remove("completed");
+        if (node.getAttribute("data-topic") === "techniques") {
+          node.classList.add("active");
+        } else {
+          node.classList.add("locked");
+        }
       });
 
-      document.querySelectorAll(".option").forEach((option) => {
-        option.classList.remove("selected");
+      document.querySelectorAll(".progress-line").forEach((line) => {
+        line.classList.remove("completed");
       });
 
-      const container = document.querySelector(".container");
-      const notification = document.createElement("div");
-      notification.className = "notification";
-      notification.textContent = "Progress reset successfully!";
-      container.insertBefore(notification, container.firstChild);
+      // Reset progress bar
+      const progressBar = document.getElementById("module-progress");
+      if (progressBar) {
+        progressBar.style.width = "0%";
+      }
 
-      setTimeout(() => {
-        notification.remove();
-      }, 3000);
+      // Re-initialize topic accessibility
+      updateTopicAccessibility();
     }
   });
 
@@ -655,3 +729,27 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
+
+// Logout function
+function logout() {
+  // Clear localStorage
+  localStorage.removeItem("currentUser");
+  localStorage.removeItem("isLoggedIn");
+
+  // Sign out from Firebase if available
+  if (typeof firebase !== "undefined" && firebase.auth) {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        console.log("User signed out from Firebase");
+        window.location.href = "index.html";
+      })
+      .catch((error) => {
+        console.error("Error signing out:", error);
+      });
+  } else {
+    // Redirect to home page
+    window.location.href = "index.html";
+  }
+}
