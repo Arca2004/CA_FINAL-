@@ -1,61 +1,81 @@
 // Particles.js Configuration
 document.addEventListener("DOMContentLoaded", function () {
-  // Check if user is logged in and update navigation
+  // Elements for profile dropdown
   const authNavItem = document.getElementById("auth-nav-item");
+  const loginLink = document.getElementById("login-link");
+  const profileContainer = document.getElementById("profile-container");
+  const profileAvatar = document.getElementById("profile-avatar");
+  const profileInitial = document.getElementById("profile-initial");
+  const logoutBtn = document.getElementById("logout-btn");
 
-  if (authNavItem) {
-    // Check for Firebase auth state
-    if (typeof firebase !== "undefined" && firebase.auth) {
-      firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
-          // User is signed in - show profile link and logout
-          authNavItem.innerHTML = `
-                        <div class="nav-dropdown">
-                            <a href="user-profile.html" class="nav-link">
-                                <i class="fas fa-user-shield"></i> ${
-                                  user.displayName || user.email
-                                }
-                            </a>
-                            <div class="dropdown-content">
-                                <a href="user-profile.html"><i class="fas fa-id-card"></i> My Profile</a>
-                                <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                            </div>
-                        </div>
-                    `;
+  // Setup logout button event listener
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      logout();
+    });
+  }
 
-          // Store in localStorage for backward compatibility
-          localStorage.setItem(
-            "currentUser",
-            JSON.stringify({
-              username: user.email,
-              fullname: user.displayName || "Cyber Academy User",
-            })
-          );
+  // Function to get user initial from name or email
+  function getUserInitial(userInfo) {
+    if (!userInfo) return "?";
+
+    if (userInfo.displayName) {
+      return userInfo.displayName.charAt(0).toUpperCase();
+    } else if (userInfo.fullname) {
+      return userInfo.fullname.charAt(0).toUpperCase();
+    } else if (userInfo.email) {
+      return userInfo.email.charAt(0).toUpperCase();
+    } else if (userInfo.username) {
+      return userInfo.username.charAt(0).toUpperCase();
+    }
+
+    return "U";
+  }
+
+  // Check for Firebase auth state
+  if (typeof firebase !== "undefined" && firebase.auth) {
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        // User is signed in with Firebase
+        if (loginLink) loginLink.style.display = "none";
+        if (profileContainer) profileContainer.style.display = "block";
+        if (profileInitial) profileInitial.textContent = getUserInitial(user);
+
+        // Store in localStorage for backward compatibility
+        localStorage.setItem(
+          "currentUser",
+          JSON.stringify({
+            username: user.email,
+            fullname: user.displayName || "Cyber Academy User",
+            initial: getUserInitial(user),
+          })
+        );
+      } else {
+        // Check localStorage for backward compatibility
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        if (currentUser) {
+          if (loginLink) loginLink.style.display = "none";
+          if (profileContainer) profileContainer.style.display = "block";
+          if (profileInitial)
+            profileInitial.textContent = getUserInitial(currentUser);
         } else {
-          // No user signed in - show login link
-          authNavItem.innerHTML = `
-                        <a href="login.html" class="nav-link">
-                            <i class="fas fa-user"></i> Login
-                        </a>
-                    `;
+          if (loginLink) loginLink.style.display = "block";
+          if (profileContainer) profileContainer.style.display = "none";
         }
-      });
-    } else {
-      // Fallback for older version
-      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-      if (currentUser) {
-        authNavItem.innerHTML = `
-                    <div class="nav-dropdown">
-                        <a href="user-profile.html" class="nav-link">
-                            <i class="fas fa-user-shield"></i> ${currentUser.username}
-                        </a>
-                        <div class="dropdown-content">
-                            <a href="user-profile.html"><i class="fas fa-id-card"></i> My Profile</a>
-                            <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                        </div>
-                    </div>
-                `;
       }
+    });
+  } else {
+    // Fallback for older version
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (currentUser) {
+      if (loginLink) loginLink.style.display = "none";
+      if (profileContainer) profileContainer.style.display = "block";
+      if (profileInitial)
+        profileInitial.textContent = getUserInitial(currentUser);
+    } else {
+      if (loginLink) loginLink.style.display = "block";
+      if (profileContainer) profileContainer.style.display = "none";
     }
   }
 
