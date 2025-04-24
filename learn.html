@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Learning Hub | Cybersec Academy</title>
+    <link rel="stylesheet" href="cyberindex.css" />
+    <link rel="stylesheet" href="learn.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="icon" type="image/png" href="/img/favicon.png" />
+  </head>
+  <body>
+    <div class="scanner-lines"></div>
+    <div class="noise-overlay"></div>
+
+    <header>
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="logo-text">
+          <span class="cyber">CYBER</span><span class="sec">SEC</span>
+          <span class="academy">Academy</span>
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li>
+            <a href="index.html" class="nav-link"
+              ><i class="fas fa-home"></i> Home</a
+            >
+          </li>
+          <li>
+            <a href="learn.html" class="nav-link"
+              ><i class="fas fa-graduation-cap"></i> Learn</a
+            >
+          </li>
+          <li>
+            <a href="about-us.html" class="nav-link"
+              ><i class="fas fa-info-circle"></i> About Us</a
+            >
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section id="learn-hero">
+        <div class="hero-container">
+          <div class="particle-container">
+            <div id="particles-js"></div>
+          </div>
+
+          <div class="hero-content">
+            <div class="glitch-text">
+              <h1 class="glitch" data-text="LEARNING HUB">LEARNING HUB</h1>
+              <h2 class="sub-glitch" data-text="Master Cybersecurity">
+                Learn the fundamentals of Cybersecurity
+              </h2>
+            </div>
+
+            <p class="hero-description">
+              Our learning paths help you understand cybersecurity step by step.
+              Start with the fundamentals and gradually explore more through
+              simple, interactive modules.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="learning-paths">
+        <h2 class="section-title">
+          Learning <span class="highlight">Paths</span>
+        </h2>
+
+        <div class="tabs-container">
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="beginner">
+              <i class="fas fa-shield-alt"></i> Beginner
+            </button>
+            <button class="tab-btn" data-tab="intermediate">
+              <i class="fas fa-user-shield"></i> Intermediate
+            </button>
+            <button class="tab-btn" data-tab="advanced">
+              <i class="fas fa-shield-virus"></i> Advanced
+            </button>
+          </div>
+
+          <div class="tab-content active" id="beginner-content">
+            <div class="module-grid">
+              <div class="module-card active">
+                <div class="module-card-header">
+                  <div class="module-icon">
+                    <i class="fas fa-book"></i>
+                  </div>
+                  <div class="difficulty easy">Easy</div>
+                </div>
+                <h3>Introduction</h3>
+                <ul class="module-topics">
+                  <li><i class="fas fa-circle"></i> What is Cybersecurity?</li>
+                  <li>
+                    <i class="fas fa-circle"></i> Importance of Cybersecurity
+                  </li>
+                  <li><i class="fas fa-circle"></i> Types of Cyber Threats</li>
+                  <li><i class="fas fa-circle"></i> Best Practices</li>
+                </ul>
+                <div class="progress-bar">
+                  <div class="progress" style="width: 0%"></div>
+                </div>
+
+                <div class="module-footer">
+                  <button
+                    class="module-btn"
+                    onclick="window.location.href='attack-targets.html'"
+                  >
+                    <i class="fas fa-play-circle"></i> Start Module
+                  </button>
+                </div>
+              </div>
+
+              <div class="module-card active">
+                <div class="module-card-header">
+                  <div class="module-icon">
+                    <i class="fas fa-crosshairs"></i>
+                  </div>
+                  <div class="difficulty easy">Easy</div>
+                </div>
+                <h3>Attack Targets</h3>
+                <ul class="module-topics">
+                  <li><i class="fas fa-circle"></i>Indicators</li>
+                  <li>
+                    <i class="fas fa-circle"></i>Business and Organizations
+                  </li>
+                  <li><i class="fas fa-circle"></i>Government Entities</li>
+                  <li><i class="fas fa-circle"></i>Critical Infrastructure</li>
+                </ul>
+                <div class="progress-bar">
+                  <div class="progress" style="width: 0%"></div>
+                </div>
+                <div class="module-footer">
+                  <button
+                    class="module-btn"
+                    onclick="window.location.href='attack-targets.html'"
+                  >
+                    <i class="fas fa-play-circle"></i> Continue
+                  </button>
+                </div>
+              </div>
+
+              <div class="module-card">
+                <div class="module-card-header">
+                  <div class="module-icon">
+                    <i class="fas fa-anchor"></i>
+                  </div>
+                  <div class="difficulty medium">Medium</div>
+                </div>
+                <h3>Phishing Attacks</h3>
+                <ul class="module-topics">
+                  <li><i class="fas fa-circle"></i> Phishing Techniques</li>
+                  <li><i class="fas fa-circle"></i> Advanced Phishing Types</li>
+                  <li><i class="fas fa-circle"></i> Prevention & Security</li>
+                  <br>
+                  <li><i class=""></i> </li>
+                </ul>
+                <div class="progress-bar">
+                  <div class="progress" style="width: 0%"></div>
+                </div>
+                <div class="module-footer">
+                  <button
+                    class="module-btn"
+                    onclick="window.location.href='phishing-attack.html'"
+                  >
+                    <i class="fas fa-play-circle"></i> Start Module
+                  </button>
+                </div>
+              </div>
+
+              <div class="module-card">
+                <div class="module-card-header">
+                  <div class="module-icon">
+                    <i class="fas fa-bug"></i>
+                  </div>
+                  <div class="difficulty medium">Medium</div>
+                </div>
+                <h3>Malware Analysis</h3>
+                <ul class="module-topics">
+                  <li><i class="fas fa-circle"></i> Types of Malware</li>
+                  <li><i class="fas fa-circle"></i> Analysis Techniques</li>
+                  <li><i class="fas fa-circle"></i> Detection Methods</li>
+                  <li><i class="fas fa-circle"></i> Remediation</li>
+                </ul>
+                <div class="progress-bar">
+                  <div class="progress" style="width: 0%"></div>
+                </div>
+                <div class="module-footer">
+                  <button
+                    class="module-btn"
+                    onclick="window.location.href='malware.html'"
+                  >
+                    <i class="fas fa-play-circle"></i> Start Module
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="intermediate-content">
+            <div class="module-grid">
+              <div class="module-card locked">
+                <div class="module-card-header">
+                  <div class="module-icon">
+                    <i class="fas fa-key"></i>
+                  </div>
+                  <div class="difficulty medium">Medium</div>
+                </div>
+                <h3>Account Security</h3>
+                <ul class="module-topics">
+                  <li><i class="fas fa-lock"></i> Password Theft Prevention</li>
+                  <li><i class="fas fa-lock"></i> Account Access Security</li>
+                  <li><i class="fas fa-lock"></i> Authentication Methods</li>
+                  <li><i class="fas fa-lock"></i> Security Best Practices</li>
+                </ul>
+                <div class="module-footer">
+                  <div class="lock-message">
+                    <i class="fas fa-lock"></i> Under Development⚠️
+                  </div>
+                </div>
+              </div>
+
+              <div class="module-card locked">
+                <div class="module-card-header">
+                  <div class="module-icon">
+                    <i class="fas fa-cloud"></i>
+                  </div>
+                  <div class="difficulty medium">Medium</div>
+                </div>
+                <h3>Cloud Security</h3>
+                <ul class="module-topics">
+                  <li><i class="fas fa-lock"></i> Attacks in the Cloud</li>
+                  <li><i class="fas fa-lock"></i> Cloud Vulnerabilities</li>
+                  <li><i class="fas fa-lock"></i> Protection Strategies</li>
+                  <li><i class="fas fa-lock"></i> Cloud Best Practices</li>
+                </ul>
+                <div class="module-footer">
+                  <div class="lock-message">
+                    <i class="fas fa-lock"></i> Under Development⚠️
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="advanced-content">
+            <div class="module-grid">
+              <div class="module-card locked">
+                <div class="module-card-header">
+                  <div class="module-icon">
+                    <i class="fas fa-network-wired"></i>
+                  </div>
+                  <div class="difficulty hard">Hard</div>
+                </div>
+                <h3>Network Security</h3>
+                <ul class="module-topics">
+                  <li><i class="fas fa-lock"></i> Network Tapping</li>
+                  <li><i class="fas fa-lock"></i> Wireless Network Pirating</li>
+                  <li>
+                    <i class="fas fa-lock"></i> Advanced Network Forensics
+                  </li>
+                  <li><i class="fas fa-lock"></i> Zero Trust Architecture</li>
+                </ul>
+                <div class="module-footer">
+                  <div class="lock-message">
+                    <i class="fas fa-lock"></i> Under Development⚠️
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="learning-stats">
+        <h2 class="section-title">
+          Your Learning <span class="highlight">Journey</span>
+        </h2>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">
+              <i class="fas fa-trophy"></i>
+              <h3>Achievements</h3>
+            </div>
+            <div class="achievements">
+              <div class="achievement">
+                <div class="achievement-icon completed">
+                  <i class="fas fa-shield-alt"></i>
+                </div>
+                <span>Cybersecurity Novice</span>
+              </div>
+              <div class="achievement">
+                <div class="achievement-icon completed">
+                  <i class="fas fa-book"></i>
+                </div>
+                <span>Knowledge Seeker</span>
+              </div>
+              <div class="achievement">
+                <div class="achievement-icon">
+                  <i class="fas fa-graduation-cap"></i>
+                </div>
+                <span>Defense Specialist</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h3>CYBERSEC ACADEMY</h3>
+          <p>Next-generation cybersecurity education platform</p>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h4>Learning</h4>
+          <ul>
+            <li><a href="#">Courses</a></li>
+            <li><a href="#">Certifications</a></li>
+            <li><a href="#">Labs</a></li>
+            <li><a href="#">Challenges</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">Glossary</a></li>
+            <li><a href="#">Tools</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Cybersec Academy. All rights reserved.</p>
+        <div class="tech-badges">
+          <span>Built with:</span>
+          <i class="fab fa-html5"></i>
+          <i class="fab fa-css3-alt"></i>
+          <i class="fab fa-js"></i>
+          <span
+            id="refresh-progress"
+            style="
+              cursor: pointer;
+              margin-left: 20px;
+              font-size: 12px;
+              opacity: 0.7;
+            "
+            >Refresh Progress</span
+          >
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="learn.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // No login checks needed, removed auth-related code
+      });
+    </script>
+  </body>
+</html>

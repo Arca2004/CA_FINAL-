@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction To Cybersecurity - Cybersec Academy</title>
+    <link rel="stylesheet" href="intro-cybersec.css">
+    <link rel="stylesheet" href="cyberindex.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="/img/favicon.png">
+</head>
+<body>
+    <div class="scanner-lines"></div>
+    
+    <div class="noise-overlay"></div>
+    
+    <header>
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="logo-text">
+                <span class="cyber">CYBER</span><span class="sec">SEC</span>
+                <span class="academy">Academy</span>
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="learn.html" class="nav-link"><i class="fas fa-graduation-cap"></i> Learn</a></li>
+                <li><a href="about-us.html" class="nav-link"><i class="fas fa-info-circle"></i> About Us</a></li>
+                <li><a href="login.html" class="nav-link"><i class="fas fa-user"></i> Login</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1>Introduction to Cybersecurity</h1>
+            <p>Cybersecurity is a discipline that covers how to defend devices and services from electronic attacks by nefarious actors such as hackers, spammers, and cybercriminals.</p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="progress-container">
+            <h3>Module Progress</h3>
+            <div class="progress-bar">
+                <div class="progress" id="module-progress"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                <span>0%</span>
+                <span>0%</span>
+            </div>
+            <div class="progress-controls">
+                <button id="reset-progress" class="btn btn-danger">Reset Progress</button>
+            </div>
+        </div>
+    
+        <section class="overview">
+            <h2><i class="fas fa-info-circle"></i> Overview</h2>
+            <br>
+            <p>Cybersecurity is the practice of protecting networks, systems, and data from cyber threats. As technology evolves, attackers exploit vulnerabilities, making cybersecurity awareness essential for individuals, businesses, and organizations.</p>
+        </section>
+    
+        <h2><i class="fas fa-bullseye"></i> Key Concepts in Cybersecurity</h2>
+    
+        <div class="target-grid">
+            <!-- Subdomain: Application Security -->
+            <div class="target-card" data-target="application-security">
+                <span class="difficulty easy">Easy</span>
+                <div class="target-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h2>1. Application Security</h2>
+                <br>
+                <p>Application security involves implementing defenses in software and services to protect against threats. This includes writing secure code, designing secure architectures, and validating data inputs to minimize unauthorized access or modification.</p>
+    
+                <!-- Practical Exercise: Secure Coding -->
+                <div class="practical-exercise">
+                    <h4>Practical Exercise: Secure Coding</h4>
+                    <p>Identify vulnerabilities in the following code snippet:</p>
+                    <div class="terminal">
+                        <pre><span class="output">function login(username, password) {
+        const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
+        database.query(query, (err, result) => {
+            if (err) throw err;
+            return result;
+        });
+    }</span></pre>
+                    </div>
+                    <p><strong>Vulnerability:</strong> SQL Injection. Use parameterized queries to prevent attackers from injecting malicious SQL code.</p>
+                </div>
+    
+                <!-- Protection Measures -->
+                <h3 class="protection-heading">Protection Measures:</h3>
+                <ul class="protection-list">
+                    <li>Use secure coding practices and frameworks.</li>
+                    <li>Validate and sanitize all user inputs.</li>
+                    <li>Regularly update and patch software.</li>
+                </ul>
+    
+                <!-- Mini-Quiz -->
+                <div class="topic-quiz">
+                    <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
+                    <div class="question">
+                        <p>What is the primary risk of not validating user inputs in an application?</p>
+                        <div class="options">
+                            <div class="option" data-correct="false">Increased server load</div>
+                            <div class="option" data-correct="true">Exposure to SQL injection attacks</div>
+                            <div class="option" data-correct="false">Improved user experience</div>
+                            <div class="option" data-correct="false">Faster application performance</div>
+                        </div>
+                    </div>
+                    <div class="topic-quiz-results" style="display: none;">
+                        <p class="correct-answer" style="display: none;">✅ Correct! Unvalidated inputs can lead to SQL injection, allowing attackers to manipulate databases.</p>
+                        <p class="incorrect-answer" style="display: none;">❌ Incorrect. Try again!</p>
+                    </div>
+                    <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
+                </div>
+    
+                <!-- Progress Tracking Button -->
+                <button class="btn btn-primary complete-btn" data-target="application-security">Mark as Complete</button>
+            </div>
+    
+            <!-- Subdomain: Cloud Security -->
+            <div class="target-card" data-target="cloud-security">
+                <span class="difficulty medium">Medium</span>
+                <div class="target-icon">
+                    <i class="fas fa-cloud"></i>
+                </div>
+                <h2>2. Cloud Security</h2>
+                <br>
+                <p>Cloud security focuses on creating secure architectures and applications for organizations using cloud service providers like AWS, Google Cloud, and Azure. It involves protecting data, applications, and infrastructure in the cloud.</p>
+    
+                <!-- Practical Exercise: Cloud Misconfiguration -->
+                <div class="practical-exercise">
+                    <h4>Practical Exercise: Cloud Misconfiguration</h4>
+                    <p>Identify the misconfiguration in this AWS S3 bucket policy:</p>
+                    <div class="terminal">
+                        <pre><span class="output">{
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Principal": "*",
+                "Action": "s3:GetObject",
+                "Resource": "arn:aws:s3:::my-bucket/*"
+            }
+        ]
+    }</span></pre>
+                    </div>
+                    <p><strong>Issue:</strong> The bucket is publicly accessible. Restrict access to specific users or roles.</p>
+                </div>
+    
+                <!-- Protection Measures -->
+                <h3 class="protection-heading">Protection Measures:</h3>
+                <ul class="protection-list">
+                    <li>Encrypt data at rest and in transit.</li>
+                    <li>Use identity and access management (IAM) policies.</li>
+                    <li>Regularly audit cloud configurations.</li>
+                </ul>
+    
+                <!-- Mini-Quiz -->
+                <div class="topic-quiz">
+                    <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
+                    <div class="question">
+                        <p>What is the primary risk of a misconfigured cloud storage bucket?</p>
+                        <div class="options">
+                            <div class="option" data-correct="false">Increased storage costs</div>
+                            <div class="option" data-correct="true">Unauthorized access to sensitive data</div>
+                            <div class="option" data-correct="false">Improved data retrieval speed</div>
+                            <div class="option" data-correct="false">Reduced server performance</div>
+                        </div>
+                    </div>
+                    <div class="topic-quiz-results" style="display: none;">
+                        <p class="correct-answer" style="display: none;">✅ Correct! Misconfigured buckets can expose sensitive data to unauthorized users.</p>
+                        <p class="incorrect-answer" style="display: none;">❌ Incorrect. Try again!</p>
+                    </div>
+                    <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
+                </div>
+    
+                <!-- Progress Tracking Button -->
+                <button class="btn btn-primary complete-btn" data-target="cloud-security">Mark as Complete</button>
+            </div>
+    
+            <!-- Subdomain: Identity Management and Data Security -->
+            <div class="target-card" data-target="identity-management">
+                <span class="difficulty medium">Medium</span>
+                <div class="target-icon">
+                    <i class="fas fa-user-lock"></i>
+                </div>
+                <h2>3. Identity Management and Data Security</h2>
+                <br>
+                <p>This subdomain focuses on ensuring that only authorized individuals can access an organization's information systems. It involves implementing authentication protocols, securing data storage, and managing user identities.</p>
+    
+                <!-- Practical Exercise: Two-Factor Authentication -->
+                <div class="practical-exercise">
+                    <h4>Practical Exercise: Two-Factor Authentication (2FA)</h4>
+                    <p>Explain why 2FA is important and how it works:</p>
+                    <div class="terminal">
+                        <pre><span class="output">Two-Factor Authentication adds an extra layer of security by requiring:
+    1. Something you know (e.g., password)
+    2. Something you have (e.g., a code sent to your phone)</span></pre>
+                    </div>
+                    <p><strong>Benefit:</strong> Even if a password is compromised, attackers cannot access the account without the second factor.</p>
+                </div>
+    
+                <!-- Protection Measures -->
+                <h3 class="protection-heading">Protection Measures:</h3>
+                <ul class="protection-list">
+                    <li>Implement multi-factor authentication (MFA).</li>
+                    <li>Encrypt sensitive data at rest and in transit.</li>
+                    <li>Regularly review and update access controls.</li>
+                </ul>
+    
+                <!-- Mini-Quiz -->
+                <div class="topic-quiz">
+                    <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
+                    <div class="question">
+                        <p>What is the primary purpose of multi-factor authentication?</p>
+                        <div class="options">
+                            <div class="option" data-correct="false">To simplify the login process</div>
+                            <div class="option" data-correct="true">To add an extra layer of security</div>
+                            <div class="option" data-correct="false">To reduce the need for passwords</div>
+                            <div class="option" data-correct="false">To increase server performance</div>
+                        </div>
+                    </div>
+                    <div class="topic-quiz-results" style="display: none;">
+                        <p class="correct-answer" style="display: none;">✅ Correct! MFA adds an extra layer of security by requiring multiple forms of verification.</p>
+                        <p class="incorrect-answer" style="display: none;">❌ Incorrect. Try again!</p>
+                    </div>
+                    <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
+                </div>
+    
+                <!-- Progress Tracking Button -->
+                <button class="btn btn-primary complete-btn" data-target="identity-management">Mark as Complete</button>
+            </div>
+    
+            <!-- Subdomain: Mobile Security -->
+            <div class="target-card" data-target="mobile-security">
+                <span class="difficulty easy">Easy</span>
+                <div class="target-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h2>4. Mobile Security</h2>
+                <br>
+                <p>Mobile security focuses on protecting data stored on mobile devices like smartphones, tablets, and laptops. It involves securing devices from threats like malware, unauthorized access, and theft.</p>
+    
+                <!-- Practical Exercise: Mobile Device Management -->
+                <div class="practical-exercise">
+                    <h4>Practical Exercise: Mobile Device Management (MDM)</h4>
+                    <p>List three best practices for securing mobile devices:</p>
+                    <div class="terminal">
+                        <pre><span class="output">1. Use strong passwords or biometric authentication.
+    2. Enable remote wipe in case of theft or loss.
+    3. Keep the device's operating system and apps updated.</span></pre>
+                    </div>
+                </div>
+    
+                <!-- Protection Measures -->
+                <h3 class="protection-heading">Protection Measures:</h3>
+                <ul class="protection-list">
+                    <li>Use encryption for data stored on devices.</li>
+                    <li>Install mobile antivirus software.</li>
+                    <li>Educate users about mobile security risks.</li>
+                </ul>
+    
+                <!-- Mini-Quiz -->
+                <div class="topic-quiz">
+                    <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
+                    <div class="question">
+                        <p>What is the primary risk of not securing mobile devices?</p>
+                        <div class="options">
+                            <div class="option" data-correct="false">Reduced battery life</div>
+                            <div class="option" data-correct="true">Unauthorized access to sensitive data</div>
+                            <div class="option" data-correct="false">Slower device performance</div>
+                            <div class="option" data-correct="false">Increased storage usage</div>
+                        </div>
+                    </div>
+                    <div class="topic-quiz-results" style="display: none;">
+                        <p class="correct-answer" style="display: none;">✅ Correct! Unsecured mobile devices can lead to data breaches and unauthorized access.</p>
+                        <p class="incorrect-answer" style="display: none;">❌ Incorrect. Try again!</p>
+                    </div>
+                    <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
+                </div>
+    
+                <!-- Progress Tracking Button -->
+                <button class="btn btn-primary complete-btn" data-target="mobile-security">Mark as Complete</button>
+            </div>
+    
+            <!-- Subdomain: Network Security -->
+            <div class="target-card" data-target="network-security">
+                <span class="difficulty hard">Hard</span>
+                <div class="target-icon">
+                    <i class="fas fa-network-wired"></i>
+                </div>
+                <h2>5. Network Security</h2>
+                <br>
+                <p>Network security involves protecting the integrity, confidentiality, and availability of data as it is transmitted across or accessed through networks. It includes hardware and software mechanisms to prevent unauthorized access and disruptions.</p>
+    
+                <!-- Practical Exercise: Firewall Configuration -->
+                <div class="practical-exercise">
+                    <h4>Practical Exercise: Firewall Configuration</h4>
+                    <p>Identify the issue in this firewall rule:</p>
+                    <div class="terminal">
+                        <pre><span class="output">Allow all traffic from 0.0.0.0/0 to port 22 (SSH)</span></pre>
+                    </div>
+                    <p><strong>Issue:</strong> This rule allows SSH access from any IP address, which is a security risk. Restrict access to specific IP ranges.</p>
+                </div>
+    
+                <!-- Protection Measures -->
+                <h3 class="protection-heading">Protection Measures:</h3>
+                <ul class="protection-list">
+                    <li>Use firewalls and intrusion detection systems (IDS).</li>
+                    <li>Segment networks to limit access.</li>
+                    <li>Regularly monitor and update network configurations.</li>
+                </ul>
+    
+                <!-- Mini-Quiz -->
+                <div class="topic-quiz">
+                    <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
+                    <div class="question">
+                        <p>What is the primary purpose of network segmentation?</p>
+                        <div class="options">
+                            <div class="option" data-correct="false">To increase network speed</div>
+                            <div class="option" data-correct="true">To limit the spread of attacks</div>
+                            <div class="option" data-correct="false">To reduce hardware costs</div>
+                            <div class="option" data-correct="false">To simplify network management</div>
+                        </div>
+                    </div>
+                    <div class="topic-quiz-results" style="display: none;">
+                        <p class="correct-answer" style="display: none;">✅ Correct! Network segmentation limits the spread of attacks by isolating network segments.</p>
+                        <p class="incorrect-answer" style="display: none;">❌ Incorrect. Try again!</p>
+                    </div>
+                    <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
+                </div>
+    
+                <!-- Progress Tracking Button -->
+                <button class="btn btn-primary complete-btn" data-target="network-security">Mark as Complete</button>
+            </div>
+        </div>
+    
+        <div class="conclusion">
+            <h2>Conclusion</h2>
+            <p>By understanding the diverse aspects of cybersecurity and implementing tailored protective measures, individuals, businesses, and organizations can significantly reduce their vulnerability to cyber threats. Cybersecurity is a shared responsibility that requires proactive measures, continuous monitoring, and collaboration.</p>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Cybersecurity Academy</p>
+    </footer>
+    
+    <!-- Module Completion Celebration Modal -->
+    <div class="celebration-container">
+        <div class="celebration-content">
+            <div class="achievement-unlocked">Achievement Unlocked!</div>
+            <div class="trophy-animation">
+                <div class="trophy">
+                    <i class="fas fa-trophy"></i>
+                    <div class="trophy-sparkle" id="trophy-sparkle"></div>
+                </div>
+            </div>
+            <h2 class="celebration-title">Module Mastery Achieved!</h2>
+            <p class="celebration-text">Congratulations on completing the Introduction to Cybersecurity module! You've gained critical knowledge about cybersecurity vulnerabilities and how to defend against them.</p>
+    
+            <div class="celebration-stats">
+                <div class="stat-item">
+                    <div class="stat-value">5/5</div>
+                    <div class="stat-label">Topics Completed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Module Progress</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">5/5</div>
+                    <div class="stat-label">Knowledge Checks</div>
+                </div>
+            </div>
+    
+            <div class="celebration-badge">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+    
+            <button class="celebration-btn">Continue Learning</button>
+        </div>
+    </div>
+    <script>
+        // DEBUG SECTION - For immediate testing of progress
+        // Uncomment this section to force set progress in localStorage
+        localStorage.setItem('attackCompletedSections', JSON.stringify(['individuals', 'businesses']));
+        localStorage.setItem('attackCompletedQuizzes', JSON.stringify(['individuals', 'businesses']));
+        console.log('DEBUG: Set progress values in localStorage for testing');
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            let completedSections = JSON.parse(localStorage.getItem('attackCompletedSections')) || [];
+            let completedQuizzes = JSON.parse(localStorage.getItem('attackCompletedQuizzes')) || [];
+            
+            function initializeProgressUI() {
+                completedSections.forEach(targetId => {
+                    const card = document.querySelector(`.target-card[data-target="${targetId}"]`);
+                    if (card) {
+                        card.classList.add('completed');
+                    }
+                    
+                    document.querySelectorAll(`.complete-btn[data-target="${targetId}"]`).forEach(button => {
+                        button.textContent = 'Completed';
+                        button.disabled = true;
+                    });
+                });
+                
+                completedQuizzes.forEach(targetId => {
+                    const card = document.querySelector(`.target-card[data-target="${targetId}"]`);
+                    if (card) {
+                        const quizContainer = card.querySelector('.topic-quiz');
+                        if (quizContainer) {
+                            const quizBtn = quizContainer.querySelector('.topic-quiz-btn');
+                            const correctOption = quizContainer.querySelector('.option[data-correct="true"]');
+                            const resultsDiv = quizContainer.querySelector('.topic-quiz-results');
+                            const correctAnswer = quizContainer.querySelector('.correct-answer');
+                            
+                            if (quizBtn && correctOption && resultsDiv && correctAnswer) {
+                                correctOption.classList.add('selected');
+                                resultsDiv.style.display = 'block';
+                                correctAnswer.style.display = 'block';
+                                quizBtn.textContent = 'Correct!';
+                                quizBtn.classList.add('success');
+                                quizBtn.disabled = true;
+                            }
+                        }
+                    }
+                });
+                
+                updateProgress();
+            }
+            
+            initializeProgressUI();
+            
+            document.querySelectorAll('.complete-btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const targetId = this.getAttribute('data-target');
+                    markAsComplete(targetId);
+                });
+            });
+            
+            const topicQuizButtons = document.querySelectorAll('.topic-quiz-btn');
+            topicQuizButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const quizContainer = this.closest('.topic-quiz');
+                    const resultsDiv = quizContainer.querySelector('.topic-quiz-results');
+                    const correctAnswer = quizContainer.querySelector('.correct-answer');
+                    const incorrectAnswer = quizContainer.querySelector('.incorrect-answer');
+                    const selectedOption = quizContainer.querySelector('.option.selected');
+                    const targetId = this.closest('.target-card').getAttribute('data-target');
+                    
+                    if (completedQuizzes.includes(targetId) && this.disabled) {
+                        return;
+                    }
+                    
+                    correctAnswer.style.display = 'none';
+                    incorrectAnswer.style.display = 'none';
+                    
+                    if (selectedOption) {
+                        resultsDiv.style.display = 'block';
+                        
+                        if (selectedOption.getAttribute('data-correct') === 'true') {
+                            correctAnswer.style.display = 'block';
+                            
+                            if (!completedQuizzes.includes(targetId)) {
+                                completedQuizzes.push(targetId);
+                                localStorage.setItem('attackCompletedQuizzes', JSON.stringify(completedQuizzes));
+                                
+                                if (!completedSections.includes(targetId)) {
+                                    markAsComplete(targetId);
+                                } else {
+                                    updateProgress();
+                                }
+                            }
+                            
+                            this.textContent = 'Correct!';
+                            this.classList.add('success');
+                            this.disabled = true;
+                            selectedOption.classList.add('correct');
+                        } else {
+                            incorrectAnswer.style.display = 'block';
+                            this.textContent = 'Try Again';
+                            selectedOption.classList.add('incorrect');
+                            selectedOption.classList.add('shake-animation');
+                            setTimeout(() => {
+                                selectedOption.classList.remove('shake-animation');
+                            }, 800);
+                        }
+                    } else {
+                        alert('Please select an answer first.');
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.topic-quiz .option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const questionDiv = this.closest('.question');
+                    const options = questionDiv.querySelectorAll('.option');
+                    
+                    options.forEach(opt => {
+                        opt.classList.remove('selected');
+                        opt.classList.remove('incorrect');
+                        opt.classList.remove('shake-animation');
+                    });
+                    
+                    this.classList.add('selected');
+                    
+                    const quizContainer = this.closest('.topic-quiz');
+                    const resultsDiv = quizContainer.querySelector('.topic-quiz-results');
+                    const quizButton = quizContainer.querySelector('.topic-quiz-btn');
+                    
+                    if (quizButton.textContent === 'Try Again') {
+                        resultsDiv.style.display = 'none';
+                        quizButton.textContent = 'Check Answer';
+                    }
+                });
+            });
+            
+            const attackItems = document.querySelectorAll('.attack-item');
+            attackItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    this.classList.toggle('expanded');
+                });
+            });
+            
+            function markAsComplete(targetId) {
+                if (!completedSections.includes(targetId)) {
+                    completedSections.push(targetId);
+                    localStorage.setItem('attackCompletedSections', JSON.stringify(completedSections));
+                    
+                    document.querySelectorAll(`.complete-btn[data-target="${targetId}"]`).forEach(button => {
+                        button.textContent = 'Completed';
+                        button.disabled = true;
+                    });
+                    
+                    const card = document.querySelector(`.target-card[data-target="${targetId}"]`);
+                    if (card) {
+                        card.classList.add('completed');
+                    }
+                    
+                    updateProgress();
+                }
+            }
+            
+            function updateProgress() {
+                const totalSections = 5;
+                const progressBar = document.getElementById('module-progress');
+                const overallProgress = document.getElementById('overall-progress');
+                const topicsCompleted = document.getElementById('topics-completed');
+                const quizzesPassed = document.getElementById('quizzes-passed');
+                
+                let progressPercentage = 0;
+                const topicsWeight = 60;
+                const topicsProgressPercentage = (completedSections.length / totalSections) * topicsWeight;
+                const quizzesWeight = 40;
+                const quizzesProgressPercentage = (completedQuizzes.length / totalSections) * quizzesWeight;
+                progressPercentage = topicsProgressPercentage + quizzesProgressPercentage;
+                progressPercentage = Math.round(progressPercentage);
+                
+                progressBar.style.width = `${progressPercentage}%`;
+                
+                if (overallProgress) {
+                    overallProgress.style.width = `${progressPercentage}%`;
+                }
+                
+                if (topicsCompleted) {
+                    topicsCompleted.textContent = completedSections.length;
+                }
+                
+                if (quizzesPassed) {
+                    quizzesPassed.textContent = completedQuizzes.length;
+                }
+                
+                // Check if all topics are completed and show celebration
+                if (completedSections.length === totalSections && completedQuizzes.length === totalSections) {
+                    setTimeout(() => {
+                        showCelebration();
+                    }, 1000);
+                }
+            }
+            
+            // Confetti animation for celebration
+            function createConfetti() {
+                const colors = ['#5cdb95', '#88ccf1', '#f1c40f', '#e74c3c', '#9b59b6'];
+                const confettiCount = 200;
+                
+                for (let i = 0; i < confettiCount; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.width = Math.random() * 10 + 'px';
+                    confetti.style.height = Math.random() * 10 + 'px';
+                    confetti.style.opacity = Math.random();
+                    confetti.style.animation = 'floatConfetti ' + (Math.random() * 3 + 2) + 's ease-in infinite';
+                    
+                    document.querySelector('.celebration-container').appendChild(confetti);
+                }
+            }
+            
+            // Create trophy sparkles
+            function createSparkles() {
+                const sparkleContainer = document.getElementById('trophy-sparkle');
+                if (!sparkleContainer) return;
+                
+                for (let i = 0; i < 15; i++) {
+                    const sparkle = document.createElement('span');
+                    sparkle.style.width = Math.random() * 4 + 2 + 'px';
+                    sparkle.style.height = sparkle.style.width;
+                    sparkle.style.top = Math.random() * 100 + '%';
+                    sparkle.style.left = Math.random() * 100 + '%';
+                    sparkle.style.animationDelay = Math.random() * 2 + 's';
+                    sparkleContainer.appendChild(sparkle);
+                }
+            }
+            
+            function showCelebration() {
+                const celebrationContainer = document.querySelector('.celebration-container');
+                if (celebrationContainer && !celebrationContainer.classList.contains('active')) {
+                    celebrationContainer.classList.add('active');
+                    createConfetti();
+                    createSparkles();
+                    
+                    // Play celebration sound if available
+                    const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3');
+                    audio.volume = 0.5;
+                    audio.play().catch(e => console.log('Audio play failed:', e));
+                    
+                    // Close celebration on button click
+                    document.querySelector('.celebration-btn').addEventListener('click', () => {
+                        celebrationContainer.classList.remove('active');
+                        setTimeout(() => {
+                            // Remove confetti to clean up
+                            document.querySelectorAll('.confetti').forEach(el => el.remove());
+                        }, 500);
+                    });
+                }
+            }
+            
+            const resetProgressBtn = document.getElementById('reset-progress');
+            resetProgressBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to reset all progress? This cannot be undone.')) {
+                    localStorage.removeItem('attackCompletedSections');
+                    localStorage.removeItem('attackCompletedQuizzes');
+                    completedSections = [];
+                    completedQuizzes = [];
+                    updateProgress();
+                    
+                    document.querySelectorAll('.complete-btn').forEach(button => {
+                        button.textContent = 'Mark as Complete';
+                        button.disabled = false;
+                    });
+                    
+                    document.querySelectorAll('.topic-quiz-btn').forEach(button => {
+                        button.textContent = 'Check Answer';
+                        button.classList.remove('success');
+                        button.disabled = false;
+                    });
+                    
+                    document.querySelectorAll('.topic-quiz-results').forEach(result => {
+                        result.style.display = 'none';
+                    });
+                    
+                    document.querySelectorAll('.target-card').forEach(card => {
+                        card.classList.remove('completed');
+                    });
+                    
+                    document.querySelectorAll('.option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                    
+                    const container = document.querySelector('.container');
+                    const notification = document.createElement('div');
+                    notification.className = 'notification';
+                    notification.textContent = 'Progress reset successfully!';
+                    container.insertBefore(notification, container.firstChild);
+                    
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 3000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
