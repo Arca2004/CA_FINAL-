@@ -1,0 +1,671 @@
+document.addEventListener("DOMContentLoaded", function () {
+  // Initialize variables for completed sections and quizzes
+  let completedSections = [];
+  let completedQuizzes = [];
+
+  // Define topic progression order
+  const topicOrder = [
+    "application-security",
+    "cloud-security",
+    "identity-management",
+    "mobile-security",
+    "network-security",
+  ];
+
+  // Check if user is logged in with Firebase
+  function checkUserLoggedIn() {
+    // For local testing, return true to enable lock mechanism
+    return true;
+
+    // Commented out for local testing
+    // if (firebase && firebase.auth) {
+    //     return firebase.auth().currentUser !== null;
+    // }
+    // return false;
+  }
+
+  // Function to load progress data from Firebase (placeholder)
+  // In a production app, you would load actual progress from Firebase Firestore
+  function loadProgressFromFirebase() {
+    // For local testing, initialize localStorage if needed
+    if (!localStorage.getItem("introCompletedSections")) {
+      localStorage.setItem("introCompletedSections", JSON.stringify([]));
+    }
+    if (!localStorage.getItem("introCompletedQuizzes")) {
+      localStorage.setItem("introCompletedQuizzes", JSON.stringify([]));
+    }
+
+    // Reset progress for not logged in users
+    if (!checkUserLoggedIn()) {
+      completedSections = [];
+      completedQuizzes = [];
+      updateProgress();
+      return;
+    }
+
+    // For now, still use localStorage as a fallback
+    // In a real implementation, you would fetch this from Firebase Firestore
+    completedSections =
+      JSON.parse(localStorage.getItem("introCompletedSections")) || [];
+    completedQuizzes =
+      JSON.parse(localStorage.getItem("introCompletedQuizzes")) || [];
+
+    initializeProgressUI();
+  }
+
+  // Load progress when page loads
+  loadProgressFromFirebase();
+
+  function initializeProgressUI() {
+    // Only show progress for logged in users
+    if (!checkUserLoggedIn()) {
+      // Reset all progress UI elements to initial state
+      document.querySelectorAll(".target-card").forEach((card) => {
+        card.classList.remove("completed");
+      });
+
+      document.querySelectorAll(".topic-quiz-btn").forEach((button) => {
+        button.textContent = "Check Answer";
+        button.classList.remove("success");
+        button.disabled = false;
+      });
+
+      document.querySelectorAll(".topic-quiz-results").forEach((result) => {
+        result.style.display = "none";
+      });
+
+      document.querySelectorAll(".option").forEach((option) => {
+        option.classList.remove("selected", "correct", "incorrect");
+      });
+
+      // Reset progress bar
+      const progressBar = document.getElementById("module-progress");
+      if (progressBar) {
+        progressBar.style.width = "0%";
+      }
+
+      return;
+    }
+
+    // Update UI with progress data for logged in users
+    completedSections.forEach((targetId) => {
+      const card = document.querySelector(
+        `.target-card[data-target="${targetId}"]`
+      );
+      if (card) {
+        card.classList.add("completed");
+      }
+    });
+
+    completedQuizzes.forEach((targetId) => {
+      const card = document.querySelector(
+        `.target-card[data-target="${targetId}"]`
+      );
+      if (card) {
+        const quizContainer = card.querySelector(".topic-quiz");
+        if (quizContainer) {
+          const quizBtn = quizContainer.querySelector(".topic-quiz-btn");
+          const correctOption = quizContainer.querySelector(
+            '.option[data-correct="true"]'
+          );
+          const resultsDiv = quizContainer.querySelector(".topic-quiz-results");
+          const correctAnswer = quizContainer.querySelector(".correct-answer");
+
+          if (quizBtn && correctOption && resultsDiv && correctAnswer) {
+            correctOption.classList.add("selected");
+            resultsDiv.style.display = "block";
+            correctAnswer.style.display = "block";
+            quizBtn.textContent = "Correct!";
+            quizBtn.classList.add("success");
+            quizBtn.disabled = true;
+          }
+        }
+      }
+    });
+
+    // Initialize topic accessibility
+    updateTopicAccessibility();
+    updateProgress();
+  }
+
+  const topicQuizButtons = document.querySelectorAll(".topic-quiz-btn");
+  topicQuizButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const quizContainer = this.closest(".topic-quiz");
+      const resultsDiv = quizContainer.querySelector(".topic-quiz-results");
+      const correctAnswer = quizContainer.querySelector(".correct-answer");
+      const incorrectAnswer = quizContainer.querySelector(".incorrect-answer");
+      const selectedOption = quizContainer.querySelector(".option.selected");
+      const targetId = this.closest(".target-card").getAttribute("data-target");
+
+      // Check if the topic is accessible
+      if (!isTopicAccessible(targetId)) {
+        return;
+      }
+
+      if (completedQuizzes.includes(targetId) && this.disabled) {
+        return;
+      }
+
+      correctAnswer.style.display = "none";
+      incorrectAnswer.style.display = "none";
+
+      if (selectedOption) {
+        resultsDiv.style.display = "block";
+
+        if (selectedOption.getAttribute("data-correct") === "true") {
+          correctAnswer.style.display = "block";
+
+          // Only save progress if logged in
+          if (checkUserLoggedIn() && !completedQuizzes.includes(targetId)) {
+            completedQuizzes.push(targetId);
+            // In a real implementation, save to Firebase instead
+            localStorage.setItem(
+              "introCompletedQuizzes",
+              JSON.stringify(completedQuizzes)
+            );
+
+            if (!completedSections.includes(targetId)) {
+              markAsComplete(targetId);
+            } else {
+              updateProgress();
+            }
+          }
+
+          this.textContent = "Correct!";
+          this.classList.add("success");
+          this.disabled = true;
+          selectedOption.classList.add("correct");
+        } else {
+          incorrectAnswer.style.display = "block";
+          this.textContent = "Try Again";
+          selectedOption.classList.add("incorrect");
+          selectedOption.classList.add("shake-animation");
+          setTimeout(() => {
+            selectedOption.classList.remove("shake-animation");
+          }, 800);
+        }
+      } else {
+        alert("Please select an answer first.");
+      }
+
+      // Force topic accessibility update on page load
+      console.log("Forcing updateTopicAccessibility");
+      updateTopicAccessibility();
+    });
+  });
+
+  document.querySelectorAll(".topic-quiz .option").forEach((option) => {
+    option.addEventListener("click", function () {
+      const targetId = this.closest(".target-card").getAttribute("data-target");
+
+      // Check if the topic is accessible
+      if (!isTopicAccessible(targetId)) {
+        return;
+      }
+
+      const questionDiv = this.closest(".question");
+      const options = questionDiv.querySelectorAll(".option");
+
+      options.forEach((opt) => {
+        opt.classList.remove("selected");
+        opt.classList.remove("incorrect");
+        opt.classList.remove("shake-animation");
+      });
+
+      this.classList.add("selected");
+
+      const quizContainer = this.closest(".topic-quiz");
+      const resultsDiv = quizContainer.querySelector(".topic-quiz-results");
+      const quizButton = quizContainer.querySelector(".topic-quiz-btn");
+
+      if (quizButton.textContent === "Try Again") {
+        resultsDiv.style.display = "none";
+        quizButton.textContent = "Check Answer";
+      }
+
+      // Force topic accessibility update on page load
+      console.log("Forcing updateTopicAccessibility");
+      updateTopicAccessibility();
+    });
+  });
+
+  const attackItems = document.querySelectorAll(".attack-item");
+  attackItems.forEach((item) => {
+    item.addEventListener("click", function (e) {
+      const targetId = this.closest(".target-card").getAttribute("data-target");
+
+      // Check if the topic is accessible before expanding
+      if (!isTopicAccessible(targetId)) {
+        return;
+      }
+
+      this.classList.toggle("expanded");
+
+      // Force topic accessibility update on page load
+      console.log("Forcing updateTopicAccessibility");
+      updateTopicAccessibility();
+    });
+  });
+
+  function markAsComplete(targetId) {
+    // Only proceed if user is logged in
+    if (!checkUserLoggedIn()) {
+      return;
+    }
+
+    if (!completedSections.includes(targetId)) {
+      completedSections.push(targetId);
+      // In a real implementation, save to Firebase instead
+      localStorage.setItem(
+        "introCompletedSections",
+        JSON.stringify(completedSections)
+      );
+
+      const card = document.querySelector(
+        `.target-card[data-target="${targetId}"]`
+      );
+      if (card) {
+        card.classList.add("completed");
+      }
+
+      // Update accessibility for next topics
+      updateTopicAccessibility();
+      updateProgress();
+    }
+
+    // Force topic accessibility update on page load
+    console.log("Forcing updateTopicAccessibility");
+    updateTopicAccessibility();
+  }
+
+  // Function to determine if a topic should be accessible
+  function isTopicAccessible(topicId) {
+    const topicIndex = topicOrder.indexOf(topicId);
+
+    // First topic is always accessible
+    if (topicIndex === 0) return true;
+
+    // For any other topic, the previous topic must be completed
+    const previousTopicId = topicOrder[topicIndex - 1];
+    return completedQuizzes.includes(previousTopicId);
+  }
+
+  // Update the visual state of all topics based on accessibility
+  function updateTopicAccessibility() {
+    topicOrder.forEach((topicId, index) => {
+      const topicCard = document.querySelector(
+        `.target-card[data-target="${topicId}"]`
+      );
+      if (!topicCard) return;
+
+      const isAccessible = isTopicAccessible(topicId);
+
+      // Update the progress tracker nodes
+      const progressNode = document.querySelector(
+        `.progress-node[data-topic="${topicId}"]`
+      );
+      if (progressNode) {
+        progressNode.classList.remove("active", "completed", "locked");
+
+        const baseTooltip = progressNode
+          .getAttribute("data-tooltip")
+          .split(" - ")[0];
+
+        if (completedQuizzes.includes(topicId)) {
+          progressNode.classList.add("completed");
+          progressNode.setAttribute(
+            "data-tooltip",
+            `${baseTooltip} - Completed ✓`
+          );
+        } else if (isAccessible) {
+          progressNode.classList.add("active");
+          progressNode.setAttribute(
+            "data-tooltip",
+            `${baseTooltip} - In Progress`
+          );
+        } else {
+          progressNode.classList.add("locked");
+          const prevTopicName =
+            index > 0
+              ? topicOrder[index - 1]
+                  .replace(/-/g, " ")
+                  .replace(/\b\w/g, (l) => l.toUpperCase())
+              : "";
+          progressNode.setAttribute(
+            "data-tooltip",
+            `${baseTooltip} - Locked (Complete ${prevTopicName} first)`
+          );
+        }
+      }
+
+      // Update progress tracker lines
+      if (index > 0) {
+        const prevTopicId = topicOrder[index - 1];
+        const progressLine = progressNode?.previousElementSibling;
+
+        if (progressLine && progressLine.classList.contains("progress-line")) {
+          progressLine.classList.toggle(
+            "completed",
+            completedQuizzes.includes(prevTopicId)
+          );
+        }
+      }
+
+      // Add/remove lock overlay
+      if (!isAccessible && !topicCard.classList.contains("locked")) {
+        // Lock the topic
+        topicCard.classList.add("locked");
+
+        // Add lock overlay if not already present
+        if (!topicCard.querySelector(".lock-overlay")) {
+          const lockOverlay = document.createElement("div");
+          lockOverlay.className = "lock-overlay";
+
+          const lockIcon = document.createElement("i");
+          lockIcon.className = "fas fa-lock";
+          lockOverlay.appendChild(lockIcon);
+
+          const lockMessage = document.createElement("p");
+          lockMessage.className = "lock-message";
+          const prevTopicName =
+            index > 0
+              ? topicOrder[index - 1]
+                  .replace(/-/g, " ")
+                  .replace(/\b\w/g, (l) => l.toUpperCase())
+              : "";
+          lockMessage.textContent = `Complete "${prevTopicName}" to unlock`;
+          lockOverlay.appendChild(lockMessage);
+
+          topicCard.appendChild(lockOverlay);
+
+          // Disable all interactive elements in locked topics
+          topicCard
+            .querySelectorAll(
+              ".practical-exercise, .topic-quiz .option, .topic-quiz-btn"
+            )
+            .forEach((element) => {
+              element.style.pointerEvents = "none";
+            });
+        }
+      } else if (isAccessible && topicCard.classList.contains("locked")) {
+        // Unlock the topic
+        topicCard.classList.remove("locked");
+
+        // Remove lock overlay
+        const lockOverlay = topicCard.querySelector(".lock-overlay");
+        if (lockOverlay) {
+          lockOverlay.remove();
+        }
+
+        // Re-enable all interactive elements
+        topicCard
+          .querySelectorAll(
+            ".practical-exercise, .topic-quiz .option, .topic-quiz-btn"
+          )
+          .forEach((element) => {
+            element.style.pointerEvents = "auto";
+          });
+      }
+    });
+
+    // Force topic accessibility update on page load
+    console.log("Forcing updateTopicAccessibility");
+    updateTopicAccessibility();
+  }
+
+  function updateProgress() {
+    const totalSections = 5;
+    const progressBar = document.getElementById("module-progress");
+    const overallProgress = document.getElementById("overall-progress");
+    const topicsCompleted = document.getElementById("topics-completed");
+    const quizzesPassed = document.getElementById("quizzes-passed");
+
+    // Always set progress to 0 if not logged in
+    if (!checkUserLoggedIn()) {
+      if (progressBar) progressBar.style.width = "0%";
+      if (overallProgress) overallProgress.style.width = "0%";
+      if (topicsCompleted) topicsCompleted.textContent = "0";
+      if (quizzesPassed) quizzesPassed.textContent = "0";
+      return;
+    }
+
+    let progressPercentage = 0;
+    const topicsWeight = 60;
+    const topicsProgressPercentage =
+      (completedSections.length / totalSections) * topicsWeight;
+    const quizzesWeight = 40;
+    const quizzesProgressPercentage =
+      (completedQuizzes.length / totalSections) * quizzesWeight;
+    progressPercentage = topicsProgressPercentage + quizzesProgressPercentage;
+    progressPercentage = Math.round(progressPercentage);
+
+    if (progressBar) {
+      progressBar.style.width = `${progressPercentage}%`;
+    }
+
+    if (overallProgress) {
+      overallProgress.style.width = `${progressPercentage}%`;
+    }
+
+    if (topicsCompleted) {
+      topicsCompleted.textContent = completedSections.length;
+    }
+
+    if (quizzesPassed) {
+      quizzesPassed.textContent = completedQuizzes.length;
+    }
+
+    // Check if all topics are completed and show celebration
+    if (
+      completedSections.length === totalSections &&
+      completedQuizzes.length === totalSections
+    ) {
+      setTimeout(() => {
+        showCelebration();
+      }, 1000);
+    }
+
+    // Force topic accessibility update on page load
+    console.log("Forcing updateTopicAccessibility");
+    updateTopicAccessibility();
+  }
+
+  // Confetti animation for celebration
+  function createConfetti() {
+    const colors = ["#5cdb95", "#88ccf1", "#f1c40f", "#e74c3c", "#9b59b6"];
+    const confettiCount = 200;
+
+    for (let i = 0; i < confettiCount; i++) {
+      const confetti = document.createElement("div");
+      confetti.className = "confetti";
+      confetti.style.backgroundColor =
+        colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.left = Math.random() * 100 + "vw";
+      confetti.style.width = Math.random() * 10 + "px";
+      confetti.style.height = Math.random() * 10 + "px";
+      confetti.style.opacity = Math.random();
+      confetti.style.animation = `fall ${
+        Math.random() * 3 + 2
+      }s linear forwards, sway ${
+        Math.random() * 3 + 2
+      }s ease-in-out infinite alternate`;
+      document.body.appendChild(confetti);
+    }
+  }
+
+  // Create trophy sparkles
+  function createSparkles() {
+    const sparkleContainer = document.getElementById("trophy-sparkle");
+    if (!sparkleContainer) return;
+
+    for (let i = 0; i < 15; i++) {
+      const sparkle = document.createElement("span");
+      sparkle.style.top = Math.random() * 100 + "%";
+      sparkle.style.left = Math.random() * 100 + "%";
+      sparkle.style.width = Math.random() * 4 + 2 + "px";
+      sparkle.style.height = sparkle.style.width;
+      sparkle.style.animationDelay = Math.random() * 2 + "s";
+      sparkleContainer.appendChild(sparkle);
+    }
+  }
+
+  function showCelebration() {
+    const celebrationContainer = document.querySelector(
+      ".celebration-container"
+    );
+    if (
+      celebrationContainer &&
+      !celebrationContainer.classList.contains("active")
+    ) {
+      celebrationContainer.classList.add("active");
+      createConfetti();
+      createSparkles();
+
+      // Play celebration sound if available
+      const audio = new Audio(
+        "https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3"
+      );
+      audio.volume = 0.5;
+      audio.play().catch((e) => console.log("Audio play failed:", e));
+
+      // Close celebration on button click
+      document
+        .querySelector(".celebration-btn")
+        .addEventListener("click", () => {
+          celebrationContainer.classList.remove("active");
+          setTimeout(() => {
+            // Remove confetti to clean up
+            document.querySelectorAll(".confetti").forEach((el) => el.remove());
+          }, 500);
+        });
+    }
+
+    // Force topic accessibility update on page load
+    console.log("Forcing updateTopicAccessibility");
+    updateTopicAccessibility();
+  }
+
+  const resetProgressBtn = document.getElementById("reset-progress");
+  resetProgressBtn.addEventListener("click", function () {
+    // Only allow resetting progress if logged in
+    if (!checkUserLoggedIn()) {
+      alert("Please log in to track and reset progress");
+      return;
+    }
+
+    if (
+      confirm(
+        "Are you sure you want to reset all progress? This cannot be undone."
+      )
+    ) {
+      // Clear progress data
+      localStorage.removeItem("introCompletedSections");
+      localStorage.removeItem("introCompletedQuizzes");
+      completedSections = [];
+      completedQuizzes = [];
+
+      // Reset UI elements
+      document.querySelectorAll(".complete-btn").forEach((button) => {
+        button.textContent = "Mark as Complete";
+        button.disabled = false;
+      });
+
+      document.querySelectorAll(".topic-quiz-btn").forEach((button) => {
+        button.textContent = "Check Answer";
+        button.classList.remove("success");
+        button.disabled = false;
+      });
+
+      document.querySelectorAll(".topic-quiz-results").forEach((result) => {
+        result.style.display = "none";
+      });
+
+      document.querySelectorAll(".target-card").forEach((card) => {
+        card.classList.remove("completed");
+      });
+
+      document.querySelectorAll(".option").forEach((option) => {
+        option.classList.remove("selected");
+      });
+
+      // Remove lock overlays
+      document.querySelectorAll(".lock-overlay").forEach((overlay) => {
+        overlay.remove();
+      });
+
+      document.querySelectorAll(".target-card").forEach((card) => {
+        card.classList.remove("locked");
+      });
+
+      // Update accessibility for topics
+      updateTopicAccessibility();
+      updateProgress();
+
+      // Show notification
+      const container = document.querySelector(".container");
+      const notification = document.createElement("div");
+      notification.className = "notification";
+      notification.textContent = "Progress reset successfully!";
+      container.insertBefore(notification, container.firstChild);
+
+      setTimeout(() => {
+        notification.remove();
+      }, 3000);
+    }
+
+    // Force topic accessibility update on page load
+    console.log("Forcing updateTopicAccessibility");
+    updateTopicAccessibility();
+  });
+
+  // Add click event to progress tracker nodes to scroll to corresponding topic
+  document.querySelectorAll(".progress-node").forEach((node) => {
+    node.addEventListener("click", function () {
+      const topicId = this.getAttribute("data-topic");
+      const topicCard = document.querySelector(
+        `.target-card[data-target="${topicId}"]`
+      );
+
+      // Only scroll to accessible topics
+      if (isTopicAccessible(topicId) && topicCard) {
+        topicCard.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        // Create a pulse animation on the locked topic
+        this.classList.add("shake-animation");
+        setTimeout(() => {
+          this.classList.remove("shake-animation");
+        }, 800);
+
+        // Show a tooltip
+        const container = document.querySelector(".container");
+        const notification = document.createElement("div");
+        notification.className = "notification";
+
+        // Get the previous topic name for the message
+        const topicIndex = topicOrder.indexOf(topicId);
+        const prevTopicName =
+          topicIndex > 0
+            ? topicOrder[topicIndex - 1]
+                .replace(/-/g, " ")
+                .replace(/\b\w/g, (l) => l.toUpperCase())
+            : "";
+
+        notification.textContent = `Complete "${prevTopicName}" to unlock this topic.`;
+        container.insertBefore(notification, container.firstChild);
+
+        setTimeout(() => {
+          notification.remove();
+        }, 3000);
+      }
+
+      // Force topic accessibility update on page load
+      console.log("Forcing updateTopicAccessibility");
+      updateTopicAccessibility();
+    });
+  });
+
+  // Force topic accessibility update on page load
+  console.log("Forcing updateTopicAccessibility");
+  updateTopicAccessibility();
+});

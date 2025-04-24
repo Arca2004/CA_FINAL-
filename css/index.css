@@ -1,0 +1,88 @@
+/* Additional styles for cybersecurity tips section */
+#cyber-tips {
+  background: rgba(12, 15, 25, 0.7);
+  border-radius: 8px;
+  margin: 50px auto;
+  max-width: 1200px;
+  padding: 30px;
+}
+
+#cyber-tips .section-title {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.tips-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.tip-card {
+  background: rgba(20, 25, 40, 0.8);
+  border: 1px solid #2a3754;
+  border-radius: 10px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.tip-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2);
+}
+
+.tip-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background: #5cdb95;
+}
+
+.tip-card h3 {
+  color: #5cdb95;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+.tip-card p {
+  color: #ccc;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.tip-metadata {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.tip-loading {
+  text-align: center;
+  color: #5cdb95;
+  padding: 20px;
+  grid-column: 1 / -1;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+.tip-loading i {
+  animation: pulse 1.5s infinite;
+  margin-right: 10px;
+}
