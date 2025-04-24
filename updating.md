@@ -76,6 +76,16 @@ If Git reports merge conflicts, you'll need to manually resolve them:
 4. Add the resolved files with `git add filename`
 5. Complete the merge with `git commit`
 
+
+
+
+
+
+
+
+
+
+
 ## Complete Example Workflow
 
 ```bash
