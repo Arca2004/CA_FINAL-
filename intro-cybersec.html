@@ -6,6 +6,7 @@
     <title>Introduction To Cybersecurity - Cybersec Academy</title>
     <link rel="stylesheet" href="css/intro-cybersec.css" />
     <link rel="stylesheet" href="cyberindex.css" />
+    <link rel="stylesheet" href="css/profile-dropdown.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -15,50 +16,14 @@
     <!-- Force lock styles to be visible during development -->
     <style>
       /* Force lock styles to be visible for debugging */
-      .target-card[data-target="cloud-security"],
-      .target-card[data-target="identity-management"],
-      .target-card[data-target="mobile-security"],
-      .target-card[data-target="network-security"] {
+      .target-card.locked[data-target="cloud-security"],
+      .target-card.locked[data-target="identity-management"],
+      .target-card.locked[data-target="mobile-security"],
+      .target-card.locked[data-target="network-security"] {
         position: relative;
         filter: grayscale(0.8) brightness(0.7);
         border: 3px solid #e74c3c !important;
         overflow: hidden;
-      }
-      
-      /* Add lock overlay directly in HTML */
-      .debug-lock-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(14, 22, 33, 0.8);
-        backdrop-filter: blur(2px);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: 100;
-      }
-      
-      .debug-lock-overlay i {
-        font-size: 5rem;
-        color: #e74c3c;
-        margin-bottom: 15px;
-        text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-        animation: wiggle 2.5s infinite ease-in-out;
-      }
-      
-      .debug-lock-message {
-        background: rgba(231, 76, 60, 0.9);
-        color: white;
-        padding: 15px 25px;
-        border-radius: 5px;
-        font-weight: bold;
-        text-align: center;
-        max-width: 80%;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
-        font-size: 1.2rem;
       }
       
       /* Wiggle animation for lock icon */
@@ -103,10 +68,23 @@
               ><i class="fas fa-info-circle"></i> About Us</a
             >
           </li>
-          <li>
-            <a href="login.html" class="nav-link"
+          <li id="auth-nav-item">
+            <a href="login.html" class="nav-link" id="login-link"
               ><i class="fas fa-user"></i> Login</a
             >
+            <div class="profile-container" id="profile-container" style="display: none;">
+              <div class="profile-avatar" id="profile-avatar">
+                <span id="profile-initial">U</span>
+              </div>
+              <div class="profile-info">
+                <span id="profile-name"></span>
+                <div class="profile-dropdown">
+                  <a href="profile.html"><i class="fas fa-user-circle"></i> Profile</a>
+                  <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                  <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+              </div>
+            </div>
           </li>
         </ul>
       </nav>
@@ -272,12 +250,6 @@
             applications, and infrastructure in the cloud.
           </p>
 
-          <!-- HARDCODED LOCK OVERLAY -->
-          <div class="debug-lock-overlay">
-            <i class="fas fa-lock"></i>
-            <div class="debug-lock-message">Complete "Application Security" to unlock</div>
-          </div>
-
           <!-- Practical Exercise: Cloud Misconfiguration -->
           <div class="practical-exercise">
             <h4>Practical Exercise: Cloud Misconfiguration</h4>
@@ -360,12 +332,6 @@
             managing user identities.
           </p>
 
-          <!-- HARDCODED LOCK OVERLAY -->
-          <div class="debug-lock-overlay">
-            <i class="fas fa-lock"></i>
-            <div class="debug-lock-message">Complete "Cloud Security" to unlock</div>
-          </div>
-
           <!-- Practical Exercise: Two-Factor Authentication -->
           <div class="practical-exercise">
             <h4>Practical Exercise: Two-Factor Authentication (2FA)</h4>
@@ -436,12 +402,6 @@
             from threats like malware, unauthorized access, and theft.
           </p>
 
-          <!-- HARDCODED LOCK OVERLAY -->
-          <div class="debug-lock-overlay">
-            <i class="fas fa-lock"></i>
-            <div class="debug-lock-message">Complete "Identity Management" to unlock</div>
-          </div>
-
           <!-- Practical Exercise: Mobile Device Management -->
           <div class="practical-exercise">
             <h4>Practical Exercise: Mobile Device Management (MDM)</h4>
@@ -508,12 +468,6 @@
             through networks. It includes hardware and software mechanisms to
             prevent unauthorized access and disruptions.
           </p>
-
-          <!-- HARDCODED LOCK OVERLAY -->
-          <div class="debug-lock-overlay">
-            <i class="fas fa-lock"></i>
-            <div class="debug-lock-message">Complete "Mobile Security" to unlock</div>
-          </div>
 
           <!-- Practical Exercise: Firewall Configuration -->
           <div class="practical-exercise">

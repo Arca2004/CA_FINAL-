@@ -4,82 +4,91 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Phishing Attacks - Cybersec Academy</title>
-    <link rel="stylesheet" href="phishing-attacks.css" />
     <link rel="stylesheet" href="cyberindex.css" />
     <link rel="stylesheet" href="css/phishing-attacks.css" />
+    <link rel="stylesheet" href="css/index.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <link rel="icon" type="image/png" href="/img/favicon.png" />
+    <link rel="stylesheet" href="css/profile-dropdown.css" />
     <link rel="stylesheet" href="css/responsive.css" />
-    <!-- Enhanced lock styles to match intro-cybersec.html and attack-targets.html -->
     <style>
-      /* Enhanced lock styles for non-first topics */
+      /* Ensure quiz options are always clickable in techniques section */
+      .target-card[data-target="techniques"] .topic-quiz .option,
+      .target-card[data-target="techniques"] .topic-quiz-btn {
+        pointer-events: auto !important;
+      }
+
+      /* Additional fix for unlocking topics with debug-lock-overlay */
+      .target-card[data-target="types"].accessible .debug-lock-overlay,
+      .target-card[data-target="prevention"].accessible .debug-lock-overlay {
+        display: none !important;
+      }
+
+      .target-card.accessible {
+        filter: none !important;
+        pointer-events: auto !important;
+      }
+
+      /* Remove red border from current topics */
       .target-card[data-target="types"],
-      .target-card[data-target="prevention"] {
-        position: relative;
-        filter: grayscale(0.8) brightness(0.7);
-        border: 3px solid #e74c3c !important;
-        overflow: hidden;
+      .target-card[data-target="prevention"],
+      .target-card.accessible {
+        border: 3px solid #1a2634 !important;
       }
 
-      /* Lock overlay styles */
-      .debug-lock-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(14, 22, 33, 0.8);
-        backdrop-filter: blur(2px);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: 100;
-      }
-
-      .debug-lock-overlay i {
-        font-size: 5rem;
-        color: #e74c3c;
-        margin-bottom: 15px;
-        text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-        animation: wiggle 2.5s infinite ease-in-out;
-      }
-
-      .debug-lock-message {
-        background: rgba(231, 76, 60, 0.9);
-        color: white;
-        padding: 15px 25px;
-        border-radius: 5px;
-        font-weight: bold;
-        text-align: center;
-        max-width: 80%;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
-        font-size: 1.2rem;
-      }
-
-      /* Wiggle animation for lock icon */
-      @keyframes wiggle {
-        0%,
-        100% {
-          transform: rotate(0);
-        }
-        20% {
-          transform: rotate(-8deg);
-        }
-        40% {
-          transform: rotate(8deg);
-        }
-        60% {
-          transform: rotate(-4deg);
-        }
-        80% {
-          transform: rotate(4deg);
-        }
+      /* Only show red border on locked topics with visible lock overlay */
+      .target-card[data-target="types"]
+        .debug-lock-overlay:not([style*="display: none"])
+        ~ *,
+      .target-card[data-target="prevention"]
+        .debug-lock-overlay:not([style*="display: none"])
+        ~ * {
+        border: none !important;
       }
     </style>
+    <script>
+      // Add this extra script to handle the hardcoded debug-lock-overlay
+      document.addEventListener("DOMContentLoaded", function () {
+        // Check if the user has completed the first quiz
+        const completedQuizzes =
+          JSON.parse(localStorage.getItem("phishingCompletedQuizzes")) || [];
+
+        if (completedQuizzes.includes("techniques")) {
+          // If techniques is completed, make the next section accessible
+          const typesCard = document.querySelector(
+            '.target-card[data-target="types"]'
+          );
+          if (typesCard) {
+            typesCard.classList.add("accessible");
+            // Enable pointer events on all interactive elements
+            typesCard
+              .querySelectorAll(
+                ".attack-item, .topic-quiz .option, .topic-quiz-btn"
+              )
+              .forEach((el) => (el.style.pointerEvents = "auto"));
+          }
+        }
+
+        if (completedQuizzes.includes("types")) {
+          // If types is completed, make the next section accessible
+          const preventionCard = document.querySelector(
+            '.target-card[data-target="prevention"]'
+          );
+          if (preventionCard) {
+            preventionCard.classList.add("accessible");
+            // Enable pointer events on all interactive elements
+            preventionCard
+              .querySelectorAll(
+                ".attack-item, .topic-quiz .option, .topic-quiz-btn"
+              )
+              .forEach((el) => (el.style.pointerEvents = "auto"));
+          }
+        }
+      });
+    </script>
   </head>
   <body>
     <div class="scanner-lines"></div>
@@ -97,7 +106,12 @@
         </div>
       </div>
       <nav>
-        <ul>
+        <div class="hamburger-menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <ul class="nav-links">
           <li>
             <a href="index.html" class="nav-link"
               ><i class="fas fa-home"></i> Home</a
@@ -114,9 +128,30 @@
             >
           </li>
           <li id="auth-nav-item">
-            <a href="login.html" class="nav-link"
-              ><i class="fas fa-user"></i> Login</a
+            <a href="login.html" class="nav-link" id="login-link">
+              <i class="fas fa-user"></i> Login
+            </a>
+            <div
+              class="profile-container"
+              id="profile-container"
+              style="display: none"
             >
+              <div class="profile-link">
+                <div class="profile-avatar" id="profile-avatar">
+                  <span id="profile-initial"></span>
+                </div>
+                <span class="profile-name" id="profile-name"></span>
+              </div>
+              <div class="profile-dropdown">
+                <a href="profile.html"
+                  ><i class="fas fa-user-circle"></i> View Profile</a
+                >
+                <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                <a href="#" class="logout-link" id="logout-btn"
+                  ><i class="fas fa-sign-out-alt"></i> Logout</a
+                >
+              </div>
+            </div>
           </li>
         </ul>
       </nav>
@@ -1052,7 +1087,10 @@ openssh-server/focal-updates,focal-security 1:8.2p1-4ubuntu0.3 amd64 [upgradable
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>
     <script src="firebase-config.js"></script>
     <script src="js/phishing-attack.js"></script>
+    <script src="js/mobile-menu.js"></script>
   </body>
 </html>

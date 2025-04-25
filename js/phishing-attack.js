@@ -1,60 +1,84 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Check if user is logged in and update navigation
+  // Elements for profile dropdown
   const authNavItem = document.getElementById("auth-nav-item");
+  const loginLink = document.getElementById("login-link");
+  const profileContainer = document.getElementById("profile-container");
+  const profileAvatar = document.getElementById("profile-avatar");
+  const profileInitial = document.getElementById("profile-initial");
+  const profileName = document.getElementById("profile-name");
+  const logoutBtn = document.getElementById("logout-btn");
 
-  if (authNavItem) {
-    // Check for Firebase auth state
-    if (typeof firebase !== "undefined" && firebase.auth) {
-      firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
-          // User is signed in - show profile link and logout
-          authNavItem.innerHTML = `
-            <div class="nav-dropdown">
-              <a href="user-profile.html" class="nav-link">
-                <i class="fas fa-user-shield"></i> ${
-                  user.displayName || user.email
-                }
-              </a>
-              <div class="dropdown-content">
-                <a href="user-profile.html"><i class="fas fa-id-card"></i> My Profile</a>
-                <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
-              </div>
-            </div>
-          `;
+  // Setup logout button event listener
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      logout();
+    });
+  }
 
-          // Store in localStorage for backward compatibility
-          localStorage.setItem(
-            "currentUser",
-            JSON.stringify({
-              username: user.email,
-              fullname: user.displayName || "Cyber Academy User",
-            })
-          );
+  // Function to get user initial from name or email
+  function getUserInitial(userInfo) {
+    if (!userInfo) return "?";
+
+    if (userInfo.displayName) {
+      return userInfo.displayName.charAt(0).toUpperCase();
+    } else if (userInfo.fullname) {
+      return userInfo.fullname.charAt(0).toUpperCase();
+    } else if (userInfo.email) {
+      return userInfo.email.charAt(0).toUpperCase();
+    } else if (userInfo.username) {
+      return userInfo.username.charAt(0).toUpperCase();
+    }
+
+    return "U";
+  }
+
+  // Check for Firebase auth state
+  if (firebase && firebase.auth) {
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        // User is signed in with Firebase
+        if (loginLink) loginLink.style.display = "none";
+        if (profileContainer) profileContainer.style.display = "block";
+        if (profileInitial) profileInitial.textContent = getUserInitial(user);
+        if (profileName) profileName.textContent = "";
+
+        // Store in localStorage for backward compatibility
+        localStorage.setItem(
+          "currentUser",
+          JSON.stringify({
+            username: user.email,
+            fullname: user.displayName || "Cyber Academy User",
+            initial: getUserInitial(user),
+          })
+        );
+      } else {
+        // Check localStorage for backward compatibility
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        if (currentUser) {
+          if (loginLink) loginLink.style.display = "none";
+          if (profileContainer) profileContainer.style.display = "block";
+          if (profileInitial)
+            profileInitial.textContent = getUserInitial(currentUser);
+          if (profileName) profileName.textContent = "";
         } else {
-          // No user signed in - show login link
-          authNavItem.innerHTML = `
-            <a href="login.html" class="nav-link">
-              <i class="fas fa-user"></i> Login
-            </a>
-          `;
+          if (loginLink) loginLink.style.display = "block";
+          if (profileContainer) profileContainer.style.display = "none";
         }
-      });
-    } else {
-      // Fallback for older version
-      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-      if (currentUser) {
-        authNavItem.innerHTML = `
-          <div class="nav-dropdown">
-            <a href="user-profile.html" class="nav-link">
-              <i class="fas fa-user-shield"></i> ${currentUser.username}
-            </a>
-            <div class="dropdown-content">
-              <a href="user-profile.html"><i class="fas fa-id-card"></i> My Profile</a>
-              <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
-            </div>
-          </div>
-        `;
       }
+    });
+  } else {
+    // Fallback for older version
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (currentUser) {
+      if (loginLink) loginLink.style.display = "none";
+      if (profileContainer) profileContainer.style.display = "block";
+      if (profileInitial)
+        profileInitial.textContent = getUserInitial(currentUser);
+      if (profileName) profileName.textContent = "";
+    } else {
+      if (loginLink) loginLink.style.display = "block";
+      if (profileContainer) profileContainer.style.display = "none";
     }
   }
 
@@ -177,51 +201,23 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
+    // Make sure options in the first topic (techniques) are always clickable
+    const firstTopicCard = document.querySelector(
+      '.target-card[data-target="techniques"]'
+    );
+    if (firstTopicCard) {
+      firstTopicCard
+        .querySelectorAll(".topic-quiz .option, .topic-quiz-btn")
+        .forEach((element) => {
+          element.style.pointerEvents = "auto";
+        });
+    }
+
     updateProgress();
   }
 
   // Define topic progression order
   const topicOrder = ["techniques", "types", "prevention"];
-
-  function initializeProgressUI() {
-    // Update the UI with completed sections from completed quizzes
-    completedQuizzes.forEach((targetId) => {
-      // When a quiz is completed, mark the section as completed too
-      if (!completedSections.includes(targetId)) {
-        completedSections.push(targetId);
-      }
-
-      const card = document.querySelector(
-        `.target-card[data-target="${targetId}"]`
-      );
-      if (card) {
-        card.classList.add("completed");
-
-        const quizContainer = card.querySelector(".topic-quiz");
-        if (quizContainer) {
-          const quizBtn = quizContainer.querySelector(".topic-quiz-btn");
-          const correctOption = quizContainer.querySelector(
-            '.option[data-correct="true"]'
-          );
-          const resultsDiv = quizContainer.querySelector(".topic-quiz-results");
-          const correctAnswer = quizContainer.querySelector(".correct-answer");
-
-          if (quizBtn && correctOption && resultsDiv && correctAnswer) {
-            correctOption.classList.add("selected");
-            resultsDiv.style.display = "block";
-            correctAnswer.style.display = "block";
-            quizBtn.textContent = "Correct!";
-            quizBtn.classList.add("success");
-            quizBtn.disabled = true;
-          }
-        }
-      }
-    });
-
-    // Initialize topic locking based on progression
-    updateTopicAccessibility();
-    updateProgress();
-  }
 
   // Function to determine if a topic should be accessible
   function isTopicAccessible(topicId) {
@@ -293,12 +289,40 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       }
 
+      // Handle hardcoded debug-lock-overlay in the HTML
+      const debugLockOverlay = topicCard.querySelector(".debug-lock-overlay");
+      if (debugLockOverlay) {
+        if (isAccessible) {
+          // Hide the hardcoded lock overlay when the topic becomes accessible
+          debugLockOverlay.style.display = "none";
+
+          // Make sure all interactive elements in this card are clickable
+          topicCard
+            .querySelectorAll(
+              ".attack-item, .topic-quiz .option, .complete-btn, .topic-quiz-btn"
+            )
+            .forEach((element) => {
+              element.style.pointerEvents = "auto";
+            });
+
+          // Remove any grayscale filter from the card
+          topicCard.style.filter = "none";
+          topicCard.style.pointerEvents = "auto";
+        } else {
+          // Show the hardcoded lock overlay when the topic is not accessible
+          debugLockOverlay.style.display = "flex";
+        }
+      }
+
       if (!isAccessible && !topicCard.classList.contains("locked")) {
         // Lock the topic
         topicCard.classList.add("locked");
 
-        // Add lock overlay if not already present
-        if (!topicCard.querySelector(".lock-overlay")) {
+        // Add lock overlay if not already present and there's no debug lock overlay
+        if (
+          !topicCard.querySelector(".lock-overlay") &&
+          !topicCard.querySelector(".debug-lock-overlay")
+        ) {
           const lockOverlay = document.createElement("div");
           lockOverlay.className = "lock-overlay";
 
@@ -347,6 +371,18 @@ document.addEventListener("DOMContentLoaded", function () {
           });
       }
     });
+
+    // Ensure first topic quiz options are always clickable
+    const firstTopicCard = document.querySelector(
+      '.target-card[data-target="techniques"]'
+    );
+    if (firstTopicCard) {
+      firstTopicCard
+        .querySelectorAll(".topic-quiz .option, .topic-quiz-btn")
+        .forEach((element) => {
+          element.style.pointerEvents = "auto";
+        });
+    }
   }
 
   initializeProgressUI();
@@ -403,6 +439,11 @@ document.addEventListener("DOMContentLoaded", function () {
               updateTopicAccessibility();
               updateProgress();
             }
+
+            // Force an additional call to updateTopicAccessibility to handle hardcoded overlays
+            setTimeout(() => {
+              updateTopicAccessibility();
+            }, 100);
           }
 
           this.textContent = "Correct!";
@@ -431,6 +472,14 @@ document.addEventListener("DOMContentLoaded", function () {
       // Check if the topic is accessible
       if (!isTopicAccessible(targetId)) {
         return;
+      }
+
+      // Make sure all quiz options in the first (techniques) section have pointer-events set to auto
+      if (targetId === "techniques") {
+        const topicCard = this.closest(".target-card");
+        topicCard.querySelectorAll(".topic-quiz .option").forEach((opt) => {
+          opt.style.pointerEvents = "auto";
+        });
       }
 
       const questionDiv = this.closest(".question");
@@ -681,6 +730,18 @@ document.addEventListener("DOMContentLoaded", function () {
         progressBar.style.width = "0%";
       }
 
+      // Make sure options in the first topic (techniques) are always clickable
+      const firstTopicCard = document.querySelector(
+        '.target-card[data-target="techniques"]'
+      );
+      if (firstTopicCard) {
+        firstTopicCard
+          .querySelectorAll(".topic-quiz .option, .topic-quiz-btn")
+          .forEach((element) => {
+            element.style.pointerEvents = "auto";
+          });
+      }
+
       // Re-initialize topic accessibility
       updateTopicAccessibility();
     }
@@ -730,26 +791,29 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// Logout function
+// Define logout function
 function logout() {
-  // Clear localStorage
-  localStorage.removeItem("currentUser");
-  localStorage.removeItem("isLoggedIn");
-
-  // Sign out from Firebase if available
-  if (typeof firebase !== "undefined" && firebase.auth) {
+  // Check if Firebase auth is available
+  if (firebase && firebase.auth) {
     firebase
       .auth()
       .signOut()
       .then(() => {
-        console.log("User signed out from Firebase");
-        window.location.href = "index.html";
+        // Remove current user from localStorage for backward compatibility
+        localStorage.removeItem("currentUser");
+        // Redirect to login page
+        window.location.href = "login.html";
       })
       .catch((error) => {
-        console.error("Error signing out:", error);
+        console.error("Sign out error:", error);
+
+        // Fallback to local logout if Firebase fails
+        localStorage.removeItem("currentUser");
+        window.location.href = "login.html";
       });
   } else {
-    // Redirect to home page
-    window.location.href = "index.html";
+    // Fallback for older version
+    localStorage.removeItem("currentUser");
+    window.location.href = "login.html";
   }
 }
