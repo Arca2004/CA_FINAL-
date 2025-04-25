@@ -304,45 +304,66 @@
     </main>
 
     <footer>
-      <div class="footer-container">
-        <div class="footer-logo">
-          <div class="logo-icon">
-            <i class="fas fa-shield-alt"></i>
+      <div class="redesigned-footer">
+        <div class="footer-main">
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <div class="logo-icon">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <div>
+                <span class="cyber">CYBER</span><span class="sec">SEC</span>
+                <span class="academy">Academy</span>
+              </div>
+            </div>
           </div>
-          <span class="cyber">CYBER</span><span class="sec">SEC</span>
-          <span class="academy">Academy</span>
-        </div>
 
-        <div class="footer-links">
-          <div class="link-group">
-            <h4>Quick Links</h4>
-            <ul>
-              <li>
+          <div class="footer-nav">
+            <div class="footer-nav-section">
+              <h4>Navigation</h4>
+              <div class="nav-links">
                 <a href="index.html"><i class="fas fa-home"></i> Home</a>
-              </li>
-              <li>
                 <a href="learn.html"
                   ><i class="fas fa-graduation-cap"></i> Learn</a
                 >
-              </li>
-              <li>
                 <a href="about-us.html"
                   ><i class="fas fa-info-circle"></i> About Us</a
                 >
-              </li>
-            </ul>
+              </div>
+            </div>
+
+            <div class="footer-nav-section">
+              <h4>Learning Paths</h4>
+              <div class="nav-links">
+                <a href="learn.html#beginner-content"
+                  ><i class="fas fa-shield-alt"></i> Beginner</a
+                >
+                <a href="learn.html#intermediate-content"
+                  ><i class="fas fa-user-shield"></i> Intermediate</a
+                >
+                <a href="learn.html#advanced-content"
+                  ><i class="fas fa-shield-virus"></i> Advanced</a
+                >
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="footer-bottom">
-        <p>&copy; 2025 Cybersec Academy. All rights reserved.</p>
-        <div class="tech-badge">
-          <span><i class="fab fa-html5"></i> HTML5</span>
-          <span><i class="fab fa-css3-alt"></i> CSS3</span>
-          <span><i class="fab fa-js"></i> JavaScript</span>
-          <span><i class="fab fa-github"></i> GitHub</span>
-          <span><i class="fas fa-fire"></i> Firebase</span>
+        <div class="footer-divider"></div>
+
+        <div class="footer-bottom">
+          <p class="copyright">
+            &copy; 2025 Cybersec Academy. All rights reserved.
+          </p>
+          <div class="tech-stack">
+            <div class="tech-icons">
+              <span><i class="fab fa-html5"></i> HTML5</span>
+              <span><i class="fab fa-css3-alt"></i> CSS3</span>
+              <span><i class="fab fa-js"></i> JavaScript</span>
+              <span><i class="fab fa-github"></i> GitHub</span>
+              <span><i class="fas fa-fire"></i> Firebase</span>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
@@ -351,4 +372,150 @@
     <script src="js/profile.js"></script>
     <script src="js/mobile-menu.js"></script>
   </body>
+
+  <style>
+    /* Redesigned Footer Styles - Isolated to avoid conflicts */
+    footer .redesigned-footer {
+      padding: 40px 30px 20px;
+      background: var(--secondary-dark);
+      color: var(--text-secondary);
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    footer .footer-main {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-bottom: 25px;
+    }
+
+    footer .footer-brand {
+      flex: 1;
+      min-width: 220px;
+      max-width: 350px;
+    }
+
+    footer .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    footer .footer-nav {
+      display: flex;
+      flex: 2;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    footer .footer-nav-section {
+      min-width: 160px;
+    }
+
+    footer .footer-nav-section h4 {
+      color: var(--text-light);
+      margin-bottom: 15px;
+      font-size: 1rem;
+      position: relative;
+      padding-bottom: 8px;
+    }
+
+    footer .footer-nav-section h4:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 30px;
+      height: 2px;
+      background: var(--cyber-blue);
+    }
+
+    footer .nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    footer .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      opacity: 0.8;
+      font-size: 0.95rem;
+    }
+
+    footer .nav-links a:hover {
+      color: var(--cyber-blue);
+      transform: translateX(3px);
+      opacity: 1;
+    }
+
+    footer .nav-links a i {
+      font-size: 0.85rem;
+      width: 18px;
+    }
+
+    footer .footer-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+      margin: 15px 0;
+    }
+
+    footer .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      padding-top: 15px;
+    }
+
+    footer .copyright {
+      font-size: 0.85rem;
+      opacity: 0.7;
+    }
+
+    footer .tech-icons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    footer .tech-icons span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    footer .tech-icons i {
+      color: var(--cyber-blue);
+      font-size: 1rem;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      footer .footer-main {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      footer .footer-nav {
+        width: 100%;
+      }
+
+      footer .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
 </html>
