@@ -10,10 +10,10 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <link rel="icon" type="image/png" href="img/favicon.png" />
-    <link rel="stylesheet" href="css/profile-dropdown.css">
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/responsive.css">
-    
+    <link rel="stylesheet" href="css/profile-dropdown.css" />
+    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -63,7 +63,11 @@
             <a href="login.html" class="nav-link" id="login-link">
               <i class="fas fa-user"></i> Login
             </a>
-            <div class="profile-container" id="profile-container" style="display: none;">
+            <div
+              class="profile-container"
+              id="profile-container"
+              style="display: none"
+            >
               <div class="profile-link">
                 <div class="profile-avatar" id="profile-avatar">
                   <span id="profile-initial"></span>
@@ -71,9 +75,13 @@
                 <span class="profile-name" id="profile-name"></span>
               </div>
               <div class="profile-dropdown">
-                <a href="profile.html"><i class="fas fa-user-circle"></i> View Profile</a>
+                <a href="profile.html"
+                  ><i class="fas fa-user-circle"></i> View Profile</a
+                >
                 <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
-                <a href="#" class="logout-link" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a href="#" class="logout-link" id="logout-btn"
+                  ><i class="fas fa-sign-out-alt"></i> Logout</a
+                >
               </div>
             </div>
           </li>
@@ -97,7 +105,9 @@
             </div>
 
             <p class="hero-description">
-                Explore essential cybersecurity tips to protect yourself online. Learn about attack targets, phishing scams, malware, password security, network threats, and more. Stay informed, stay safe!
+              Explore essential cybersecurity tips to protect yourself online.
+              Learn about attack targets, phishing scams, malware, password
+              security, network threats, and more. Stay informed, stay safe!
             </p>
 
             <div class="cta-buttons">
@@ -114,7 +124,7 @@
 
             <div class="cyber-stats">
               <div class="stat">
-                <span class="counter" data-target="33">0</span>+
+                <span class="counter" data-target="38">0</span>+
                 <span class="stat-label">Topics</span>
               </div>
               <div class="stat">
@@ -168,9 +178,7 @@
 
       <section id="topics">
         <div class="topics-container">
-          <h2 class="section-title">
-            T<span class="highlight">opics</span>
-          </h2>
+          <h2 class="section-title">T<span class="highlight">opics</span></h2>
 
           <div class="module-grid">
             <a href="intro-cybersec.html" class="module-card">
@@ -196,7 +204,6 @@
                     ><span class="stat-counter" data-target="0">0</span>%
                     Complete</span
                   >
-                  
                 </div>
               </div>
             </a>
@@ -251,7 +258,6 @@
                     ><span class="stat-counter" data-target="0">0</span>%
                     Complete</span
                   >
-                 
                 </div>
               </div>
             </a>
@@ -279,23 +285,63 @@
                     ><span class="stat-counter" data-target="0">0</span>%
                     Complete</span
                   >
-                
                 </div>
               </div>
             </a>
-          </div>
-        </div>
-      </section>
-      
-      <!-- New Cybersecurity Tips Section -->
-      <section id="cyber-tips">
-        <h2 class="section-title">
-          Cybersecurity <span class="highlight">Tips</span>
-        </h2>
-        
-        <div class="tips-container" id="tips-container">
-          <div class="tip-loading">
-            <i class="fas fa-sync fa-spin"></i> Loading cybersecurity tips...
+
+            <a href="password-theft.html" class="module-card">
+              <div class="module-content">
+                <div class="module-icon">
+                  <i class="fas fa-key"></i>
+                </div>
+                <h3>Password Security</h3>
+                <div class="module-stats">
+                  <span><i class="fas fa-book"></i> 4 Topics</span>
+                  <span><i class="fas fa-clock"></i> 60 minutes</span>
+                </div>
+                <div class="difficulty medium">
+                  <span>Intermediate</span>
+                </div>
+              </div>
+              <div class="module-progress">
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 0%"></div>
+                </div>
+                <div class="progress-stats">
+                  <span class="completion-rate"
+                    ><span class="stat-counter" data-target="0">0</span>%
+                    Complete</span
+                  >
+                </div>
+              </div>
+            </a>
+
+            <a href="cloud-security.html" class="module-card">
+              <div class="module-content">
+                <div class="module-icon">
+                  <i class="fas fa-cloud"></i>
+                </div>
+                <h3>Cloud Security</h3>
+                <div class="module-stats">
+                  <span><i class="fas fa-book"></i> 5 Topics</span>
+                  <span><i class="fas fa-clock"></i> 90 minutes</span>
+                </div>
+                <div class="difficulty medium">
+                  <span>Intermediate</span>
+                </div>
+              </div>
+              <div class="module-progress">
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 0%"></div>
+                </div>
+                <div class="progress-stats">
+                  <span class="completion-rate"
+                    ><span class="stat-counter" data-target="0">0</span>%
+                    Complete</span
+                  >
+                </div>
+              </div>
+            </a>
           </div>
         </div>
       </section>
@@ -305,15 +351,17 @@
           <div class="cta-content">
             <h2>Ready to learn the basics of cybersecurity?</h2>
             <p>
-            Learn the basics of cybersecurity and build a solid foundation to stay safe in the digital world.
+              Learn the basics of cybersecurity and build a solid foundation to
+              stay safe in the digital world.
             </p>
 
             <a href="learn.html">
-  <button id="join-btn" class="primary-btn">
-    <span class="btn-content">Start Your Journey</span>
-    <span class="btn-glitch"></span>
-  </button>
-</a>
+              <button id="join-btn" class="primary-btn">
+                <span class="btn-content">Start Your Journey</span>
+                <span class="btn-glitch"></span>
+              </button>
+            </a>
+          </div>
           <div class="cta-decoration">
             <div class="cyber-circuit"></div>
           </div>
@@ -335,32 +383,44 @@
               </div>
             </div>
           </div>
-          
+
           <div class="footer-nav">
             <div class="footer-nav-section">
               <h4>Navigation</h4>
               <div class="nav-links">
                 <a href="index.html"><i class="fas fa-home"></i> Home</a>
-                <a href="learn.html"><i class="fas fa-graduation-cap"></i> Learn</a>
-                <a href="about-us.html"><i class="fas fa-info-circle"></i> About Us</a>
+                <a href="learn.html"
+                  ><i class="fas fa-graduation-cap"></i> Learn</a
+                >
+                <a href="about-us.html"
+                  ><i class="fas fa-info-circle"></i> About Us</a
+                >
               </div>
             </div>
-            
+
             <div class="footer-nav-section">
               <h4>Learning Paths</h4>
               <div class="nav-links">
-                <a href="learn.html#beginner-content"><i class="fas fa-shield-alt"></i> Beginner</a>
-                <a href="learn.html#intermediate-content"><i class="fas fa-user-shield"></i> Intermediate</a>
-                <a href="learn.html#advanced-content"><i class="fas fa-shield-virus"></i> Advanced</a>
+                <a href="learn.html#beginner-content"
+                  ><i class="fas fa-shield-alt"></i> Beginner</a
+                >
+                <a href="learn.html#intermediate-content"
+                  ><i class="fas fa-user-shield"></i> Intermediate</a
+                >
+                <a href="learn.html#advanced-content"
+                  ><i class="fas fa-shield-virus"></i> Advanced</a
+                >
               </div>
             </div>
           </div>
         </div>
-        
+
         <div class="footer-divider"></div>
-        
+
         <div class="footer-bottom">
-          <p class="copyright">&copy; 2025 Cybersec Academy. All rights reserved.</p>
+          <p class="copyright">
+            &copy; 2025 Cybersec Academy. All rights reserved.
+          </p>
           <div class="tech-stack">
             <div class="tech-icons">
               <span><i class="fab fa-html5"></i> HTML5</span>
@@ -378,7 +438,7 @@
     <script src="js/index.js"></script>
     <script src="js/mobile-menu.js"></script>
   </body>
-  
+
   <style>
     /* Redesigned Footer Styles - Isolated to avoid conflicts */
     footer .redesigned-footer {
@@ -388,7 +448,7 @@
       max-width: 1400px;
       margin: 0 auto;
     }
-    
+
     footer .footer-main {
       display: flex;
       justify-content: space-between;
@@ -396,20 +456,20 @@
       gap: 30px;
       margin-bottom: 25px;
     }
-    
+
     footer .footer-brand {
       flex: 1;
       min-width: 220px;
       max-width: 350px;
     }
-    
+
     footer .footer-logo {
       display: flex;
       align-items: center;
       gap: 8px;
       margin-bottom: 10px;
     }
-    
+
     footer .footer-nav {
       display: flex;
       flex: 2;
@@ -417,11 +477,11 @@
       flex-wrap: wrap;
       gap: 30px;
     }
-    
+
     footer .footer-nav-section {
       min-width: 160px;
     }
-    
+
     footer .footer-nav-section h4 {
       color: var(--text-light);
       margin-bottom: 15px;
@@ -429,9 +489,9 @@
       position: relative;
       padding-bottom: 8px;
     }
-    
+
     footer .footer-nav-section h4:after {
-      content: '';
+      content: "";
       position: absolute;
       left: 0;
       bottom: 0;
@@ -439,13 +499,13 @@
       height: 2px;
       background: var(--cyber-blue);
     }
-    
+
     footer .nav-links {
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
-    
+
     footer .nav-links a {
       color: var(--text-secondary);
       text-decoration: none;
@@ -456,24 +516,24 @@
       opacity: 0.8;
       font-size: 0.95rem;
     }
-    
+
     footer .nav-links a:hover {
       color: var(--cyber-blue);
       transform: translateX(3px);
       opacity: 1;
     }
-    
+
     footer .nav-links a i {
       font-size: 0.85rem;
       width: 18px;
     }
-    
+
     footer .footer-divider {
       height: 1px;
       background: rgba(255, 255, 255, 0.1);
       margin: 15px 0;
     }
-    
+
     footer .footer-bottom {
       display: flex;
       justify-content: space-between;
@@ -482,18 +542,18 @@
       gap: 15px;
       padding-top: 15px;
     }
-    
+
     footer .copyright {
       font-size: 0.85rem;
       opacity: 0.7;
     }
-    
+
     footer .tech-icons {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
     }
-    
+
     footer .tech-icons span {
       display: flex;
       align-items: center;
@@ -501,23 +561,23 @@
       font-size: 0.85rem;
       opacity: 0.8;
     }
-    
+
     footer .tech-icons i {
       color: var(--cyber-blue);
       font-size: 1rem;
     }
-    
+
     /* Responsive adjustments */
     @media (max-width: 768px) {
       footer .footer-main {
         flex-direction: column;
         gap: 20px;
       }
-      
+
       footer .footer-nav {
         width: 100%;
       }
-      
+
       footer .footer-bottom {
         flex-direction: column;
         align-items: flex-start;
