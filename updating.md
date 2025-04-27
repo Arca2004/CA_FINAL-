@@ -10,6 +10,9 @@ First, check what files have been changed in your local workspace:
 
 ```bash
 git status
+git add .
+git commit -m "Add feature X to improve user experience"
+git push origin master
 ```
 
 This will show you:
