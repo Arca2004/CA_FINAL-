@@ -36,26 +36,28 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Handle the login button
-  document
-    .getElementById("login-button")
-    .addEventListener("click", function () {
+  document.querySelector("#login-link").addEventListener("click", function (e) {
+    if (e.target.id === "login-link") {
       window.location.href =
         "login.html?redirect=" + encodeURIComponent(window.location.href);
-    });
+    }
+  });
 
   // Handle the logout button
-  document
-    .getElementById("logout-button")
-    .addEventListener("click", function () {
-      auth
-        .signOut()
-        .then(() => {
-          console.log("User signed out");
-        })
-        .catch((error) => {
-          console.error("Error signing out:", error);
-        });
-    });
+  if (document.getElementById("logout-btn")) {
+    document
+      .getElementById("logout-btn")
+      .addEventListener("click", function () {
+        auth
+          .signOut()
+          .then(() => {
+            console.log("User signed out");
+          })
+          .catch((error) => {
+            console.error("Error signing out:", error);
+          });
+      });
+  }
 
   // Set up the accordion functionality for attack items
   setupAccordion();
@@ -122,57 +124,80 @@ function resetProgress() {
 
 // Update the UI based on the user's progress
 function updateUI() {
-  const sections = [
-    "cloud-overview",
-    "data-breaches",
-    "misconfigurations",
-    "account-hijacking",
-    "api-insecurity",
-  ];
+  const progressTracker = document.querySelector(".progress-tracker");
+  if (!progressTracker) return;
 
-  sections.forEach((section, index) => {
-    const sectionElement = document.getElementById(section);
-    const completed = userProgress.completedSections.includes(section);
+  const progressNodes = progressTracker.querySelectorAll(".progress-node");
+  const progressLines = progressTracker.querySelectorAll(".progress-line");
 
-    // Update completion status
-    if (completed) {
-      sectionElement.classList.add("completed");
-      document
-        .querySelector(`.progress-item[data-section="${section}"]`)
-        .classList.add("completed");
-    } else {
-      sectionElement.classList.remove("completed");
-      document
-        .querySelector(`.progress-item[data-section="${section}"]`)
-        .classList.remove("completed");
-    }
+  // Mapping topics from progress tracker to section IDs
+  const topicToSection = {
+    "cloud-basics": "cloud-overview",
+    "data-breaches": "data-breaches",
+    misconfiguration: "misconfigurations",
+    "account-hijacking": "account-hijacking",
+    "insider-threats": "api-insecurity",
+  };
 
-    // Handle locks (unlock the next section if the current one is completed)
-    if (index > 0) {
-      const prevSection = sections[index - 1];
-      const isLocked = !userProgress.completedSections.includes(prevSection);
+  // Update progress tracker nodes
+  progressNodes.forEach((node, index) => {
+    const topicId = node.getAttribute("data-topic");
+    const sectionId = topicToSection[topicId];
 
-      const lockOverlay = sectionElement.querySelector(".lock-overlay");
-      if (lockOverlay) {
-        if (isLocked) {
-          lockOverlay.classList.remove("hidden");
-        } else {
-          lockOverlay.classList.add("hidden");
-        }
+    if (userProgress.completedSections.includes(sectionId)) {
+      node.classList.add("completed");
+      node.classList.remove("locked");
+      if (index > 0 && progressLines[index - 1]) {
+        progressLines[index - 1].classList.add("completed");
+      }
+    } else if (index > 0) {
+      const prevTopic = progressNodes[index - 1].getAttribute("data-topic");
+      const prevSectionId = topicToSection[prevTopic];
+
+      if (!userProgress.completedSections.includes(prevSectionId)) {
+        node.classList.add("locked");
+      } else {
+        node.classList.remove("locked");
       }
     }
   });
 
   // Update overall progress percentage
-  const completedCount = userProgress.completedSections.length;
-  const totalSections = sections.length;
-  const progressPercent =
-    totalSections > 0 ? Math.round((completedCount / totalSections) * 100) : 0;
+  const progressElement = document.getElementById("module-progress");
+  if (progressElement) {
+    const completedCount = userProgress.completedSections.length;
+    const totalSections = Object.keys(topicToSection).length;
+    const progressPercent =
+      totalSections > 0
+        ? Math.round((completedCount / totalSections) * 100)
+        : 0;
+    progressElement.style.width = `${progressPercent}%`;
 
-  document.getElementById(
-    "progress-percent"
-  ).textContent = `${progressPercent}%`;
-  document.getElementById("progress-bar").style.width = `${progressPercent}%`;
+    const progressPercentText = document.getElementById("progress-percent");
+    if (progressPercentText) {
+      progressPercentText.textContent = `${progressPercent}%`;
+    }
+  }
+
+  // Update locked sections
+  document.querySelectorAll(".target-card.locked").forEach((card) => {
+    const targetId = card.getAttribute("data-target");
+    const lockOverlay = card.querySelector(".lock-overlay");
+
+    // Check if previous section is completed to unlock this one
+    const sections = Object.values(topicToSection);
+    const currentIndex = sections.indexOf(targetId);
+
+    if (currentIndex > 0) {
+      const prevSection = sections[currentIndex - 1];
+      if (userProgress.completedSections.includes(prevSection)) {
+        card.classList.remove("locked");
+        if (lockOverlay) lockOverlay.style.display = "none";
+      } else {
+        if (lockOverlay) lockOverlay.style.display = "flex";
+      }
+    }
+  });
 }
 
 // Set up the accordion functionality
@@ -199,102 +224,132 @@ function setupAccordion() {
 
 // Set up quizzes
 function setupQuizzes() {
-  const quizForms = document.querySelectorAll(".quiz-form");
+  const quizSections = document.querySelectorAll(".topic-quiz");
 
-  quizForms.forEach((form) => {
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
+  quizSections.forEach((quiz) => {
+    const options = quiz.querySelectorAll(".option");
+    const checkButton = quiz.querySelector(".topic-quiz-btn");
+    const resultsDiv = quiz.querySelector(".topic-quiz-results");
+    const correctFeedback = quiz.querySelector(".correct-answer");
+    const incorrectFeedback = quiz.querySelector(".incorrect-answer");
+    let selectedOption = null;
 
-      const sectionId = this.getAttribute("data-section");
-      const selectedOption = this.querySelector(
-        'input[name="quiz-option"]:checked'
-      );
+    // Handle option click
+    options.forEach((option) => {
+      option.addEventListener("click", function () {
+        // Remove selected class from all options
+        options.forEach((opt) => opt.classList.remove("selected"));
 
-      if (!selectedOption) {
-        alert("Please select an answer.");
-        return;
-      }
-
-      const feedbackCorrect = this.querySelector(".feedback-correct");
-      const feedbackIncorrect = this.querySelector(".feedback-incorrect");
-      const submitButton = this.querySelector('button[type="submit"]');
-      const continueButton = this.querySelector(".continue-button");
-
-      if (selectedOption.value === "correct") {
-        feedbackCorrect.classList.remove("hidden");
-        feedbackIncorrect.classList.add("hidden");
-        submitButton.classList.add("hidden");
-        continueButton.classList.remove("hidden");
-
-        // Mark section as completed
-        if (!userProgress.completedSections.includes(sectionId)) {
-          userProgress.completedSections.push(sectionId);
-          saveUserProgress();
-          updateUI();
-        }
-      } else {
-        feedbackCorrect.classList.add("hidden");
-        feedbackIncorrect.classList.remove("hidden");
-      }
+        // Add selected class to clicked option
+        this.classList.add("selected");
+        selectedOption = this;
+      });
     });
 
-    // Continue button functionality
-    const continueButton = form.querySelector(".continue-button");
-    if (continueButton) {
-      continueButton.addEventListener("click", function () {
-        const sectionId = form.getAttribute("data-section");
-        const currentIndex = [
-          "cloud-overview",
-          "data-breaches",
-          "misconfigurations",
-          "account-hijacking",
-          "api-insecurity",
-        ].indexOf(sectionId);
+    // Check answer button
+    if (checkButton) {
+      checkButton.addEventListener("click", function () {
+        if (!selectedOption) {
+          alert("Please select an answer first.");
+          return;
+        }
 
-        if (currentIndex < 4) {
-          // If not the last section
-          const nextSection = document.getElementById(
-            [
-              "cloud-overview",
-              "data-breaches",
-              "misconfigurations",
-              "account-hijacking",
-              "api-insecurity",
-            ][currentIndex + 1]
-          );
-          const nextHeader = nextSection.querySelector("h3");
+        resultsDiv.style.display = "block";
 
-          // Scroll to next section
-          nextSection.scrollIntoView({ behavior: "smooth" });
+        if (selectedOption.getAttribute("data-correct") === "true") {
+          correctFeedback.style.display = "block";
+          incorrectFeedback.style.display = "none";
+          selectedOption.classList.add("correct");
+          checkButton.textContent = "Continue";
+          checkButton.classList.add("success");
 
-          // Expand next section after scrolling
-          setTimeout(() => {
-            if (nextHeader) {
-              nextHeader.click();
+          // Get the section ID from the target card
+          const targetCard = quiz.closest(".target-card");
+          if (targetCard) {
+            const sectionId = targetCard.getAttribute("data-target");
+
+            // Mark section as completed
+            if (
+              sectionId &&
+              !userProgress.completedSections.includes(sectionId)
+            ) {
+              userProgress.completedSections.push(sectionId);
+              saveUserProgress();
+              updateUI();
+
+              // Show celebration
+              setTimeout(() => {
+                showCelebration();
+              }, 1000);
             }
-          }, 800);
+          }
+
+          // Update check button to navigate to next section
+          checkButton.removeEventListener("click", arguments.callee);
+          checkButton.addEventListener("click", function () {
+            const currentCard = quiz.closest(".target-card");
+            const nextCard = currentCard.nextElementSibling;
+
+            if (nextCard && nextCard.classList.contains("target-card")) {
+              nextCard.scrollIntoView({ behavior: "smooth" });
+
+              // Expand first attack item in next section
+              setTimeout(() => {
+                const nextAttackItem = nextCard.querySelector(".attack-item");
+                if (nextAttackItem) {
+                  nextAttackItem.classList.add("expanded");
+                }
+              }, 800);
+            }
+          });
         } else {
-          // Last section completed, show celebration
-          showCelebration();
+          correctFeedback.style.display = "none";
+          incorrectFeedback.style.display = "block";
+          selectedOption.classList.add("incorrect");
         }
       });
     }
   });
 }
 
-// Show celebration animation when all sections are completed
+// Show celebration animation when section is completed
 function showCelebration() {
-  const celebrationContainer = document.getElementById("celebration-container");
-  celebrationContainer.classList.remove("hidden");
+  const celebrationContainer = document.querySelector(".celebration-container");
+  if (!celebrationContainer) return;
 
-  // Create confetti
+  celebrationContainer.classList.add("active");
+  celebrationContainer.style.opacity = "1";
+  celebrationContainer.style.visibility = "visible";
+
+  // Update celebration stats
+  const completedCount = userProgress.completedSections.length;
+  const totalSections = 5; // Total sections in module
+  const statValues = celebrationContainer.querySelectorAll(".stat-value");
+
+  if (statValues.length >= 1) {
+    statValues[0].textContent = `${completedCount}/${totalSections}`;
+  }
+
+  // Add confetti effect
   for (let i = 0; i < 100; i++) {
     createConfetti(celebrationContainer);
   }
 
-  // Hide celebration after 5 seconds
+  // Add click event to continue button
+  const continueBtn = celebrationContainer.querySelector(".celebration-btn");
+  if (continueBtn) {
+    continueBtn.addEventListener("click", function () {
+      celebrationContainer.classList.remove("active");
+      celebrationContainer.style.opacity = "0";
+      celebrationContainer.style.visibility = "hidden";
+    });
+  }
+
+  // Auto-hide celebration after 5 seconds
   setTimeout(() => {
-    celebrationContainer.classList.add("hidden");
+    celebrationContainer.classList.remove("active");
+    celebrationContainer.style.opacity = "0";
+    celebrationContainer.style.visibility = "hidden";
   }, 5000);
 }
 
@@ -312,8 +367,9 @@ function createConfetti(container) {
 
   const confetti = document.createElement("div");
   confetti.className = "confetti";
-  confetti.style.left = Math.random() * 100 + "vw";
-  confetti.style.animationDuration = Math.random() * 3 + 2 + "s";
+  confetti.style.left = `${Math.random() * 100}%`;
+  confetti.style.top = `${Math.random() * 40}%`;
+  confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
   confetti.style.backgroundColor =
     colors[Math.floor(Math.random() * colors.length)];
 

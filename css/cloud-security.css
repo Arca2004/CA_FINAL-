@@ -890,3 +890,25 @@ footer p {
     transform: scale(1);
   }
 }
+
+/* Add confetti animation */
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #f94144;
+  opacity: 0.8;
+  animation: confetti-fall 5s linear infinite;
+  z-index: 999;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
