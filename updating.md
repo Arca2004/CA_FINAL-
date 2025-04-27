@@ -76,16 +76,6 @@ If Git reports merge conflicts, you'll need to manually resolve them:
 4. Add the resolved files with `git add filename`
 5. Complete the merge with `git commit`
 
-
-
-
-
-
-
-
-
-
-
 ## Complete Example Workflow
 
 ```bash
@@ -103,3 +93,43 @@ git push origin master
 ```
 
 Remember to commit frequently with clear messages to make your project history easier to understand.
+
+## Pulling Updates From the Repository
+
+If you want to get the latest changes from the repository without making local changes first, follow these steps:
+
+### 1. Ensure You're in the Right Directory
+
+Make sure you're in your project directory:
+
+```bash
+cd your-repository-name
+```
+
+### 2. Fetch the Latest Changes
+
+Check for any updates in the remote repository:
+
+```bash
+git fetch origin
+```
+
+### 3. Pull the Updates
+
+Download and merge the updates to your local repository:
+
+```bash
+git pull origin master
+```
+
+(Replace "master" with the branch name you want to pull from if different)
+
+### 4. View the Changes
+
+After pulling, you can see what files were updated:
+
+```bash
+git log --stat
+```
+
+This will show you recent commits and which files were modified.
