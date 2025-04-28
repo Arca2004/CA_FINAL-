@@ -107,7 +107,24 @@
             <p class="hero-description">
               Explore essential cybersecurity tips to protect yourself online.
               Learn about attack targets, phishing scams, malware, password
-              security, network threats, and more. Stay informed, stay safe!
+              security, network threats, and more. <span class="highlight-text">Stay informed, stay safe!</span>
+
+<style>
+.highlight-text {
+  background: linear-gradient(120deg, #00ff9d, #00b3ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
+  animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% { filter: brightness(100%); }
+  50% { filter: brightness(150%); }
+}
+</style>
             </p>
 
             <div class="cta-buttons">
