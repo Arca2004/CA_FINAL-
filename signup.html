@@ -37,40 +37,38 @@
         position: relative;
         background: url("img/what-is-cybersecurity.jpg") no-repeat center
           center/cover;
-        padding: 20px;
+        padding: 15px;
+        overflow: hidden;
       }
 
       /* Blurred Background Overlay */
       body::before {
         content: "";
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        background: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(10px);
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+        background: inherit;
+        filter: blur(15px);
         z-index: -1;
       }
 
       .container {
         position: relative;
         width: 100%;
-        max-width: 420px;
-        background: rgba(25, 25, 25, 0.8);
+        max-width: 380px;
+        background: rgba(255, 255, 255, 0.1);
         border-radius: 20px;
         backdrop-filter: blur(20px);
-        box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.5);
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
         overflow: hidden;
-        padding-bottom: 30px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 15px;
       }
 
       .header {
-        height: 160px;
+        height: 120px;
         background: url("img/what-is-cybersecurity.jpg") no-repeat center
           center/cover;
-        position: relative;
+        clip-path: ellipse(100% 80% at 50% 20%);
       }
 
       .header::after {
@@ -84,44 +82,67 @@
       }
 
       .form-container {
-        padding: 30px;
+        padding: 15px;
         text-align: center;
       }
 
       h2 {
-        font-size: 28px;
+        font-size: 22px;
         font-weight: 700;
         color: #ffcc00;
         text-shadow: 2px 2px 5px rgba(255, 204, 0, 0.5);
-        margin-bottom: 5px;
+        margin-bottom: 3px;
       }
 
       p {
         color: white;
-        font-size: 16px;
+        font-size: 13px;
         font-weight: 500;
-        margin-bottom: 20px;
+        margin-bottom: 12px;
       }
 
       .input-group {
         position: relative;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
       }
 
       .input-group i {
         position: absolute;
-        left: 12px;
-        top: 16px;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
         color: rgba(255, 255, 255, 0.7);
+        font-size: 13px;
+      }
+
+      .password-toggle {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 13px;
+        cursor: pointer;
+        transition: color 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        z-index: 2;
+      }
+      
+      .password-toggle:hover {
+        color: #ffcc00;
       }
 
       input {
         width: 100%;
-        padding: 14px 14px 14px 40px;
+        padding: 10px 35px 10px 30px;
         border: none;
-        border-radius: 8px;
+        border-radius: 6px;
         background: rgba(255, 255, 255, 0.1);
-        font-size: 15px;
+        font-size: 13px;
         outline: none;
         color: white;
         transition: all 0.3s;
@@ -141,15 +162,15 @@
 
       .error-message {
         color: #ff6b6b !important;
-        font-size: 14px;
-        margin-top: 10px;
+        font-size: 12px;
+        margin-top: 8px;
         display: none;
       }
 
       .success-message {
         color: #5cdb95 !important;
-        font-size: 14px;
-        margin-top: 10px;
+        font-size: 12px;
+        margin-top: 8px;
         display: none;
       }
 
@@ -157,22 +178,22 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 14px;
-        margin-bottom: 20px;
+        font-size: 12px;
+        margin-bottom: 12px;
       }
 
       .options label {
         display: flex;
         align-items: center;
-        font-size: 15px;
+        font-size: 12px;
         color: white;
       }
 
       .options input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
+        width: 14px;
+        height: 14px;
         accent-color: #ffcc00;
-        margin-right: 8px;
+        margin-right: 6px;
       }
 
       .signup-btn {
@@ -180,25 +201,26 @@
         background: #ffcc00;
         color: black;
         border: none;
-        padding: 14px;
-        border-radius: 8px;
-        font-size: 16px;
+        padding: 10px;
+        border-radius: 6px;
+        font-size: 14px;
         font-weight: 600;
         cursor: pointer;
         transition: 0.3s;
         box-shadow: 0 4px 8px rgba(255, 204, 0, 0.3);
-        margin-bottom: 15px;
+        margin-bottom: 10px;
       }
 
       .signup-btn:hover {
         background: #ff9900;
         box-shadow: 0 6px 12px rgba(255, 204, 0, 0.5);
+        transform: scale(1.02);
       }
 
       .divider {
         display: flex;
         align-items: center;
-        margin: 20px 0;
+        margin: 12px 0;
         color: rgba(255, 255, 255, 0.7);
       }
 
@@ -210,8 +232,8 @@
       }
 
       .divider span {
-        padding: 0 15px;
-        font-size: 14px;
+        padding: 0 12px;
+        font-size: 12px;
       }
 
       .google-btn {
@@ -222,19 +244,20 @@
         background: #fff;
         color: #444;
         border: none;
-        padding: 12px;
-        border-radius: 8px;
-        font-size: 16px;
+        padding: 8px;
+        border-radius: 6px;
+        font-size: 13px;
         font-weight: 600;
         cursor: pointer;
         transition: 0.3s;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        margin-bottom: 20px;
+        margin-bottom: 12px;
       }
 
       .google-btn:hover {
         background: #f0f0f0;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        transform: scale(1.02);
       }
 
       .google-btn img {
@@ -243,8 +266,8 @@
       }
 
       .login-account {
-        margin-top: 15px;
-        font-size: 14px;
+        margin-top: 10px;
+        font-size: 12px;
         color: rgba(255, 255, 255, 0.8);
       }
 
@@ -255,14 +278,115 @@
       }
 
       .login-account a:hover {
+        color: #ff9900;
         text-decoration: underline;
       }
 
-      @media (max-width: 480px) {
+      @media (max-height: 700px) {
         .container {
-          width: 95%;
+          max-width: 350px;
+        }
+        
+        .header {
+          height: 100px;
+        }
+        
+        .form-container {
+          padding: 12px;
+        }
+        
+        .input-group {
+          margin-bottom: 8px;
+        }
+        
+        input {
+          padding: 8px 8px 8px 28px;
+        }
+        
+        .options {
+          margin-bottom: 8px;
+        }
+        
+        .signup-btn {
+          padding: 8px;
+          margin-bottom: 8px;
+        }
+        
+        .divider {
+          margin: 8px 0;
+        }
+        
+        .google-btn {
+          padding: 7px;
+          margin-bottom: 8px;
         }
       }
+
+      /* Notification system */
+      .notification {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 12px 20px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+        display: none;
+        max-width: 90%;
+        text-align: center;
+        animation: fadeIn 0.3s ease-in-out;
+      }
+
+      .notification.error {
+        background: rgba(255, 70, 70, 0.95);
+        border-left: 4px solid #ff0000;
+      }
+
+      .notification.success {
+        background: rgba(70, 200, 120, 0.95);
+        border-left: 4px solid #00a550;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translate(-50%, -20px); }
+        to { opacity: 1; transform: translate(-50%, 0); }
+      }
+
+      /* Password strength meter */
+      .password-strength {
+        width: 100%;
+        height: 5px;
+        background: rgba(255, 255, 255, 0.1);
+        margin-top: 5px;
+        border-radius: 3px;
+        overflow: hidden;
+        display: none;
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+      }
+
+      .strength-meter {
+        height: 100%;
+        width: 0%;
+        transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+      }
+
+      .strength-text {
+        font-size: 11px;
+        text-align: right;
+        margin-top: 3px;
+        display: none;
+      }
+
+      .very-weak { background-color: #ff4d4d; width: 20%; }
+      .weak { background-color: #ffa64d; width: 40%; }
+      .medium { background-color: #ffff4d; width: 60%; }
+      .strong { background-color: #4dff4d; width: 80%; }
+      .very-strong { background-color: #4da6ff; width: 100%; }
     </style>
   </head>
   <body>
@@ -271,6 +395,9 @@
       <div class="form-container">
         <h2>Cyber Academy</h2>
         <p>Create Your Account</p>
+
+        <!-- Notification system -->
+        <div class="notification" id="notification"></div>
 
         <div class="input-group">
           <i class="fas fa-user"></i>
@@ -290,6 +417,13 @@
         <div class="input-group">
           <i class="fas fa-lock"></i>
           <input type="password" id="password" placeholder="Create Password" />
+          <span class="password-toggle" onclick="togglePasswordVisibility('password')">
+            <i class="fas fa-eye"></i>
+          </span>
+          <div class="password-strength" id="password-strength">
+            <div class="strength-meter" id="strength-meter"></div>
+          </div>
+          <div class="strength-text" id="strength-text"></div>
         </div>
 
         <div class="input-group">
@@ -299,6 +433,9 @@
             id="confirm-password"
             placeholder="Confirm Password"
           />
+          <span class="password-toggle" onclick="togglePasswordVisibility('confirm-password')">
+            <i class="fas fa-eye"></i>
+          </span>
         </div>
 
         <p class="error-message" id="error-msg"></p>
@@ -355,6 +492,94 @@
     </div>
 
     <script>
+      // Toggle password visibility
+      function togglePasswordVisibility(inputId) {
+        const passwordInput = document.getElementById(inputId);
+        const toggleIcon = passwordInput.nextElementSibling.querySelector('i');
+        
+        if (passwordInput.type === 'password') {
+          passwordInput.type = 'text';
+          toggleIcon.classList.remove('fa-eye');
+          toggleIcon.classList.add('fa-eye-slash');
+        } else {
+          passwordInput.type = 'password';
+          toggleIcon.classList.remove('fa-eye-slash');
+          toggleIcon.classList.add('fa-eye');
+        }
+      }
+
+      // Password strength checker
+      document.getElementById('password').addEventListener('input', function() {
+        const password = this.value;
+        const strengthMeter = document.getElementById('strength-meter');
+        const strengthText = document.getElementById('strength-text');
+        const passwordStrengthContainer = document.getElementById('password-strength');
+        
+        if (password.length > 0) {
+          passwordStrengthContainer.style.display = 'block';
+          strengthText.style.display = 'block';
+          
+          // Calculate password strength (improved calculation)
+          let strength = 0;
+          
+          // Check length (max 2 points)
+          if (password.length >= 8) strength += 1;
+          if (password.length >= 12) strength += 1;
+          
+          // Check character types (1 point each)
+          if (/[a-z]/.test(password)) strength += 1; // lowercase
+          if (/[A-Z]/.test(password)) strength += 1; // uppercase
+          if (/[0-9]/.test(password)) strength += 1; // numbers
+          if (/[^A-Za-z0-9]/.test(password)) strength += 1; // special characters
+          
+          // Set class based on strength
+          strengthMeter.className = 'strength-meter';
+          
+          // Apply the appropriate class
+          if (strength <= 1) {
+            strengthMeter.classList.add('very-weak');
+            strengthText.textContent = 'Very Weak';
+            strengthText.style.color = '#ff4d4d';
+          } else if (strength <= 2) {
+            strengthMeter.classList.add('weak');
+            strengthText.textContent = 'Weak';
+            strengthText.style.color = '#ffa64d';
+          } else if (strength <= 4) {
+            strengthMeter.classList.add('medium');
+            strengthText.textContent = 'Medium';
+            strengthText.style.color = '#ffff4d';
+          } else if (strength <= 5) {
+            strengthMeter.classList.add('strong');
+            strengthText.textContent = 'Strong';
+            strengthText.style.color = '#4dff4d';
+          } else {
+            strengthMeter.classList.add('very-strong');
+            strengthText.textContent = 'Very Strong';
+            strengthText.style.color = '#4da6ff';
+          }
+          
+          // For debugging
+          console.log('Password strength:', strength, 'Length:', password.length);
+        } else {
+          passwordStrengthContainer.style.display = 'none';
+          strengthText.style.display = 'none';
+        }
+      });
+
+      // Show notification
+      function showNotification(message, type) {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.className = 'notification';
+        notification.classList.add(type);
+        notification.style.display = 'block';
+        
+        // Hide notification after 5 seconds
+        setTimeout(() => {
+          notification.style.display = 'none';
+        }, 5000);
+      }
+
       function signup() {
         // Get input values
         const fullname = document.getElementById("fullname").value.trim();
@@ -374,37 +599,57 @@
 
         // Validate inputs
         if (!fullname || !email || !username || !password || !confirmPassword) {
-          errorMsg.innerText = "All fields are required!";
-          errorMsg.style.display = "block";
+          showNotification("All fields are required!", "error");
           return;
         }
 
         // Email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-          errorMsg.innerText = "Please enter a valid email address!";
-          errorMsg.style.display = "block";
+          showNotification("Please enter a valid email address!", "error");
           return;
         }
 
+        // Password strength validation with improved criteria
+        let strength = 0;
+          
+        // Check length (max 2 points)
+        if (password.length >= 8) strength += 1;
+        if (password.length >= 12) strength += 1;
+        
+        // Check character types (1 point each)
+        if (/[a-z]/.test(password)) strength += 1; // lowercase
+        if (/[A-Z]/.test(password)) strength += 1; // uppercase
+        if (/[0-9]/.test(password)) strength += 1; // numbers
+        if (/[^A-Za-z0-9]/.test(password)) strength += 1; // special characters
+
         // Password validation
         if (password.length < 6) {
-          errorMsg.innerText = "Password must be at least 6 characters long!";
-          errorMsg.style.display = "block";
+          showNotification("Password must be at least 6 characters long!", "error");
+          return;
+        }
+        
+        if (strength <= 3) {
+          let missingRequirements = [];
+          if (!/[a-z]/.test(password)) missingRequirements.push("lowercase letters");
+          if (!/[A-Z]/.test(password)) missingRequirements.push("uppercase letters");
+          if (!/[0-9]/.test(password)) missingRequirements.push("numbers");
+          if (!/[^A-Za-z0-9]/.test(password)) missingRequirements.push("special characters");
+          if (password.length < 8) missingRequirements.push("at least 8 characters");
+          
+          showNotification("Password is too weak! Please include: " + missingRequirements.join(", "), "error");
           return;
         }
 
         // Confirm password
         if (password !== confirmPassword) {
-          errorMsg.innerText = "Passwords do not match!";
-          errorMsg.style.display = "block";
+          showNotification("Passwords do not match!", "error");
           return;
         }
 
         // Terms checkbox
         if (!terms) {
-          errorMsg.innerText = "You must agree to the Terms & Conditions!";
-          errorMsg.style.display = "block";
+          showNotification("You must agree to the Terms & Conditions!", "error");
           return;
         }
 
@@ -433,7 +678,7 @@
               });
           })
           .then(() => {
-            // Legacy localStorage support during transition
+            // Legacy localStorage support during transition period
             const users = JSON.parse(localStorage.getItem("users") || "[]");
             if (!users.some((user) => user.username === username)) {
               users.push({
@@ -446,9 +691,7 @@
             }
 
             // Show success message
-            successMsg.innerText =
-              "Account created successfully! Redirecting to login...";
-            successMsg.style.display = "block";
+            showNotification("Account created successfully! Redirecting to login...", "success");
 
             // Clear form
             document.getElementById("fullname").value = "";
@@ -470,15 +713,29 @@
             console.error("Firebase Auth Error:", error.code, error.message);
 
             if (error.code === "auth/email-already-in-use") {
-              errorMsg.innerText =
-                "Email already in use. Please use a different email or try logging in.";
+              showNotification("Email already in use. Please use a different email or try logging in.", "error");
             } else if (error.code === "auth/weak-password") {
-              errorMsg.innerText =
-                "Password is too weak. Please choose a stronger password.";
+              showNotification("Password is too weak. Please choose a stronger password.", "error");
             } else {
-              errorMsg.innerText = "Error creating account: " + error.message;
+              // Clean up error message to make it more user-friendly
+              let errorMessage = error.message || "An error occurred during signup";
+              
+              // Extract just the message part if it's a JSON string
+              if (typeof errorMessage === 'string' && errorMessage.includes('{"error":')) {
+                try {
+                  const errorObj = JSON.parse(errorMessage);
+                  errorMessage = errorObj.error.message || "Registration failed";
+                } catch (e) {
+                  // If parsing fails, just use a generic message
+                  errorMessage = "Registration failed. Please try again.";
+                }
+              }
+              
+              // Remove Firebase prefixes if present
+              errorMessage = errorMessage.replace("Firebase: ", "").replace("Error (auth/", "").replace(")", "");
+              
+              showNotification("Error creating account: " + errorMessage, "error");
             }
-            errorMsg.style.display = "block";
 
             // Try legacy signup if Firebase fails (during transition period)
             legacySignup();
@@ -565,15 +822,11 @@
         const email = document.getElementById("email").value.trim();
         const username = document.getElementById("username").value.trim();
         const password = document.getElementById("password").value.trim();
-        const errorMsg = document.getElementById("error-msg");
-        const successMsg = document.getElementById("success-msg");
 
         // Check if username already exists
         const users = JSON.parse(localStorage.getItem("users") || "[]");
         if (users.some((user) => user.username === username)) {
-          errorMsg.innerText =
-            "Username already exists. Please choose another one!";
-          errorMsg.style.display = "block";
+          showNotification("Username already exists. Please choose another one!", "error");
           return;
         }
 
@@ -592,9 +845,7 @@
         localStorage.setItem("users", JSON.stringify(users));
 
         // Show success message
-        successMsg.innerText =
-          "Account created successfully! Redirecting to login...";
-        successMsg.style.display = "block";
+        showNotification("Account created successfully! Redirecting to login...", "success");
 
         // Clear form
         document.getElementById("fullname").value = "";
