@@ -13,8 +13,38 @@
     />
     <link rel="icon" type="image/png" href="img/favicon.png" />
     <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="stylesheet" href="css/quiz-letters.css" />
     <!-- Force lock styles to be visible during development -->
     <style>
+      /* Quiz Styles Override to Ensure Consistency */
+      .topic-quiz .options {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px !important;
+        margin-bottom: 20px !important;
+      }
+      
+      .topic-quiz .option {
+        background: #1c2a3a !important;
+        padding: 15px !important;
+        border-radius: 6px !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        border: 2px solid transparent !important;
+      }
+      
+      .option-letter {
+        background: rgba(92, 219, 149, 0.2) !important;
+        color: #5cdb95 !important;
+      }
+      
+      @media (max-width: 768px) {
+        .topic-quiz .options {
+          grid-template-columns: 1fr !important;
+        }
+      }
+      
       /* Force lock styles to be visible for debugging */
       .target-card.locked[data-target="cloud-security"],
       .target-card.locked[data-target="identity-management"],
@@ -209,16 +239,20 @@
               </p>
               <div class="options">
                 <div class="option" data-correct="false">
-                  Increased server load
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Increased server load</span>
                 </div>
                 <div class="option" data-correct="true">
-                  Exposure to SQL injection attacks
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Exposure to SQL injection attacks</span>
                 </div>
                 <div class="option" data-correct="false">
-                  Improved user experience
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Improved user experience</span>
                 </div>
                 <div class="option" data-correct="false">
-                  Faster application performance
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Faster application performance</span>
                 </div>
               </div>
             </div>
@@ -291,16 +325,20 @@
               </p>
               <div class="options">
                 <div class="option" data-correct="false">
-                  Increased storage costs
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Increased storage costs</span>
                 </div>
                 <div class="option" data-correct="true">
-                  Unauthorized access to sensitive data
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Unauthorized access to sensitive data</span>
                 </div>
                 <div class="option" data-correct="false">
-                  Improved data retrieval speed
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Improved data retrieval speed</span>
                 </div>
                 <div class="option" data-correct="false">
-                  Reduced server performance
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Reduced server performance</span>
                 </div>
               </div>
             </div>
@@ -362,16 +400,20 @@
               <p>What is the primary purpose of multi-factor authentication?</p>
               <div class="options">
                 <div class="option" data-correct="false">
-                  To simplify the login process
+                  <span class="option-letter">A</span>
+                  <span class="option-text">To simplify the login process</span>
                 </div>
                 <div class="option" data-correct="true">
-                  To add an extra layer of security
+                  <span class="option-letter">B</span>
+                  <span class="option-text">To add an extra layer of security</span>
                 </div>
                 <div class="option" data-correct="false">
-                  To reduce the need for passwords
+                  <span class="option-letter">C</span>
+                  <span class="option-text">To reduce the need for passwords</span>
                 </div>
                 <div class="option" data-correct="false">
-                  To increase server performance
+                  <span class="option-letter">D</span>
+                  <span class="option-text">To increase server performance</span>
                 </div>
               </div>
             </div>
@@ -428,16 +470,20 @@
               <p>What is the primary risk of not securing mobile devices?</p>
               <div class="options">
                 <div class="option" data-correct="false">
-                  Reduced battery life
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Reduced battery life</span>
                 </div>
                 <div class="option" data-correct="true">
-                  Unauthorized access to sensitive data
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Unauthorized access to sensitive data</span>
                 </div>
                 <div class="option" data-correct="false">
-                  Slower device performance
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Slower device performance</span>
                 </div>
                 <div class="option" data-correct="false">
-                  Increased storage usage
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Increased storage usage</span>
                 </div>
               </div>
             </div>
@@ -498,16 +544,20 @@
               <p>What is the primary purpose of network segmentation?</p>
               <div class="options">
                 <div class="option" data-correct="false">
-                  To increase network speed
+                  <span class="option-letter">A</span>
+                  <span class="option-text">To increase network speed</span>
                 </div>
                 <div class="option" data-correct="true">
-                  To limit the spread of attacks
+                  <span class="option-letter">B</span>
+                  <span class="option-text">To limit the spread of attacks</span>
                 </div>
                 <div class="option" data-correct="false">
-                  To reduce hardware costs
+                  <span class="option-letter">C</span>
+                  <span class="option-text">To reduce hardware costs</span>
                 </div>
                 <div class="option" data-correct="false">
-                  To simplify network management
+                  <span class="option-letter">D</span>
+                  <span class="option-text">To simplify network management</span>
                 </div>
               </div>
             </div>

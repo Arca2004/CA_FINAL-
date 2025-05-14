@@ -308,7 +308,7 @@
 
           <div class="tab-content" id="advanced-content">
             <div class="module-grid">
-              <div class="module-card locked">
+              <div class="module-card active">
                 <div class="module-card-header">
                   <div class="module-icon">
                     <i class="fas fa-network-wired"></i>
@@ -317,17 +317,21 @@
                 </div>
                 <h3>Network Security</h3>
                 <ul class="module-topics">
-                  <li><i class="fas fa-lock"></i> Network Tapping</li>
-                  <li><i class="fas fa-lock"></i> Wireless Network Pirating</li>
-                  <li>
-                    <i class="fas fa-lock"></i> Advanced Network Forensics
-                  </li>
-                  <li><i class="fas fa-lock"></i> Zero Trust Architecture</li>
+                  <li><i class="fas fa-circle"></i> Network Security Fundamentals</li>
+                  <li><i class="fas fa-circle"></i> Network Tapping</li>
+                  <li><i class="fas fa-circle"></i> Wireless Network Pirating</li>
+                  <li><i class="fas fa-circle"></i> Advanced Network Forensics</li>
                 </ul>
+                <div class="progress-bar">
+                  <div class="progress" style="width: 0%"></div>
+                </div>
                 <div class="module-footer">
-                  <div class="lock-message">
-                    <i class="fas fa-lock"></i> Under Development⚠️
-                  </div>
+                  <button
+                    class="module-btn"
+                    onclick="window.location.href='network-security.html'"
+                  >
+                    <i class="fas fa-play-circle"></i> Start Module
+                  </button>
                 </div>
               </div>
             </div>

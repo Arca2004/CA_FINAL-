@@ -14,7 +14,37 @@
     <link rel="icon" type="image/png" href="img/favicon.png" />
     <link rel="stylesheet" href="css/profile-dropdown.css" />
     <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="stylesheet" href="css/quiz-letters.css" />
     <style>
+      /* Quiz Styles Override to Ensure Consistency */
+      .topic-quiz .options {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px !important;
+        margin-bottom: 20px !important;
+      }
+      
+      .topic-quiz .option {
+        background: #1c2a3a !important;
+        padding: 15px !important;
+        border-radius: 6px !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        border: 2px solid transparent !important;
+      }
+      
+      .option-letter {
+        background: rgba(92, 219, 149, 0.2) !important;
+        color: #5cdb95 !important;
+      }
+      
+      @media (max-width: 768px) {
+        .topic-quiz .options {
+          grid-template-columns: 1fr !important;
+        }
+      }
+      
       /* Ensure quiz options are always clickable in techniques section */
       .target-card[data-target="techniques"] .topic-quiz .option,
       .target-card[data-target="techniques"] .topic-quiz-btn {
@@ -352,16 +382,20 @@ Hidden Link HTML:
               </p>
               <div class="options">
                 <div class="option" data-correct="false">
-                  Malicious attachments
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Malicious attachments</span>
                 </div>
                 <div class="option" data-correct="true">
-                  Fraudulent data entry forms
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Fraudulent data entry forms</span>
                 </div>
                 <div class="option" data-correct="false">
-                  Link manipulation alone
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Link manipulation alone</span>
                 </div>
                 <div class="option" data-correct="false">
-                  Social media messages
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Social media messages</span>
                 </div>
               </div>
             </div>
@@ -684,10 +718,22 @@ Pharming Attack:
                 executives?
               </p>
               <div class="options">
-                <div class="option" data-correct="false">Spear phishing</div>
-                <div class="option" data-correct="true">Whaling</div>
-                <div class="option" data-correct="false">Smishing</div>
-                <div class="option" data-correct="false">Vishing</div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Spear phishing</span>
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Whaling</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Smishing</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Vishing</span>
+                </div>
               </div>
             </div>
             <div class="topic-quiz-results" style="display: none">
@@ -1001,14 +1047,20 @@ openssh-server/focal-updates,focal-security 1:8.2p1-4ubuntu0.3 amd64 [upgradable
               </p>
               <div class="options">
                 <div class="option" data-correct="false">
-                  Regular password changes
-                </div>
-                <div class="option" data-correct="false">Email filtering</div>
-                <div class="option" data-correct="true">
-                  Multi-factor authentication
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Regular password changes</span>
                 </div>
                 <div class="option" data-correct="false">
-                  Security awareness training
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Email filtering</span>
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Multi-factor authentication</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Security awareness training</span>
                 </div>
               </div>
             </div>

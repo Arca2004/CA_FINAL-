@@ -1,0 +1,2317 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Network Security - Cybersec Academy</title>
+    <link rel="stylesheet" href="cyberindex.css" />
+    <link rel="stylesheet" href="css/network-security.css" />
+    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="css/profile-dropdown.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="icon" type="image/png" href="img/favicon.png" />
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+    <!-- Firebase Config -->
+    <script src="firebase-config.js"></script>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #0e1621;
+        color: #edf2f7;
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #1c2a3a;
+        padding: 0 50px;
+        height: 80px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+      }
+      
+      /* Enhanced lock styles for non-first topics */
+      .target-card.locked[data-target="network-tapping"],
+      .target-card.locked[data-target="wireless-network-pirating"],
+      .target-card.locked[data-target="advanced-network-forensics"],
+      .target-card.locked[data-target="zero-trust-architechture"] {
+        position: relative;
+        filter: grayscale(0.8) brightness(0.7);
+        border: 3px solid #e74c3c !important;
+        overflow: hidden;
+      }
+
+      /* Lock overlay styles */
+      .debug-lock-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(14, 22, 33, 0.8);
+        backdrop-filter: blur(2px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+      }
+
+      .debug-lock-overlay i {
+        font-size: 5rem;
+        color: #e74c3c;
+        margin-bottom: 15px;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        animation: wiggle 2.5s infinite ease-in-out;
+      }
+
+      .debug-lock-message {
+        background: rgba(231, 76, 60, 0.9);
+        color: white;
+        padding: 15px 25px;
+        border-radius: 5px;
+        font-weight: bold;
+        text-align: center;
+        max-width: 80%;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+        font-size: 1.2rem;
+      }
+
+      /* Wiggle animation for lock icon */
+      @keyframes wiggle {
+        0%,
+        100% {
+          transform: rotate(0);
+        }
+        20% {
+          transform: rotate(-8deg);
+        }
+        40% {
+          transform: rotate(8deg);
+        }
+        60% {
+          transform: rotate(-4deg);
+        }
+        80% {
+          transform: rotate(4deg);
+        }
+      }
+
+      /* Hero section enhancements */
+      .hero-section {
+        background: linear-gradient(135deg, #0F2027 0%, #203A43 50%, #2C5364 100%);
+        padding: 80px 0 60px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        margin-bottom: 40px;
+        margin-top: 80px;
+        border-radius: 8px;
+      }
+
+      .hero-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('img/network-bg.jpg') center/cover no-repeat;
+        opacity: 0.15;
+        z-index: 0;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        text-align: center;
+        color: #ffffff;
+      }
+
+      .hero-content h1 {
+        font-size: 3.2rem;
+        margin-bottom: 20px;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        font-weight: 700;
+        color: #5cdb95;
+      }
+
+      .hero-content p {
+        font-size: 1.2rem;
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.6;
+        text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Target grid enhancements */
+      .target-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 30px;
+        margin-top: 40px;
+      }
+
+      .target-card {
+        background: #1c2a3a;
+        border-radius: 10px;
+        padding: 30px;
+        position: relative;
+        border: 3px solid transparent;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .target-card.active {
+        border-color: #5cdb95;
+        background: rgba(30, 40, 55, 0.95);
+      }
+
+      .target-card .difficulty {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      .difficulty.easy {
+        background: #2ecc71;
+        color: #fff;
+      }
+
+      .difficulty.medium {
+        background: #f39c12;
+        color: #fff;
+      }
+
+      .difficulty.hard {
+        background: #e74c3c;
+        color: #fff;
+      }
+
+      .target-icon {
+        width: 60px;
+        height: 60px;
+        background: #2c3e50;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        border: 2px solid #5cdb95;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .target-icon i {
+        font-size: 28px;
+        color: #5cdb95;
+      }
+
+      .target-card h2 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        color: #5cdb95;
+      }
+
+      /* Lock overlay enhancements */
+      .lock-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(14, 22, 33, 0.8);
+        backdrop-filter: blur(3px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 10;
+        border-radius: 8px;
+      }
+
+      .lock-overlay i {
+        font-size: 4rem;
+        color: #e74c3c;
+        margin-bottom: 15px;
+        animation: pulse 2s infinite;
+      }
+
+      .lock-message {
+        background: rgba(231, 76, 60, 0.85);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 5px;
+        font-weight: 600;
+        text-align: center;
+        max-width: 80%;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 0.8;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      /* Quiz styling enhancements */
+      .topic-quiz {
+        background: #283747;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 25px 0 15px;
+        position: relative;
+        border-left: 4px solid #5cdb95;
+      }
+
+      .topic-quiz h4 {
+        margin-top: 0;
+        color: #5cdb95;
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+      }
+
+      .topic-quiz h4 i {
+        margin-right: 8px;
+      }
+
+      .question p {
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+        line-height: 1.5;
+      }
+
+      .options {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 25px;
+      }
+
+      .option {
+        background: rgba(44, 62, 80, 0.7);
+        border: 2px solid rgba(52, 152, 219, 0.3);
+        border-radius: 8px;
+        padding: 15px;
+        display: flex;
+        align-items: flex-start;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .option:hover {
+        background: rgba(44, 62, 80, 0.9);
+        transform: translateY(-2px);
+      }
+
+      .option.selected {
+        background: rgba(52, 152, 219, 0.2);
+        border-color: #3498db;
+      }
+
+      .option.correct {
+        background: rgba(46, 204, 113, 0.2);
+        border-color: #2ecc71;
+      }
+
+      .option.incorrect {
+        background: rgba(231, 76, 60, 0.2);
+        border-color: #e74c3c;
+      }
+
+      .option-letter {
+        background: #3498db;
+        color: white;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-right: 12px;
+        flex-shrink: 0;
+      }
+
+      .option-text {
+        line-height: 1.4;
+        margin-top: 3px;
+      }
+
+      .topic-quiz-btn {
+        background: #5cdb95;
+        color: #1c2a3a;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+      }
+
+      .topic-quiz-btn:hover {
+        background: #45b67f;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .topic-quiz-btn.success {
+        background: #27ae60;
+      }
+
+      .topic-quiz-results {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 8px;
+      }
+
+      .correct-answer {
+        color: #2ecc71;
+        display: flex;
+        align-items: flex-start;
+      }
+
+      .incorrect-answer {
+        color: #e74c3c;
+        display: flex;
+        align-items: flex-start;
+      }
+
+      .correct-answer i,
+      .incorrect-answer i {
+        margin-right: 10px;
+        font-size: 1.3rem;
+        margin-top: 2px;
+      }
+
+      /* Attack item enhancements */
+      .attack-item {
+        margin-bottom: 20px;
+        border-radius: 8px;
+        overflow: hidden;
+        background: rgba(44, 62, 80, 0.5);
+        transition: all 0.3s ease;
+      }
+
+      .attack-item h3 {
+        background: rgba(52, 73, 94, 0.8);
+        padding: 15px 20px;
+        margin: 0;
+        font-size: 1.2rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: all 0.3s ease;
+      }
+
+      .attack-item h3::after {
+        content: "\f078";
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        font-size: 0.9rem;
+        color: #3498db;
+        transition: all 0.3s ease;
+      }
+
+      .attack-item.expanded h3::after {
+        transform: rotate(180deg);
+      }
+
+      .attack-detail {
+        padding: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.5s ease;
+      }
+
+      .attack-item.expanded .attack-detail {
+        padding: 20px;
+        max-height: 2000px;
+      }
+
+      .attack-detail h4 {
+        color: #3498db;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+      }
+
+      .attack-detail p {
+        margin-bottom: 15px;
+        line-height: 1.5;
+      }
+
+      .attack-detail ul {
+        padding-left: 20px;
+        margin-bottom: 15px;
+      }
+
+      .attack-detail li {
+        margin-bottom: 8px;
+        line-height: 1.4;
+      }
+
+      .protection-heading {
+        background: rgba(52, 152, 219, 0.2);
+        color: #3498db;
+        padding: 12px 20px;
+        border-radius: 6px 6px 0 0;
+        font-weight: bold;
+        margin-top: 30px;
+        font-size: 1.2rem;
+        border-left: 4px solid #3498db;
+      }
+
+      .protection-list {
+        background: rgba(44, 62, 80, 0.5);
+        padding: 20px;
+        border-radius: 0 0 6px 6px;
+        margin-bottom: 25px;
+        border-left: 4px solid #3498db;
+      }
+
+      .protection-list li {
+        margin-bottom: 12px;
+        line-height: 1.5;
+      }
+
+      .protection-list strong {
+        color: #3498db;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .hero-content h1 {
+          font-size: 2.5rem;
+        }
+        
+        .hero-content p {
+          font-size: 1rem;
+        }
+        
+        .target-card {
+          padding: 20px;
+        }
+        
+        .options {
+          gap: 8px;
+        }
+        
+        .option {
+          padding: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="scanner-lines"></div>
+
+    <div class="noise-overlay"></div>
+
+    <header>
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="logo-text">
+          <span class="cyber">CYBER</span><span class="sec">SEC</span>
+          <span class="academy">Academy</span>
+        </div>
+      </div>
+      <nav>
+        <div class="hamburger-menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <ul class="nav-links">
+          <li>
+            <a href="index.html" class="nav-link"
+              ><i class="fas fa-home"></i> Home</a
+            >
+          </li>
+          <li>
+            <a href="learn.html" class="nav-link"
+              ><i class="fas fa-graduation-cap"></i> Learn</a
+            >
+          </li>
+          <li>
+            <a href="about-us.html" class="nav-link"
+              ><i class="fas fa-info-circle"></i> About Us</a
+            >
+          </li>
+          <li id="auth-nav-item">
+            <a href="login.html" class="nav-link" id="login-link">
+              <i class="fas fa-user"></i> Login
+            </a>
+            <div
+              class="profile-container"
+              id="profile-container"
+              style="display: none"
+            >
+              <div class="profile-link">
+                <div class="profile-avatar" id="profile-avatar">
+                  <span id="profile-initial"></span>
+                </div>
+                <span class="profile-name" id="profile-name"></span>
+              </div>
+              <div class="profile-dropdown">
+                <a href="profile.html"
+                  ><i class="fas fa-user-circle"></i> View Profile</a
+                >
+                <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                <a href="#" class="logout-link" id="logout-btn"
+                  ><i class="fas fa-sign-out-alt"></i> Logout</a
+                >
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1>Network Security</h1>
+        <p>
+          Understanding essential defenses, monitoring techniques, and 
+          architectural models to protect networks against unauthorized 
+          access and attacks while enabling investigation of security incidents.
+        </p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Progress tracker -->
+      <div class="progress-tracker">
+        <div
+          class="progress-node active"
+          data-topic="network-security"
+          data-tooltip="Network Security Fundamentals"
+        >
+          <i class="fas fa-network-wired"></i>
+        </div>
+        <div class="progress-line"></div>
+        <div
+          class="progress-node locked"
+          data-topic="network-tapping"
+          data-tooltip="Network Tapping"
+        >
+          <i class="fas fa-database"></i>
+        </div>
+        <div class="progress-line"></div>
+        <div
+          class="progress-node locked"
+          data-topic="wireless-network-pirating"
+          data-tooltip="Wireless Network Pirating"
+        >
+          <i class="fas fa-wrench"></i>
+        </div>
+        <div class="progress-line"></div>
+        <div
+          class="progress-node locked"
+          data-topic="advanced-network-forensics"
+          data-tooltip="Advanced Network Forensics"
+        >
+          <i class="fas fa-user-secret"></i>
+        </div>
+        <div class="progress-line"></div>
+        <div
+          class="progress-node locked"
+          data-topic="zero-trust-architechture"
+          data-tooltip="Zero Trust Architecture"
+        >
+          <i class="fas fa-user-shield"></i>
+        </div>
+      </div>
+
+      <!-- Introduction Section -->
+      <div class="overview">
+        <h2>Overview</h2>
+        <p>
+            In the modern interlinked world, safeguarding networks has become 
+            crucial for both organizations and individuals. Network security 
+            involves the techniques, policies, technologies, and measures aimed 
+            at safeguarding the integrity, confidentiality, and accessibility of 
+            computer networks and their information. As cyber threats become more 
+            advanced and frequent, grasping the basics of network security remains 
+            essential for establishing effective protective strategies. 
+        </p>
+      </div>
+
+      <!-- Network Security Fundamentals Section -->
+      <div class="target-grid">
+        <div class="target-card active" data-target="network-security">
+          <span class="difficulty easy">Beginner</span>
+          <div class="target-icon">
+            <i class="fas fa-network-wired"></i>
+          </div>
+          <h2>Network Security Fundamentals</h2>
+
+          <div class="attack-list">
+            <div class="attack-item">
+              <h3>Why Network Security Matters?</h3>
+              <div class="attack-detail">
+                <p>
+                    Network security is critical because nearly every aspect 
+                    of modern business and personal life depends on secure 
+                    digital communications. The consequences of security
+                    breaches can be devastating:
+                </p>
+                <ul>
+                  <li>
+                    <strong>Data theft and exposure</strong>
+                    of sensitive personal, financial, or proprietary information
+                  </li>
+                  <li>
+                    <strong>Financial losses</strong> 
+                    from direct theft, ransomware, or business disruption
+                  </li>
+                  <li>
+                    <strong>Operational downtime</strong> 
+                    affecting critical services and business functions
+                  </li>
+                  <li>
+                    <strong>Reputational damage</strong> 
+                    that erodes trust and customer confidence
+                  </li>
+                  <li>
+                    <strong>Regulatory penalties</strong> 
+                    from non-compliance with data protection laws
+                  </li>
+                </ul>
+                <h4>The Changing Network Security Landscape</h4>
+                <p>
+                    The conventional network security approach depended 
+                    on a fortified boundary with reliable internal networks. 
+                    Nonetheless, various elements have significantly altered 
+                    the security environment:
+                </p>
+                <ul>
+                  <li>
+                    The breakdown of distinct network perimeters as a 
+                    result of cloud computing.
+                  </li>
+                  <li>
+                    Remote and hybrid work styles expanding the network 
+                    boundary to residential settings.
+                  </li>
+                  <li>
+                    Increase in mobile and IoT devices generating new 
+                    access gateways.
+                  </li>
+                  <li>
+                    More advanced threat actors focusing on particular
+                    organizations
+                  </li>
+                  <li>
+                    Supply chain weaknesses are broadening security issues 
+                    related to third-party partnerships
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Core Elements of Network Security</h3>
+              <div class="attack-detail">
+                <p>
+                    Effective network security requires a multi-layered approach 
+                    addressing several key areas:
+                </p>
+                <ul>
+                  <li>
+                    <strong>Perimeter Security:</strong>
+                    Establishing boundaries between trusted and untrusted networks 
+                    using firewalls, proxies, and gateways
+                  </li>
+                  <li>
+                    <strong>Access Control:</strong>
+                    Determining who can access network resources through authentication,
+                    authorization, and accounting
+                  </li>
+                  <li>
+                    <strong>Data Protection:</strong>
+                    Safeguarding information through encryption, data loss prevention, 
+                    and rights management
+                  </li>
+                  <li>
+                    <strong>Threat Management:</strong>
+                    Identifying and mitigating potential attacks using intrusion 
+                    detection/prevention systems
+                  </li>
+                  <li>
+                    <strong>Vulnerability Management:</strong>
+                    Regular assessment and remediation of security weaknesses
+                  </li>
+                  <li>
+                    <strong>Security Monitoring:</strong>
+                    Continuous observation of network traffic and system behaviors for anomalies
+                  </li>
+                  <li>
+                    <strong>Incident Response</strong>
+                    Planned procedures for detecting, containing, and recovering from security breaches
+                  </li>
+                </ul>
+                <h4>Key Technologies</h4>
+                <p>
+                    Several fundamental technologies form the backbone of modern network security strategies:
+                </p>
+                <ul>
+                  <li>
+                    <strong>Firewall:</strong>
+                    Act as barriers between trusted internal networks and untrusted external networks
+                  </li>
+                  <li>
+                    <strong>Intrusion Detection/Prevention Systems (IDS/IPS):</strong>
+                    Monitor for and block suspicious network activities
+                  </li>
+                  <li>
+                    <strong>Virtual Private Networks (VPNs):</strong>
+                    Create encrypted tunnels for secure communications over public networks
+                  </li>
+                  <li>
+                    <strong>Network Access Control (NAC)::</strong>
+                    Enforce security policies for devices connecting to the network
+                  </li>
+                  <li>
+                    <strong>Security Information and Event Management (SIEM): </strong>
+                    Aggregate and analyze security data from multiple sources
+                  </li>
+                  <li>
+                    <strong>Encryption:</strong>
+                    Protect data confidentiality and integrity during transmission and storage
+                  </li>
+                  <li>
+                    <strong>Authentication Systems:</strong>
+                    Verify the identity of users and devices accessing network resources
+                  </li>
+                </ul>
+              </div>
+            </div>  
+
+            <div class="attack-item">
+              <h3>Security Principles and Best Practices</h3>
+              <div class="attack-detail">
+                <p>
+                    No matter which technologies are used, certain principles direct 
+                    successful network security: 
+                </p>
+                <ul>
+                  <li>
+                    <strong>Defense in Depth:</strong> 
+                    Implementing multiple layers of security controls
+                  </li>
+                  <li>
+                    <strong>Principle of Least Privilege:</strong>
+                    Providing only the essential access permissions required.
+                  </li>
+                  <li>
+                    <strong>Segregation of Duties:</strong>
+                    Allocating essential tasks to various persons
+                  </li>
+                  <li>
+                    <strong>Regular Updates and Patching:</strong>
+                    Addressing known vulnerabilities in a timely manner
+                  </li>
+                  <li>
+                    <strong>Security Awareness Training:</strong> 
+                    Informing individuals about security risks and protective actions.
+                  </li>
+                  <li>
+                    <strong>Continues Monitoring:</strong> 
+                    Ensuring alertness via regular security evaluations
+                  </li>
+                  <li>
+                    <strong>Incident Response Planning:</strong>
+                    Preparing for security breaches before they occur
+                  </li>
+                </ul>
+                <h4>Specialized Network Secuirty Areas</h4>
+                <p>
+                  Expanding on these basics, network security evolves into specific 
+                  areas that tackle unique issues:
+                </p>
+                <ul>
+                  <li>
+                    <strong>Wireless Network Security:</strong>
+                    Safeguarding information sent through wireless networks.
+                  </li>
+                  <li>
+                    <strong>Network Interception and Surveillance:</strong>
+                    Responsibly acquiring network data for security evaluation.
+                  </li>
+                  <li>
+                    <strong>Advanced Network Forensics:</strong>
+                    Analyzing traffic in-depth to probe security incidents
+                  </li>
+                  <li>
+                    <strong>Zero Trust Architecture:</strong>
+                    Adopting security frameworks that assume no trust and authenticate all
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="protection-heading">The Human Element</div>
+            <div class="protection-list">
+              <p>
+                While technologies are essential, human factors significantly impact 
+                network security effectiveness:
+              </p> <br>
+              <li>
+                <strong>Security Culture:</strong>
+                Fostering a setting in which security is the duty of all.
+              </li>
+              <li>
+                <strong>Security Awareness:</strong>
+                Making sure users comprehend risks and their part in prevention.
+              </li>
+              <li>
+                <strong>Social Engineering Resistance:</strong>
+                Educating users to identify manipulation efforts
+              </li>
+              <li>
+                <strong>Security Governance:</strong>
+                Setting up explicit policies, procedures, and responsibilities
+              </li>
+            </div>
+
+            <div class="protection-heading">Protection Measures</div>
+            <div class="protection-list">
+              <p>
+                While technologies are essential, human factors significantly impact 
+                network security effectiveness:
+              </p> <br>
+              <li>
+                <strong>Stay informed</strong>
+                about emerging threats and vulnerabilities
+              </li>
+              <li>
+                <strong>Regularly assess</strong>
+                security controls and practices
+              </li>
+              <li>
+                <strong>Adopt security strategies</strong>
+                to address new technologies and business models
+              </li>
+              <li>
+                <strong>Participate in security communities</strong>
+                to share intelligence and best practices
+              </li>
+              <p>
+                By grasping these fundamental concepts of network security, organizations
+                can create more robust defenses against progressively advanced threats 
+                while facilitating the connectivity required for contemporary business activities. 
+              </p>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="topic-quiz">
+              <h4><i class="fas fa-question-circle"></i> Knowledge Check</h4>
+              <div class="question">
+                <p>
+                  Which security mechanism is primarily used to verify the identity of a user or 
+                  system before granting access to resources?
+                </p>
+              </div>
+              <div class="options">
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text"
+                    >Encryption</span
+                  >
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">B</span>
+                  <span class="option-text"
+                    >Authentication</span
+                  >
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">C</span>
+                  <span class="option-text"
+                    >Firewall</span
+                  >
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Intrusion Detection System (IDS)</span>
+                </div>
+              </div>
+              <button class="topic-quiz-btn">Check Answer</button>
+              <div class="topic-quiz-results" style="display: none">
+                <div class="correct-answer" style="display: none">
+                  <i class="fas fa-check-circle"></i> Correct! Authentication is the process 
+                  of verifying that users or systems are who they claim to be before granting
+                   access to protected resources. This typically involves validating credentials
+                    such as passwords, digital certificates, biometrics, or multi-factor combinations. 
+                    Authentication is a fundamental security control that establishes identity before 
+                    authorization decisions can be made.
+                </div>
+                <div class="incorrect-answer" style="display: none">
+                  <i class="fas fa-times-circle"></i> Incorrect. Encryption protects data confidentiality,
+                   firewalls filter network traffic, and IDS systems detect suspicious activities - but 
+                   none of these mechanisms verify user identities before granting access.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Network Tapping Section -->
+        <div class="target-card locked" data-target="network-tapping">
+          <span class="difficulty medium">Intermediate</span>
+          <div class="target-icon">
+            <i class="fas fa-database"></i>
+          </div>
+          <h2>Network Tapping</h2>
+
+          <div class="attack-list">
+            <div class="attack-item">
+              <h3>What is Network TAP?</h3>
+              <div class="attack-detail">
+                <p>
+                  Network tapping is a technique employed to observe and record 
+                  network traffic by placing a "tap" (a hardware or software device) 
+                  at a location between two points in a network. This enables 
+                  administrators, security teams, or analysts to examine data packets 
+                  without interrupting routine network functions. 
+                </p>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Different Types of Network Tap</h3>
+              <div class="attack-detail">
+                <h4>1. Passive Network Tap</h4>
+                <p>
+                  A passive network tap is a hardware tool that effectively divides 
+                  and replicates network traffic without needing any external power
+                  source. It functions at the physical layer (Layer 1) of the OSI 
+                  model and unobtrusively duplicates all data traversing a network 
+                  link (for both sending and receiving) to a monitoring port. 
+                </p>
+                <h4>Advantages</h4>
+                <ul>
+                  <li>
+                    <strong>No power required:</strong>
+                    Utilizes optical splitters (fiber) or electrical signal splitters (copper). 
+                  </li>
+                  <li>
+                    <strong>Fail-safe:</strong>
+                    Should the tap malfunction, the network link stays functional. 
+                  </li>
+                  <li>
+                    <strong>Zero latency:</strong>
+                    Traffic is not delayed as it merely replicates signals. 
+                  </li>
+                  <li>
+                    <strong>No traffic manipulation</strong>
+                    Cannot alter or adjust packets; only duplicates all data.
+                  </li>
+                </ul>
+                <h4>Disadvantages</h4>
+                <ul>
+                  <li>
+                    <strong>No traffic filtering:</strong>
+                    Duplicates all traffic, potentially burdening monitoring tools. 
+                  </li>
+                  <li>
+                    <strong>Signal deterioration:</strong>
+                     Dividing light (in fiber taps) may weaken signal intensity. 
+                  </li>
+                  <li>
+                    <strong>Restricted to physical media:</strong>
+                    Functions exclusively on the cable where it is installed (lacks remote management).  
+                  </li>
+                </ul>
+                <h4>Ideal For:</h4>
+                <ul>
+                  <li>
+                    Environments with high security where dependability is essential. 
+                  </li>
+                  <li>
+                    Networks where power failures are an issue. 
+                  </li>
+                  <li>
+                    Basic observation without requiring any filtering. 
+                  </li>
+                </ul>
+                <h4>Sample Use Case</h4>
+                <p>
+                  Installing a passive fiber tap between a firewall and core switch 
+                  to discreetly record all traffic for intrusion detection purposes. 
+                </p>
+
+                <h4>2. Active Network Tap</h4>
+                <p>
+                  An active network tap is a device that requires power to enhance, 
+                  filter, and send network traffic to surveillance tools. In contrast 
+                  to passive taps, it processes data proactively, frequently offering 
+                  extra functionalities such as traffic aggregation, filtering, and 
+                  remote management.  
+                </p>
+                <h4>Advantages</h4>
+                <ul>
+                  <li>
+                    <strong>Signal regeneration:</strong>
+                    Enhances and clarifies weak signals. 
+                  </li>
+                  <li>
+                    <strong>Traffic filtering:</strong>
+                    Has the ability to forward only pertinent traffic selectively. 
+                  </li>
+                  <li>
+                    <strong>Remote management:</strong>
+                     Certain models enable setup through CLI/web. 
+                  </li>
+                </ul>
+                <h4>Disadvantages</h4>
+                <ul>
+                  <li>
+                    <strong>Power reliance:</strong>
+                    Discontinues operation if electricity is interrupted (unless utilizing a bypass option). 
+                  </li>
+                  <li>
+                    <strong>Possible latency:</strong>
+                     Minor lag from processing.
+                  </li>
+                  <li>
+                    <strong>More intricate:</strong>
+                    Greater expense and upkeep compared to passive taps. 
+                  </li>
+                </ul>
+                <h4>Ideal For:</h4>
+                <ul>
+                  <li>
+                    Networks requiring traffic filtering or consolidation. 
+                  </li>
+                  <li>
+                    Circumstances in which signal regeneration is required. 
+                  </li>
+                  <li>
+                    Settings where remote oversight is beneficial. 
+                  </li>
+                </ul>
+                <h4>Sample Use Case</h4>
+                <p>
+                  Employing an active tap with aggregation to oversee various 
+                  network segments and transmit solely HTTP traffic to an analysis tool.  
+                </p>
+
+                <h4>3. Virtual Taps</h4>
+                <p>
+                  A Virtual Tap (vTap) is a software-driven network monitoring solution 
+                  that intercepts and transmits traffic among virtual machines (VMs), 
+                  containers, or cloud instances—eliminating the need for physical 
+                  equipment. It works similarly to a conventional network tap but runs in 
+                  virtualized or cloud settings (e.g., VMware, AWS, Azure, Kubernetes). 
+                </p>
+                <h4>How Does It Work?</h4>
+                <ul>
+                  <li>
+                    <strong>Traffice mirroring:</strong>
+                    The vTap replicates traffic moving between virtual network interfaces 
+                    (vNICs) or virtual switches (e.g., VMware vSwitch, Open vSwitch). 
+                  </li>
+                  <li>
+                    <strong>Filtering & aggregation:</strong>
+                    Certain vTaps have the ability to filter traffic (for instance, 
+                    capturing just HTTP flows) or combine data from various sources. 
+                  </li>
+                  <li>
+                    <strong>Redirecting to monitoring tools:</strong>
+                    Transfers duplicated traffic to IDS/IPS, SIEM, packet analyzers 
+                    (Wireshark), or NetFlow collectors. 
+                  </li>
+                </ul>
+                <h4>Advantages</h4>
+                <ul>
+                  <li>
+                    <strong>No hardware required:</strong>
+                    Functions solely through software. 
+                  </li>
+                  <li>
+                    <strong>Cloud & hybrid assistance:</strong>
+                    Works with AWS VPC, Azure NSG, GCP, and Kubernetes. 
+                  </li>
+                  <li>
+                    <strong>Dynamic scalability:</strong>
+                   Capable of adjusting to flexible cloud settings. 
+                  </li>
+                  <li>
+                    <strong>Traffic filtering:</strong>
+                    Able to capture only pertinent data 
+                    (e.g., certain VLANs, protocols). 
+                  </li>
+                  <li>
+                    <strong>Encrypted traffic handling:</strong>
+                    Some vTaps integrate with decryption tools. 
+                  </li>
+                </ul>
+                <h4>Disadvantages</h4>
+                <ul>
+                  <li>
+                    <strong>Performance overhead:</strong>
+                     Could affect VM/container CPU if unoptimized. 
+                  </li>
+                  <li>
+                    <strong>Restricted virtual traffic:</strong>
+                     Unable to observe physical network segments. 
+                  </li>
+                  <li>
+                    <strong>Cloud provider limitations:</strong>
+                     Certain cloud services restrict traffic mirroring 
+                     (for instance, AWS imposes fees for VPC mirroring). 
+                  </li>
+                </ul>
+                <h4>Ideal For:</h4>
+                <ul>
+                  <p>Cloud Platforms (AWS, Azure, GCP)</p>
+                  <li>
+                    Observe VPC/VNet traffic remotely without needing physical access. 
+                  </li>
+                  <li>
+                    Send cloud logs to SIEM/IDS (e.g., Splunk, Palo Alto Cloud NGFW). 
+                  </li>
+                  <li>
+                    Virtualized Data Centers (VMware, Hyper-V, KVM).
+                  </li>
+                  <li>
+                    Record VM-to-VM traffic without using SPAN ports. 
+                  </li>
+                  <li>
+                    Operates with SDN (Open vSwitch, VMware NSX). 
+                  </li>
+                </ul>
+                <h4>Sample Use Case</h4>
+                <p>
+                  Installing a passive fiber tap between a firewall and core switch 
+                  to discreetly record all traffic for intrusion detection purposes. 
+                </p>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>How Network Taps Work?</h3>
+              <div class="attack-detail">
+                <p>
+                  Rather than having two network segments, like a router and switch,
+                  directly linked, a network TAP is inserted between them, linking 
+                  both devices together. 
+                </p>
+                <p>
+                  The information continues to be sent back and forth between the two 
+                  network devices (e.g., routers and switches) in both directions, 
+                  east and west flow. TAPs subsequently duplicate the transmission 
+                  signals from every device and forwards them to individual monitoring 
+                  ports. This guarantees that each packet is duplicated and removes any
+                   possibility of oversubscription, without adding extra strain or load 
+                   to the network. 
+                </p>
+                <h4>TAP Models</h4>
+                <p>Not all TAPs are the same — Certain Network TAPs can execute various 
+                  functions and modes in a single device, providing you the versatility 
+                  to enhance your tools and network. The functions illustrated in the 
+                  diagrams above encompass:</p>
+                <ul>
+                  <li>
+                    <strong>TAP 'Breakout'</strong> (often simply called TAP or TAP mode) 
+                    is the primary function offered by TAPs. 'Breakout' directs traffic 
+                    from each side to distinct monitoring ports. Making sure that no packet 
+                    is missed by essential monitoring tools. 
+                  </li>
+                  <li>
+                    <strong>Aggregation</strong>  combines both ends of the traffic flows 
+                    into a single monitoring port to cut appliance expenses or consolidate 
+                    packet broker ports, frequently used alongside filtering TAPs, (e.g., 
+                    filter and merge data streams). 
+                  </li>
+                  <li>
+                    <strong>Regeneration/SPAN</strong> generates numerous duplicates of network
+                    information to accommodate various devices from one tapped connection. This 
+                    enables you to transmit identical information to various endpoints.
+                  </li>
+                  <li>
+                    <strong>Bypass</strong> oversees the accessibility of inline tools, avoiding 
+                    a single point of failure in the network by "bypassing" the device if it 
+                    malfunctions or requires an update. Minimizing network outages. Bypass stands 
+                    out among the other TAP modes because it operates inline instead of out-of-band. 
+                  </li>
+                  <li>
+                    <strong>Filtering</strong> often linked to network packet brokers, enables you to 
+                    select particular data streams for tapping and monitoring. Filtering additionally 
+                    stops ports from becoming oversubscribed during the aggregation process. An 
+                    additional aspect to enhance the performance of your tools and network. 
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="protection-heading">Network Tap vs SPAN Port</div>
+            <div class="protection-list">
+              <p> In contrast to SPAN (Switched Port Analyzer) ports that can lose packets during busy traffic times,
+              Network TAPs offer a dependable and steady solution for monitoring all network data without the 
+              possibility of data loss. 
+              </p>
+              </div>
+
+            <!-- Quiz Section -->
+            <div class="topic-quiz">
+              <h4><i class="fas fa-question-circle"></i> Knowledge Check</h4>
+              <div class="question">
+                <p>
+                  Which of the following statements about network taps is MOST accurate?
+                </p>
+              </div>
+              <div class="options">
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text"
+                    >Network taps modify traffic as it passes through to eliminate security threats.</span
+                  >
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">B</span>
+                  <span class="option-text"
+                    >Network taps are always software-based solutions that can be deployed remotely.</span
+                  >
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Network taps create a copy of network traffic without 
+                    alerting the targeted systems.</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text"
+                    >Network taps can only be installed by replacing existing network infrastructure.</span
+                  >
+                </div>
+              </div>
+              <button class="topic-quiz-btn">Check Answer</button>
+              <div class="topic-quiz-results" style="display: none">
+                <div class="correct-answer" style="display: none">
+                  <i class="fas fa-check-circle"></i> Correct! Network taps are passive devices that 
+                  create exact duplicates of network traffic without detection or interference. The 
+                  incorrect options mischaracterize taps by suggesting they actively modify traffic, 
+                  are limited to software implementations, or require infrastructure replacement - all 
+                  of which contradict the fundamental passive monitoring nature of network taps.
+                </div>
+                <div class="incorrect-answer" style="display: none">
+                  <i class="fas fa-times-circle"></i> Incorrect. Network taps are passive devices that 
+                  create exact duplicates of network traffic without detection or interference. The 
+                  incorrect options mischaracterize taps by suggesting they actively modify traffic, 
+                  are limited to software implementations, or require infrastructure replacement - all 
+                  of which contradict the fundamental passive monitoring nature of network taps.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lock-overlay">
+            <i class="fas fa-lock"></i>
+            <div class="lock-message">
+              Complete the previous section to unlock
+            </div>
+          </div>
+        </div>
+
+        <!-- Wireless Network Pirating Section -->
+        <div class="target-card locked" data-target="wireless-network-pirating">
+          <span class="difficulty medium">Intermediate</span>
+          <div class="target-icon">
+            <i class="fas fa-wrench"></i>
+          </div>
+          <h2>Wireless Network Pirating</h2>
+
+          <div class="attack-list">
+            <div class="attack-item">
+              <h3>What is Wireless Network Pirating?</h3>
+              <div class="attack-detail">
+                <p>
+                  Wireless networks have become a crucial element of our everyday 
+                  lives, offering easy internet access in residences, workplaces, 
+                  and communal areas. Nonetheless, this ease of use carries inherent 
+                  security weaknesses that may be taken advantage of by unauthorized 
+                  individuals. This educational resource seeks to offer a thorough 
+                  understanding of wireless network security, the dangers of unauthorized 
+                  access, and the ways individuals and organizations can safeguard themselves. 
+                </p>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Fundamental Wireless Security Principles</h3>
+              <div class="attack-detail">
+                <p>Grasping the fundamental elements of wireless security lays the 
+                  groundwork for making educated choices regarding network safeguarding. 
+                  Here are the essential factors you should be aware of: 
+                </p>
+                <ul>
+                  <li>
+                    <strong>Wi-Fi Standards (802.11 protocols):</strong> 
+                    Specify the operation of wireless networks. Recent standards (ac, ax) 
+                    provide enhanced security features in addition to quicker speeds. 
+                  </li>
+                </ul>
+                <h4>Security Protocols</h4>
+                <ul>
+                  <li>
+                    <strong>WEP:</strong>
+                    The initial encryption standard, now entirely compromised and insecure for use. 
+                  </li>
+                  <li>
+                    <strong>WPA:</strong>
+                    Enhanced security features but includes recognized weaknesses. 
+                  </li>
+                  <li>
+                    <strong>WPA2:</strong>
+                    The prevalent standard today, secure if implemented correctly. 
+                  </li>
+                  <li>
+                    <strong>WPA3:</strong>
+                    The newest protocol offering improved security against brute force attacks.
+                  </li>
+                </ul>
+                <h4>Methods of Authentication</h4>
+                <ul>
+                  <li>
+                    <strong>Password safeguarding:</strong>
+                    Fundamental security that necessitates a passphrase for connection.
+                  </li>
+                  <li>
+                    <strong>MAC filtering:</strong>
+                     Limits network access to designated device addresses (can be easily circumvented 
+                     but provides an additional layer).
+                  </li>
+                  <li>
+                    <strong>802.1X:</strong>
+                    Authentication at the enterprise level that necessitates unique credentials for every user.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Common Vulnerabilities and Legal Framework</h3>
+              <div class="attack-detail">
+                <p>
+                  Even secure networks can possess vulnerabilities that attackers might
+                  take advantage of. Identifying these weaknesses is the initial move 
+                  toward tackling them:  
+                </p>
+                <ul>
+                  <li>
+                    <strong>Unsecured/open networks:</strong> Send information in plain 
+                    text that can be easily captured and understood.
+                  </li>
+                  <li>
+                    <strong>Inherent or simplistic passwords:</strong> Original 
+                    configurations and basic passwords can be quickly uncovered or cracked.
+                  </li>
+                  <li>
+                    <strong>Obsolete firmware:</strong> Unupdated routers have recognized 
+                    vulnerabilities that hackers can take advantage of. 
+                  </li>
+                  <li>
+                    <strong>Identified protocol flaws:</strong> Every security protocol has 
+                    recorded weaknesses that could be leveraged. 
+                  </li>
+                  <li>
+                    <strong>Rogue access points:</strong> Deceptive networks created to 
+                    resemble authorized ones in order to obtain login details or information. 
+                  </li>
+                </ul>
+                <h4>Legal and Ethical Framework</h4>
+                  <p>
+                    Gaining entry to networks without permission is not merely a technical 
+                    breach—it is a legal infraction. Grasping the legal limits is essential 
+                    for ethical network utilization: 
+                  </p>
+                  <ul>
+                    <li>
+                      <strong>Computer Fraud and Abuse Act:</strong> Federal legislation that 
+                      prohibits unauthorized access to network resources, irrespective of the intent. 
+                    </li>
+                    <li>
+                      <strong>Consequences:</strong> Offenses may lead to fines and incarceration, 
+                      based on intention and harm inflicted. 
+                    </li>
+                    <li>
+                      <strong>"Merely using" Wi-Fi:</strong>Connecting to any network without consent 
+                      is considered unauthorized access legally.  
+                    </li>
+                    <li>
+                      <strong>Legal security testing:</strong> Necessitates clear written consent from 
+                      the network owner prior to performing any assessments 
+                    </li>
+                  </ul>
+              </div>
+            </div>
+
+            <div class="protection-heading">Protection Measures</div>
+            <div class="protection-list">
+              <p> 
+                Establishing appropriate security protocols can greatly lower the likelihood of 
+                unauthorized access. Various settings demand unique strategies: 
+              </p> <br>
+              <p> For Home Networks:</p> <br>
+              <li>
+                <strong>WPA3/WPA2 with a robust password:</strong> Create intricate passwords 
+                containing at least 12 characters that combine letters, digits, and symbols. 
+              </li>
+              <li>
+                <strong>Alter default credentials:</strong> Modify factory usernames and passwords
+                 on all networking devices. 
+              </li>
+              <li>
+                <strong>Maintain updated firmware:</strong> Consistently look for and apply updates
+                 for your router's firmware. 
+              </li>
+              <li>
+                <strong>Activate guest networks:</strong> Allow distinct access for guests while 
+                safeguarding your primary network. 
+              </li>
+              <li>
+                <strong>Turn off WPS and remote management:</strong>  These functions frequently create security risks. 
+              </li> <br>
+              <p>For Organizations:</p> <br>
+              <li>
+                <strong>802.1X authentication:</strong> 
+                Demands separate authentication for every connection attempt. 
+              </li>
+              <li>
+                <strong>Enterprise-level encryption:</strong>Employs stronger key management compared to personal networks.
+              </li>
+              <li>
+                <strong>Network segmentation:</strong> Distinguishes sensitive systems from standard-use networks. 
+              </li>
+              <li>
+                <strong>Intrusion Detection Systems (IDS): </strong>
+                Watch for and notify about questionable actions. 
+              </li>
+              <li>
+                <strong>Routine security assessments:</strong>
+                Planned evaluations to discover and rectify weaknesses. 
+              </li>
+            </div>
+          </div>
+
+          <div class="attack-item">
+              <h3>Network Monitoring and Detection</h3>
+              <div class="attack-detail">
+                <p> Safeguarding involves not only prevention but also the ability 
+                  to detect. Keeping an eye on your network assists in detecting 
+                  unauthorized access attempts or breaches: 
+                </p>
+                <ul>
+                  <li>
+                    <strong>Examine connected devices:</strong> 
+                    Frequently inspect router logs for unfamiliar devices.
+                  </li>
+                  <li>
+                    <strong>Observe unusual traffic:</strong> 
+                    Unexpected data consumption trends may suggest unauthorized access.
+                  </li>
+                  <li>
+                    <strong>Wireless intrusion detection:</strong> 
+                    Dedicated systems that recognize dubious wireless behaviors. 
+                  </li>
+                  <li>
+                    <strong>Security notifications:</strong> 
+                    Set up alerts for atypical login attempts or access behaviors. 
+                  </li>
+                </ul>
+                <h4>Sample Case: WPA2 KRACK Vulnerability</h4>
+                <p> Vulnerabilities in the real world show that even systems believed to be 
+                  secure can possess flaws. The KRACK weakness serves as an ideal illustration: 
+                </p> <br>
+                <p>
+                  The Key Reinstallation Attack (KRACK) identified in 2017 enabled attackers to 
+                  take advantage of a vulnerability in the WPA2 handshake procedure, possibly 
+                  allowing them to decrypt encrypted communications. This significant vulnerability 
+                  impacted nearly all WPA2 implementations, showing that even highly trusted security 
+                  protocols need updates and fixes. 
+                </p>
+            </div>
+          </div>
+          
+          <div class="protection-heading">Tools and Resources</div>
+            <div class="protection-list">
+              <p> 
+                For individuals seeking to improve their understanding or evaluate their network security, 
+                these tools and resources offer important insights: 
+              </p> <br>
+              <li>
+                <strong>Network analyzers:</strong> Applications such as Wireshark assist in comprehending 
+                network traffic (solely for valid security evaluation).
+              </li>
+              <li>
+                <strong>Vulnerability scanners:</strong> Programs that detect possible security vulnerabilities within your network. 
+              </li>
+              <li>
+                <strong>NIST Special Publications:</strong> Government resources offering comprehensive security recommendations.
+              </li>
+              <li>
+                <strong>Activate guest networks:</strong> Allow distinct access for guests while 
+                safeguarding your primary network. 
+              </li>
+              <li>
+                <strong>IEEE 802.11 Documentation:</strong> Authoritative technical guidelines for wireless networking.
+            </div>
+          
+
+          <!-- Quiz Section -->
+            <div class="topic-quiz">
+              <h4><i class="fas fa-question-circle"></i> Knowledge Check</h4>
+              <div class="question">
+                <p>
+                  Which technique is commonly used by attackers to intercept wireless 
+                  network traffic between legitimate devices?
+                </p>
+              </div>
+              <div class="options">
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text"
+                    >MAC address filtering</span
+                  >
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">B</span>
+                  <span class="option-text"
+                    >WPS implementation</span
+                  >
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">C</span>
+                  <span class="option-text"
+                    >Firmware patching</span>
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">D</span>
+                  <span class="option-text"
+                    >Evil twin attack</span
+                  >
+                </div>
+              </div>
+              <button class="topic-quiz-btn">Check Answer</button>
+              <div class="topic-quiz-results" style="display: none">
+                <div class="correct-answer" style="display: none">
+                  <i class="fas fa-check-circle"></i> Correct! An evil twin attack involves 
+                  creating a rogue wireless access point that mimics a legitimate network 
+                  by broadcasting the same SSID (network name). When users connect to this 
+                  malicious twin instead of the legitimate network, the attacker can intercept 
+                  all traffic passing through it. This is a common technique in wireless 
+                  network pirating because it allows passive monitoring of sensitive information 
+                  and can be difficult for average users to detect. Unlike the other options,
+                  which are security measures or maintenance procedures, an evil twin specifically 
+                  targets the relationship between wireless clients and access points.
+                </div>
+                <div class="incorrect-answer" style="display: none">
+                  <i class="fas fa-times-circle"></i> Incorrect. MAC address filtering is a preventive 
+                  security control, WPS is a connection protocol, and firmware patching is a maintenance
+                   procedure - none of these are techniques used by attackers to actively intercept traffic 
+                   between legitimate wireless devices, while an evil twin specifically creates a rogue access 
+                   point to capture communications.
+                </div>
+              </div>
+            </div>
+        
+          <div class="lock-overlay">
+            <i class="fas fa-lock"></i>
+            <div class="lock-message">
+              Complete the previous section to unlock
+            </div>
+          </div>
+        </div>
+
+        <!-- Advance Network Forensics Section -->
+        <div class="target-card locked" data-target="advanced-network-forensics">
+          <span class="difficulty hard">Advanced</span>
+          <div class="target-icon">
+            <i class="fas fa-user-secret"></i>
+          </div>
+          <h2>Advance Network Forensics</h2>
+
+            <div class="attack-item">
+              <h3>Fundamental Network Forensics concept</h3>
+              <div class="attack-detail">
+                <p>
+                  Sophisticated Network Forensics encompasses the collection, 
+                  documentation, and examination of network occurrences to 
+                  identify the origins of security breaches or other events. 
+                  This specialized area merges aspects of digital forensics 
+                  with network security to examine how intruders breach systems, 
+                  maintain persistence, and extract data via network communications. 
+                </p> <br>
+                <p>Understanding the fundamental concepts of network forensics 
+                  provides the necessary framework for effective investigations:
+                </p>
+                <ul>
+                  <li>
+                    <strong>Network Traffic Analysis:</strong> 
+                    Analysis of data movement between hosts to detect unusual patterns and communications.
+                  </li>
+                  <li>
+                    <strong>Protocol Analysis:</strong> 
+                     Thorough examination of network protocols to comprehend potential exploitation or misuse. 
+                  </li>
+                  <li>
+                    <strong>Log Examination:</strong> 
+                    Methodical assessment of different network device logs to piece together events and detect irregularities. 
+                  </li>
+                  <li>
+                    <strong>Packet Collection and Examination:</strong> 
+                    Gathering and thorough analysis of single data packets moving through a network. 
+                  </li>
+                  <li>
+                    <strong>Network Flow Analysis:</strong> 
+                    Observing communication trends among devices instead of focusing on single packets. 
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="attack-item">
+              <h3>Investigation Scenarios</h3>
+              <div class="attack-detail">
+                <p>Network forensics is utilized in different scenarios, with each demanding particular 
+                  methods and instruments: 
+                </p>
+                <ul>
+                  <li>
+                    <strong>Data Breach Analysis:</strong>
+                    Identifying which data was accessed, how intruders 
+                    navigated the network, and what was extracted. 
+                  </li>
+                  <li>
+                    <strong>Detection of Advanced Persistent Threats (APT):</strong>
+                    Recognizing complex, enduring breaches perpetrated by nation-states or organized threat groups. 
+                  </li>
+                  <li>
+                    <strong>Insider Threat Assessment:</strong>
+                    Identifying and recording illicit actions by staff members. 
+                  </li>
+                  <li>
+                    <strong>Malware Spread Examination:</strong>
+                    Monitoring the transmission of harmful software within a network. 
+                  </li>
+                  <li>
+                    <strong>Network Performance Issues:</strong>
+                    Identifying the source of unusual network activity that could suggest security concerns.
+                  </li>
+                </ul>
+                <h4>Legal and Prcedural Framework</h4>
+                <p>Network forensic investigations must comply with legal standards to guarantee that 
+                  results are both admissible and ethical:
+                </p>
+                <ul>
+                  <li>
+                    <strong>Chain of Custody:</strong>
+                    Ensuring accurate records of how evidence is gathered, examined, and safeguarded. 
+                  </li>
+                  <li>
+                    <strong>Admissibility Criteria:</strong>
+                    Verifying that evidence gathering techniques comply 
+                    with legal standards for judicial processes.
+                  </li>
+                  <li>
+                    <strong> Privacy Concerns:</strong>
+                    Weighing the demands of investigations against the legal privacy rights of users. 
+                  </li>
+                  <li>
+                    <strong>Documentation Requirements:</strong>
+                    Generating comprehensive accounts of inquiry activities and results. 
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Forensic Techniques</h3>
+              <div class="attack-detail">
+                <p>Specific methodologies that form the core of network forensic investigations:</p> <br>
+                <p>For Traffic Capture:</p>
+                <ul>
+                  <li>
+                    <strong>Full Packet Capture:</strong>
+                    Documenting all network communications for future examination. 
+                  </li>
+                  <li>
+                    <strong>Targeted Capture:</strong>
+                    Sifting through traffic to concentrate on questionable hosts or protocols. 
+                  </li>
+                  <li>
+                    <strong>Network Taps vs. SPAN Ports:</strong>
+                    Alternative techniques for gathering traffic discreetly to avoid notifying intruders. 
+                  </li>
+                  <li>
+                    <strong>Timestamp Alignment:</strong>
+                    Guaranteeing precise timing among various evidence sources. 
+                  </li>
+                </ul>
+                <p>For Analysis:</p>
+                <ul>
+                  <li>
+                    <strong>Timeline Reconstruction:</strong>
+                    Creating a sequential order of network occurrences. 
+                  </li>
+                  <li>
+                    <strong>Anomaly Detection:</strong>
+                    Recognizing variations from typical network behavior. 
+                  </li>
+                  <li>
+                    <strong>Signature Evaluation:</strong>
+                    Comparing traffic behaviors with recognized attack signatures. 
+                  </li>
+                  <li>
+                    <strong>Behavioral Assessment:</strong>
+                    Analyzing network communications according to anticipated behaviors. 
+                  </li>
+                </ul>
+                <h4>Network Data Collection Points</h4>
+                <p>Strategic locations where forensic data can be gathered provide 
+                  different perspectives on network activity:
+                </p>
+                <ul>
+                  <li>
+                    <strong>Perimeter Devices:</strong>
+                    Firewalls, IDS/IPS, and gateway logs offer insight into traffic that is
+                     coming into and going out of the network. 
+                  </li>
+                  <li>
+                    <strong>Core Infrastructure:</strong>
+                    Switches, routers, and DNS servers provide visibility into internal network interactions
+                  </li>
+                  <li>
+                    <strong>Host-Level Data:</strong> 
+                    Logs from endpoints and local packet captures disclose detailed information about 
+                    the activities of individual systems. 
+                  </li>
+                  <li>
+                    <strong>Cloud Resources:</strong> 
+                    Logs of virtual networks and flow data from cloud service providers record off-premises activities. 
+                  </li>
+                </ul>
+                <h4>Sample Case:  APT Investigation</h4>
+                <p>Complex investigations demonstrate the application of advanced network forensics principles:</p> <br>
+                <p>The probing into APT29 (Cozy Bear) activities uncovered advanced strategies such as encrypted command 
+                  and control communications that merged with regular HTTPS traffic. Forensic examination revealed beaconing 
+                  patterns, atypical DNS requests, and consistent data exfiltration during working hours to evade detection. 
+                  This situation emphasized the significance of extended traffic evaluations and connections among various 
+                  data sources. 
+                </p>
+              </div>
+            </div>
+
+           <div class="protection-heading">Forensic Tools and Resources</div>
+            <div class="protection-list">
+              <p> 
+                Specialized tools enhance successful network forensic investigations: 
+              </p> <br>
+              <li>
+                <strong>Packet Analysis Tools:</strong> Wireshark, tcpdump, and Zeek offer comprehensive packet examination features. 
+              </li>
+              <li>
+                <strong>Network Flow Analyzers:</strong> SiLK, Netflow/IPFIX tools, and Argus assist in recognizing communication patterns. 
+              </li>
+              <li>
+                <strong>Digital Evidence Management:</strong> Instruments that uphold the correct chain of custody and ensure evidence integrity.
+              </li>
+              <li>
+                <strong>SANS Network Forensics Resources:</strong> Educational and reference tools for professionals in network forensics. 
+              </li>
+              <li>
+                <strong>NIST Special Publications:</strong> Official guidelines for digital forensics processes by the government. 
+            </div>
+          
+          <!-- Quiz Section -->
+            <div class="topic-quiz">
+              <h4><i class="fas fa-question-circle"></i> Knowledge Check</h4>
+              <div class="question">
+                <p>
+                  During a network forensic investigation, what is the primary 
+                  purpose of establishing a timeline of events?
+                </p>
+              </div>
+              <div class="options">
+                <div class="option" data-correct="true">
+                  <span class="option-letter">A</span>
+                  <span class="option-text"
+                    >To correlate activities across multiple data sources 
+                    and identify causal relationships</span
+                  >
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">B</span>
+                  <span class="option-text"
+                    >To determine which security products to purchase for future protection </span
+                  >
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">C</span>
+                  <span class="option-text"
+                    >To establish who is legally liable for the security breach </span
+                  >
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text"
+                    > To meet minimum requirements for cyber insurance claims</span
+                  >
+                </div>
+              </div>
+              <button class="topic-quiz-btn">Check Answer</button>
+              <div class="topic-quiz-results" style="display: none">
+                <div class="correct-answer" style="display: none">
+                  <i class="fas fa-check-circle"></i> Correct! Creating a timeline of events 
+                  is a critical component of network forensics because it allows investigators 
+                  to correlate activities that may appear in different logs and data sources. 
+                  This correlation helps establish the sequence and potential causality between 
+                  events, revealing how an attack progressed through the network. By synthesizing 
+                  timestamp data from various systems (firewalls, servers, endpoints, etc.), 
+                  investigators can reconstruct the attack path, identify the initial compromise 
+                  vector, and understand lateral movement—information crucial for complete remediation 
+                  and future prevention.
+                </div>
+                <div class="incorrect-answer" style="display: none">
+                  <i class="fas fa-times-circle"></i> Incorrect. Future security purchases, legal 
+                  liability determination, and insurance claim requirements are business or legal 
+                  concerns rather than forensic investigation objectives. None address the technical 
+                  purpose of timeline creation in reconstructing the sequence of events across multiple 
+                  systems during a security incident.
+                </div>
+              </div>
+            </div>
+        
+              <!-- <div class="lock-overlay">
+                <i class="fas fa-lock"></i>
+                <div class="lock-message">
+                  Complete the previous section to unlock
+                </div>
+              </div> -->
+            </div>
+          </div>
+          
+
+        <!-- Zero Trust Architecture Section -->
+         <div class="target-card locked" data-target="zero-trust-architechture">
+          <span class="difficulty hard">Advanced</span>
+          <div class="target-icon">
+            <i class="fas fa-user-secret"></i>
+          </div>
+          <h2>Zero Trust Architecture</h2>
+
+          <div class="attack-item">
+            <h3>Fundamental Zero Trsut Principles</h3>
+            <div class="attack-detail">
+              <p>Zero Trust Architecture (ZTA) is a security framework that posits that 
+                no user or system should be automatically trusted, regardless of whether 
+                they are inside or outside the network boundary. This method necessitates 
+                ongoing validation of each access request, no matter the origin or endpoint. 
+                Zero Trust signifies a transformative change from conventional perimeter-focused 
+                security to a framework in which trust is never taken for granted and must constantly 
+                be established. 
+              </p> <br>
+              <p>The Zero Trust model is built upon several fundamental principles that guide implementation:
+              </p>
+              <ul>
+                <li>
+                  <strong>Always Verify, Never Trust:</strong> Each access request should be thoroughly authenticated, 
+                  authorized, and encrypted prior to allowing access. 
+                </li>
+                <li>
+                  <strong>Minimal Privilege Access:</strong> Users and systems should possess only the essential 
+                  permissions needed to carry out their tasks. 
+                </li>
+                <li>
+                  <strong>Assume Compromise:</strong> Organizations ought to act as if their network has been breached 
+                  and develop security measures accordingly. 
+                </li>
+                <li>
+                  <strong>Micro-segmentation:</strong> Networks must be partitioned into secure areas with distinct 
+                  access points for various sections of the network. 
+                </li>
+                <li>
+                  <strong>Surveillance:</strong> Every traffic and access request should be recorded 
+                  and assessed in real-time to identify irregularities. 
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="attack-item">
+            <h3>Implementation Concepts</h3>
+            <div class="attack-detail">
+              <p>Zero Trust Architecture necessitates certain technological elements to operate efficiently:</p>
+              <ul>
+                <li>
+                  <strong>Identity and Access Management (IAM):</strong> Unified oversight of user verification and permissions. 
+                </li>
+                <li>
+                  <strong>Multi-Factor Authentication (MFA):</strong> Necessitating several verification methods prior to allowing access to resources. 
+                </li>
+                <li>
+                  <strong>Network Segmentation:</strong> Splitting networks into separate sections to limit possible security breaches. 
+                </li>
+                <li>
+                  <strong>Software-Defined Perimeter (SDP):</strong> Establishing adaptable network limits that change according to user identity. 
+                </li>
+                <li>
+                  <strong>Ongoing Security Monitoring:</strong> Instant evaluation of user activities and network data flow. 
+                </li>
+              </ul>
+
+              <h4>Business & Security Benefits</h4>
+              <p>Embracing Zero Trust offers considerable benefits for contemporary organizations:</p>
+              <ul>
+                <li>
+                  <strong>Decreased Attack Surface:</strong> Restricting access points and permissions lowers potential entry avenues for attackers. 
+                </li>
+                <li>
+                  <trong>Enhanced Clarity:</trong> Thorough surveillance offers deeper understanding of network operations and possible dangers.
+                </li>
+                <li>
+                  <strong>Improved Regulatory Compliance:</strong> Zero Trust aids in fulfilling data protection regulation requirements such as GDPR, HIPAA, and PCI DSS.
+                </li>
+                <li>
+                  <strong>Flexibility for Contemporary Employment:</strong> Facilitates safe remote working, BYOD guidelines, and access to cloud resources.
+                </li>
+              </ul>
+
+              <h4>Essential Implementation Strategies</h4>
+              <p>Implementing Zero Trust requires a phased approach tailored to organizational needs:</p> <br>
+              <p>For Initial Deployment:</p>
+              <ul>
+                <li>
+                  <strong>Identity-Focused Base:</strong> Start with strong identity authentication systems.
+                </li>
+                <li>
+                  <strong>Identifying Critical Assets:</strong> Recognize and safeguard your most sensitive information and systems initially.
+                </li>
+                <li>
+                  <strong>Baseline Network Activity:</strong> Define typical behaviors to efficiently identify irregularities.
+                </li>
+                <li>
+                  <strong>Staged Execution:</strong> Begin with valuable assets and gradually broaden the protection strategy.
+                </li>
+              </ul>
+              <p>For Mature Environments:</p>
+              <ul>
+                <li>
+                  <strong>Ongoing Evaluation:</strong> Consistent assessment of security stance and modification of regulations.
+                </li>
+                <li>
+                  <strong>Automated Reply:</strong> Establish systems that instinctively respond to security incidents. 
+                </li>
+                <li>
+                  <strong>Zero Trust Data Access:</strong> Implement principles at the data layer, rather than solely at network or application layers.
+                </li>
+                <li>
+                  <strong>Third-Party Oversight:</strong> Apply Zero Trust principles to relationships with vendors and partners. 
+                </li>
+              </ul>
+              
+              <h4>Monitoring and Enforcement</h4>
+              <p>Continuous monitoring is crucial for sustaining an efficient Zero Trust framework:</p>
+              <ul>
+                <li>
+                  <strong>Behavioral Analytics:</strong> Detecting atypical user or system actions that could suggest a breach. 
+                </li>
+                <li>
+                  <strong>Policy Enforcement Points:</strong> Key sites where access choices are determined and implemented. 
+                </li>
+                <li>
+                  <strong>Security Information and Event Management (SIEM):</strong> Centralized collection and examination of security incidents. 
+                </li>
+                <li>
+                  <strong>Device Health Assessment:</strong> Confirming that connected devices fulfill security standards prior to allowing access.
+                </li>
+              </ul>
+
+              <h4>Sample Case: Financial Institution Implementation</h4>
+              <p>Real-world applications demonstrate Zero Trust principles in action:</p>
+              <p>A prominent financial services firm adopted Zero Trust to safeguard both local and cloud 
+                settings. Through the use of robust identity verification, micro-segmentation at the 
+                application level, and ongoing monitoring, they decreased successful attack attempts by 
+                65% and halved the incident response time. The execution necessitated major adjustments to 
+                their security operations center but led to a better compliance stance and increased safeguarding 
+                of sensitive financial information. </p>
+            </div>
+          </div>
+
+          <div class="protection-heading">Recommended Technologies and Resources</div>
+            <div class="protection-list">
+              <p>Several technologies and standards support Zero Trust implementation:</p> <br>
+              <li>
+                <strong>Identity Providers:</strong> Services that centrally handle authentication and authorization.
+              </li>
+              <li>
+                <strong>NIST SP 800-207:</strong> The official guidelines for Zero Trust Architecture from the 
+                National Institute of Standards and Technology.
+              </li>
+              <li>
+                <strong>Cloud Security Alliance Zero Trust Advancement Center:</strong> Resources for implementing Zero Trust in the industry. 
+              </li>
+              <li>
+                <strong>Zero Trust Evaluation Frameworks:</strong> Approaches for assessing the maturity of your Zero Trust deployment. 
+              </li>
+              <li>
+                <strong>Security Orchestration, Automation, and Response (SOAR):</strong> Instruments that automate reactions to security incidents in a Zero Trust environment. 
+              </li>
+            </div>
+          
+
+          <!-- Quiz Section -->
+          <div class="topic-quiz">
+            <h4><i class="fas fa-question-circle"></i> Knowledge Check</h4>
+            <div class="question">
+              <p>
+                Which component is MOST essential for implementing the access control 
+                aspect of Zero Trust Architecture?
+              </p>
+            </div>
+            <div class="options">
+              <div class="option" data-correct="false">
+                <span class="option-letter">A</span>
+                <span class="option-text"
+                  >Network segmentation using VLANs</span
+                >
+              </div>
+              <div class="option" data-correct="true">
+                <span class="option-letter">B</span>
+                <span class="option-text"
+                  >Identity and Access Management (IAM) with strong MFA</span
+                >
+              </div>
+              <div class="option" data-correct="false">
+                <span class="option-letter">C</span>
+                <span class="option-text"
+                  >Regular vulnerability scanning of all endpoints</span>
+              </div>
+              <div class="option" data-correct="false">
+                <span class="option-letter">D</span>
+                <span class="option-text"
+                  >Intrusion Detection Systems at network boundaries</span
+                >
+              </div>
+            </div>
+            <button class="topic-quiz-btn">Check Answer</button>
+            <div class="topic-quiz-results" style="display: none">
+              <div class="correct-answer" style="display: none">
+                <i class="fas fa-check-circle"></i> Correct! While all options contribute to security, 
+                Identity and Access Management (IAM) with Multi-Factor Authentication (MFA) is the 
+                cornerstone of Zero Trust access control. Since Zero Trust operates on the principle 
+                that identity is the new security perimeter, IAM systems provide the critical function 
+                of authenticating users and determining their access privileges. MFA adds an essential 
+                layer by requiring multiple verification methods, significantly reducing the risk of 
+                credential theft. Without robust identity verification and access control, other Zero 
+                Trust components cannot effectively enforce the principle of least privilege access based 
+                on who users are rather than where they're connecting from.
+              </div>
+              <div class="incorrect-answer" style="display: none">
+                <i class="fas fa-times-circle"></i> Incorrect. Network segmentation controls traffic flow, 
+                vulnerability scanning identifies weaknesses, and intrusion detection identifies threats -
+                 but none of these mechanisms verify user identities before granting access, which is the 
+                 cornerstone principle of Zero Trust security architecture.
+              </div>
+            </div>
+          </div>
+
+            <!-- <div class="lock-overlay">
+              <i class="fas fa-lock"></i>
+              <div class="lock-message">
+                Complete the previous section to unlock
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Conclusion Section -->
+      <div class="conclusion">
+        <h2>Safeguarding the Digital Perimeter</h2>
+        <p>
+          Network security remains a critical component of organizational defense strategy,
+           requiring continuous adaptation to evolving threats. Implementing layered security 
+           controls, maintaining vigilance through monitoring, and adopting robust architectural 
+           frameworks like Zero Trust can significantly reduce risk exposure. As attack surfaces 
+           expand with increasingly complex networks, security professionals must balance protection 
+           with operational needs while staying informed about emerging vulnerabilities and attack methodologies.
+        </p>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2023 Cybersec Academy. All rights reserved.</p>
+    </footer>
+
+    <!-- Celebration Container -->
+    <div class="celebration-container">
+      <div class="celebration-content">
+        <div class="celebration-title">
+          <i class="fas fa-trophy"></i> Achievement Unlocked!
+        </div>
+        <div class="celebration-badge">
+          <i class="fas fa-network-wired"></i>
+        </div>
+        <div class="celebration-text">
+          Congratulations! You've completed this section of the Network Security
+          module.
+        </div>
+        <div class="celebration-stats">
+          <div class="stat-item">
+            <div class="stat-value">1/4</div>
+            <div class="stat-label">Sections Complete</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value"><i class="fas fa-network-wired"></i></div>
+            <div class="stat-label">Badge Earned</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">+15</div>
+            <div class="stat-label">Points Earned</div>
+          </div>
+        </div>
+        <button class="celebration-btn">Continue Learning</button>
+      </div>
+    </div>
+
+    <!-- Direct fix script -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Fix 1: Accordion functionality
+        const accordionHeaders = document.querySelectorAll(".attack-item h3");
+        accordionHeaders.forEach((header) => {
+          header.addEventListener("click", function () {
+            // Toggle expanded class on parent
+            const parentItem = this.parentElement;
+            const wasExpanded = parentItem.classList.contains("expanded");
+
+            // Close all other expanded items
+            document
+              .querySelectorAll(".attack-item.expanded")
+              .forEach((item) => {
+                if (item !== parentItem) {
+                  item.classList.remove("expanded");
+                }
+              });
+
+            // Toggle current item
+            if (wasExpanded) {
+              parentItem.classList.remove("expanded");
+            } else {
+              parentItem.classList.add("expanded");
+            }
+          });
+        });
+
+        // Fix 2: Quiz functionality
+        const quizOptions = document.querySelectorAll(".option");
+        quizOptions.forEach((option) => {
+          option.addEventListener("click", function () {
+            // Find all sibling options and remove selected class
+            const allOptions = this.parentElement.querySelectorAll(".option");
+            allOptions.forEach((opt) => opt.classList.remove("selected"));
+
+            // Add selected class to clicked option
+            this.classList.add("selected");
+          });
+        });
+
+        // Fix 3: Check answer buttons
+        const checkButtons = document.querySelectorAll(".topic-quiz-btn");
+        checkButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            const quizSection = this.closest(".topic-quiz");
+            const selectedOption =
+              quizSection.querySelector(".option.selected");
+            const resultsDiv = quizSection.querySelector(".topic-quiz-results");
+            const correctFeedback =
+              quizSection.querySelector(".correct-answer");
+            const incorrectFeedback =
+              quizSection.querySelector(".incorrect-answer");
+
+            if (!selectedOption) {
+              alert("Please select an answer first.");
+              return;
+            }
+
+            // Show results
+            resultsDiv.style.display = "block";
+
+            if (selectedOption.getAttribute("data-correct") === "true") {
+              correctFeedback.style.display = "block";
+              incorrectFeedback.style.display = "none";
+              selectedOption.classList.add("correct");
+
+              // Mark section as completed (if we had user progress tracking)
+              const targetCard = quizSection.closest(".target-card");
+              if (targetCard) {
+                const nextCard = targetCard.nextElementSibling;
+                if (
+                  nextCard &&
+                  nextCard.classList.contains("target-card") &&
+                  nextCard.classList.contains("locked")
+                ) {
+                  nextCard.classList.remove("locked");
+                  const lockOverlay = nextCard.querySelector(".lock-overlay");
+                  if (lockOverlay) {
+                    lockOverlay.style.display = "none";
+                  }
+                }
+              }
+
+              // Update button text
+              this.textContent = "Continue";
+              this.classList.add("success");
+            } else {
+              correctFeedback.style.display = "none";
+              incorrectFeedback.style.display = "block";
+              selectedOption.classList.add("incorrect");
+            }
+          });
+        });
+      });
+    </script>
+
+    <script src="js/network-security.js"></script>
+    <script src="js/mobile-menu.js"></script>
+  </body>
+</html>

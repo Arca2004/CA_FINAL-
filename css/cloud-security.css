@@ -1,17 +1,17 @@
 body {
   margin: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: #0e1621;
-  color: #edf2f7;
+  font-family: "Rajdhani", sans-serif;
+  background: var(--primary-dark);
+  color: var(--text-light);
 }
 
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #1c2a3a;
+  background: var(--secondary-dark);
   padding: 0 50px;
-  height: 80px;
+  height: var(--header-height);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   position: fixed;
   top: 0;
@@ -28,7 +28,7 @@ nav ul {
 }
 
 nav ul li a {
-  color: #88ccf1;
+  color: var(--cyber-blue);
   text-decoration: none;
   font-weight: bold;
   padding: 10px 15px;

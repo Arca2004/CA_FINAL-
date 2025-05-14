@@ -15,9 +15,39 @@
     <link rel="icon" type="image/png" href="img/favicon.png" />
     <link rel="stylesheet" href="css/profile-dropdown.css" />
     <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="stylesheet" href="css/quiz-letters.css" />
     <!-- Enhanced lock styles to match intro-cybersec.html -->
     <style>
-      /* Enhanced lock styles for non-first topics */
+      /* Quiz Styles Override to Ensure Consistency */
+      .topic-quiz .options {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px !important;
+        margin-bottom: 20px !important;
+      }
+      
+      .topic-quiz .option {
+        background: #1c2a3a !important;
+        padding: 15px !important;
+        border-radius: 6px !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        border: 2px solid transparent !important;
+      }
+      
+      .option-letter {
+        background: rgba(92, 219, 149, 0.2) !important;
+        color: #5cdb95 !important;
+      }
+      
+      @media (max-width: 768px) {
+        .topic-quiz .options {
+          grid-template-columns: 1fr !important;
+        }
+      }
+      
+      /* Enhanced lock styles for the attack targets */
       .target-card.locked[data-target="businesses"],
       .target-card.locked[data-target="government"],
       .target-card.locked[data-target="infrastructure"],
@@ -375,16 +405,20 @@ Amazon Security Team</span></pre>
               <p>Which of these is a common indicator of a phishing attempt?</p>
               <div class="options">
                 <div class="option" data-correct="false">
-                  Email from a colleague with your company's domain
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Email from a colleague with your company's domain</span>
                 </div>
                 <div class="option" data-correct="true">
-                  Urgency to act immediately to avoid consequences
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Urgency to act immediately to avoid consequences</span>
                 </div>
                 <div class="option" data-correct="false">
-                  Link that points to your bank's official website
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Link that points to your bank's official website</span>
                 </div>
                 <div class="option" data-correct="false">
-                  Email addressed to you by your correct name
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Email addressed to you by your correct name</span>
                 </div>
               </div>
             </div>
@@ -528,17 +562,20 @@ WARNING: Do not attempt to decrypt with third party software as this may cause p
               </p>
               <div class="options">
                 <div class="option" data-correct="false">
-                  Save cryptocurrency to pay ransoms quickly
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Save cryptocurrency to pay ransoms quickly</span>
                 </div>
                 <div class="option" data-correct="false">
-                  Use only cloud storage for all company data
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Use only cloud storage for all company data</span>
                 </div>
                 <div class="option" data-correct="true">
-                  Maintain isolated, offline backups of critical data
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Maintain isolated, offline backups of critical data</span>
                 </div>
                 <div class="option" data-correct="false">
-                  Keep all systems on a single network for centralized
-                  management
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Keep all systems on a single network for centralized management</span>
                 </div>
               </div>
             </div>
@@ -710,16 +747,20 @@ RECOMMENDATIONS:
               </p>
               <div class="options">
                 <div class="option" data-correct="false">
-                  Basic phishing campaigns
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Basic phishing campaigns</span>
                 </div>
                 <div class="option" data-correct="true">
-                  Advanced Persistent Threats (APTs)
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Advanced Persistent Threats (APTs)</span>
                 </div>
                 <div class="option" data-correct="false">
-                  Denial of Service attacks
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Denial of Service attacks</span>
                 </div>
                 <div class="option" data-correct="false">
-                  Supply chain compromises
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Supply chain compromises</span>
                 </div>
               </div>
             </div>
@@ -876,17 +917,20 @@ IMPACT:
               </p>
               <div class="options">
                 <div class="option" data-correct="false">
-                  It improves system processing speed
+                  <span class="option-letter">A</span>
+                  <span class="option-text">It improves system processing speed</span>
                 </div>
                 <div class="option" data-correct="false">
-                  It reduces power consumption
+                  <span class="option-letter">B</span>
+                  <span class="option-text">It reduces power consumption</span>
                 </div>
                 <div class="option" data-correct="true">
-                  It prevents direct network-based attacks from reaching
-                  critical systems
+                  <span class="option-letter">C</span>
+                  <span class="option-text">It prevents direct network-based attacks from reaching critical systems</span>
                 </div>
                 <div class="option" data-correct="false">
-                  It simplifies the maintenance process
+                  <span class="option-letter">D</span>
+                  <span class="option-text">It simplifies the maintenance process</span>
                 </div>
               </div>
             </div>
@@ -1103,14 +1147,20 @@ SECURITY FAILURES:
               </p>
               <div class="options">
                 <div class="option" data-correct="false">
-                  Basic password authentication
-                </div>
-                <div class="option" data-correct="false">Email filtering</div>
-                <div class="option" data-correct="true">
-                  Multi-factor authentication with out-of-band verification
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Basic password authentication</span>
                 </div>
                 <div class="option" data-correct="false">
-                  Antivirus software alone
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Email filtering</span>
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Multi-factor authentication with out-of-band verification</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Antivirus software alone</span>
                 </div>
               </div>
             </div>
