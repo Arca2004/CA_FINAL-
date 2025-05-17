@@ -6,8 +6,8 @@
     <title>Network Security - Cybersec Academy</title>
     <link rel="stylesheet" href="cyberindex.css" />
     <link rel="stylesheet" href="css/network-security.css" />
-    <link rel="stylesheet" href="css/index.css" />
     <link rel="stylesheet" href="css/profile-dropdown.css" />
+    <link rel="stylesheet" href="css/index.css" />
     <link rel="stylesheet" href="css/responsive.css" />
     <link
       rel="stylesheet"
@@ -23,545 +23,13 @@
     <!-- Firebase Config -->
     <script src="firebase-config.js"></script>
 
-    <style>
-      body {
-        margin: 0;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: #0e1621;
-        color: #edf2f7;
-      }
-
-      header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: #1c2a3a;
-        padding: 0 50px;
-        height: 80px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 100;
-      }
-      
-      /* Critical fix for dropdown content */
-      .attack-item {
-        margin-bottom: 20px;
-        border-radius: 8px;
-        overflow: hidden;
-        background: rgba(44, 62, 80, 0.5);
-        transition: all 0.3s ease;
-      }
-      
-      .attack-detail {
-        padding: 0;
-        max-height: 0;
-        overflow: hidden;
-        transition: all 0.5s ease;
-      }
-      
-      .attack-item.expanded .attack-detail {
-        padding: 20px;
-        max-height: 2000px;
-      }
-      
-      /* Enhanced lock styles for non-first topics */
-      .target-card.locked[data-target="network-tapping"],
-      .target-card.locked[data-target="wireless-network-pirating"],
-      .target-card.locked[data-target="advanced-network-forensics"],
-      .target-card.locked[data-target="zero-trust-architechture"] {
-        position: relative;
-        filter: grayscale(0.8) brightness(0.7);
-        border: 3px solid #e74c3c !important;
-        overflow: hidden;
-      }
-
-      /* Lock overlay styles */
-      .debug-lock-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(14, 22, 33, 0.8);
-        backdrop-filter: blur(2px);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: 100;
-      }
-
-      .debug-lock-overlay i {
-        font-size: 5rem;
-        color: #e74c3c;
-        margin-bottom: 15px;
-        text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-        animation: wiggle 2.5s infinite ease-in-out;
-      }
-
-      .debug-lock-message {
-        background: rgba(231, 76, 60, 0.9);
-        color: white;
-        padding: 15px 25px;
-        border-radius: 5px;
-        font-weight: bold;
-        text-align: center;
-        max-width: 80%;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
-        font-size: 1.2rem;
-      }
-
-      /* Wiggle animation for lock icon */
-      @keyframes wiggle {
-        0%,
-        100% {
-          transform: rotate(0);
-        }
-        20% {
-          transform: rotate(-8deg);
-        }
-        40% {
-          transform: rotate(8deg);
-        }
-        60% {
-          transform: rotate(-4deg);
-        }
-        80% {
-          transform: rotate(4deg);
-        }
-      }
-
-      /* Hero section enhancements */
-      .hero-section {
-        background: linear-gradient(135deg, #0F2027 0%, #203A43 50%, #2C5364 100%);
-        padding: 80px 0 60px;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        margin-bottom: 40px;
-        margin-top: 80px;
-        border-radius: 8px;
-      }
-
-      .hero-section::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: url('img/network-bg.jpg') center/cover no-repeat;
-        opacity: 0.15;
-        z-index: 0;
-      }
-
-      .hero-content {
-        position: relative;
-        z-index: 1;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-        text-align: center;
-        color: #ffffff;
-      }
-
-      .hero-content h1 {
-        font-size: 3.2rem;
-        margin-bottom: 20px;
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        font-weight: 700;
-        color: #5cdb95;
-      }
-
-      .hero-content p {
-        font-size: 1.2rem;
-        max-width: 800px;
-        margin: 0 auto;
-        line-height: 1.6;
-        text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
-      }
-
-      /* Target grid enhancements */
-      .target-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 30px;
-        margin-top: 40px;
-      }
-
-      .target-card {
-        background: #1c2a3a;
-        border-radius: 10px;
-        padding: 30px;
-        position: relative;
-        border: 3px solid transparent;
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      }
-
-      .target-card.active {
-        border-color: #5cdb95;
-        background: rgba(30, 40, 55, 0.95);
-      }
-
-      .target-card .difficulty {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-size: 0.8rem;
-        font-weight: bold;
-        text-transform: uppercase;
-      }
-
-      .difficulty.easy {
-        background: #2ecc71;
-        color: #fff;
-      }
-
-      .difficulty.medium {
-        background: #f39c12;
-        color: #fff;
-      }
-
-      .difficulty.hard {
-        background: #e74c3c;
-        color: #fff;
-      }
-
-      .target-icon {
-        width: 60px;
-        height: 60px;
-        background: #2c3e50;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 20px;
-        border: 2px solid #5cdb95;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-      }
-
-      .target-icon i {
-        font-size: 28px;
-        color: #5cdb95;
-      }
-
-      .target-card h2 {
-        font-size: 1.8rem;
-        margin-bottom: 20px;
-        color: #5cdb95;
-      }
-
-      /* Lock overlay enhancements */
-      .lock-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(14, 22, 33, 0.8);
-        backdrop-filter: blur(3px);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: 10;
-        border-radius: 8px;
-      }
-
-      .lock-overlay i {
-        font-size: 4rem;
-        color: #e74c3c;
-        margin-bottom: 15px;
-        animation: pulse 2s infinite;
-      }
-
-      .lock-message {
-        background: rgba(231, 76, 60, 0.85);
-        color: white;
-        padding: 12px 20px;
-        border-radius: 5px;
-        font-weight: 600;
-        text-align: center;
-        max-width: 80%;
-      }
-
-      @keyframes pulse {
-        0% {
-          transform: scale(1);
-          opacity: 1;
-        }
-        50% {
-          transform: scale(1.1);
-          opacity: 0.8;
-        }
-        100% {
-          transform: scale(1);
-          opacity: 1;
-        }
-      }
-
-      /* Quiz styling enhancements */
-      .topic-quiz {
-        background: #283747;
-        padding: 20px;
-        border-radius: 8px;
-        margin: 25px 0 15px;
-        position: relative;
-        border-left: 4px solid #5cdb95;
-      }
-
-      .topic-quiz h4 {
-        margin-top: 0;
-        color: #5cdb95;
-        font-size: 1.2rem;
-        margin-bottom: 20px;
-      }
-
-      .topic-quiz h4 i {
-        margin-right: 8px;
-      }
-
-      .question p {
-        font-size: 1.1rem;
-        margin-bottom: 20px;
-        line-height: 1.5;
-      }
-
-      .options {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 12px;
-        margin-bottom: 25px;
-      }
-
-      .option {
-        background: rgba(44, 62, 80, 0.7);
-        border: 2px solid rgba(52, 152, 219, 0.3);
-        border-radius: 8px;
-        padding: 15px;
-        display: flex;
-        align-items: flex-start;
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-
-      .option:hover {
-        background: rgba(44, 62, 80, 0.9);
-        transform: translateY(-2px);
-      }
-
-      .option.selected {
-        background: rgba(52, 152, 219, 0.2);
-        border-color: #3498db;
-      }
-
-      .option.correct {
-        background: rgba(46, 204, 113, 0.2);
-        border-color: #2ecc71;
-      }
-
-      .option.incorrect {
-        background: rgba(231, 76, 60, 0.2);
-        border-color: #e74c3c;
-      }
-
-      .option-letter {
-        background: #3498db;
-        color: white;
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        margin-right: 12px;
-        flex-shrink: 0;
-      }
-
-      .option-text {
-        line-height: 1.4;
-        margin-top: 3px;
-      }
-
-      .topic-quiz-btn {
-        background: #5cdb95;
-        color: #1c2a3a;
-        border: none;
-        padding: 12px 24px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: bold;
-        font-size: 1rem;
-        transition: all 0.2s ease;
-      }
-
-      .topic-quiz-btn:hover {
-        background: #45b67f;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      }
-
-      .topic-quiz-btn.success {
-        background: #27ae60;
-      }
-
-      .topic-quiz-results {
-        margin-top: 20px;
-        padding: 15px;
-        border-radius: 8px;
-      }
-
-      .correct-answer {
-        color: #2ecc71;
-        display: flex;
-        align-items: flex-start;
-      }
-
-      .incorrect-answer {
-        color: #e74c3c;
-        display: flex;
-        align-items: flex-start;
-      }
-
-      .correct-answer i,
-      .incorrect-answer i {
-        margin-right: 10px;
-        font-size: 1.3rem;
-        margin-top: 2px;
-      }
-
-      /* Attack item enhancements */
-      .attack-item {
-        margin-bottom: 20px;
-        border-radius: 8px;
-        overflow: hidden;
-        background: rgba(44, 62, 80, 0.5);
-        transition: all 0.3s ease;
-      }
-
-      .attack-item h3 {
-        background: rgba(52, 73, 94, 0.8);
-        padding: 15px 20px;
-        margin: 0;
-        font-size: 1.2rem;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        transition: all 0.3s ease;
-      }
-
-      .attack-item h3::after {
-        content: "\f078";
-        font-family: "Font Awesome 5 Free";
-        font-weight: 900;
-        font-size: 0.9rem;
-        color: #3498db;
-        transition: all 0.3s ease;
-      }
-
-      .attack-item.expanded h3::after {
-        transform: rotate(180deg);
-      }
-
-      .attack-detail {
-        padding: 0;
-        max-height: 0;
-        overflow: hidden;
-        transition: all 0.5s ease;
-      }
-
-      .attack-item.expanded .attack-detail {
-        padding: 20px;
-        max-height: 2000px;
-      }
-
-      .attack-detail h4 {
-        color: #3498db;
-        margin-top: 20px;
-        margin-bottom: 10px;
-        font-size: 1.1rem;
-      }
-
-      .attack-detail p {
-        margin-bottom: 15px;
-        line-height: 1.5;
-      }
-
-      .attack-detail ul {
-        padding-left: 20px;
-        margin-bottom: 15px;
-      }
-
-      .attack-detail li {
-        margin-bottom: 8px;
-        line-height: 1.4;
-      }
-
-      .protection-heading {
-        background: rgba(52, 152, 219, 0.2);
-        color: #3498db;
-        padding: 12px 20px;
-        border-radius: 6px 6px 0 0;
-        font-weight: bold;
-        margin-top: 30px;
-        font-size: 1.2rem;
-        border-left: 4px solid #3498db;
-      }
-
-      .protection-list {
-        background: rgba(44, 62, 80, 0.5);
-        padding: 20px;
-        border-radius: 0 0 6px 6px;
-        margin-bottom: 25px;
-        border-left: 4px solid #3498db;
-      }
-
-      .protection-list li {
-        margin-bottom: 12px;
-        line-height: 1.5;
-      }
-
-      .protection-list strong {
-        color: #3498db;
-      }
-
-      /* Responsive adjustments */
-      @media (max-width: 768px) {
-        .hero-content h1 {
-          font-size: 2.5rem;
-        }
-        
-        .hero-content p {
-          font-size: 1rem;
-        }
-        
-        .target-card {
-          padding: 20px;
-        }
-        
-        .options {
-          gap: 8px;
-        }
-        
-        .option {
-          padding: 12px;
-        }
-      }
-    </style>
   </head>
   <body>
     <div class="scanner-lines"></div>
 
     <div class="noise-overlay"></div>
 
+    <!-- Header using standard site styling -->
     <header>
       <div class="logo">
         <div class="logo-icon">
@@ -681,7 +149,7 @@
 
       <!-- Introduction Section -->
       <div class="overview">
-        <h2>Overview</h2>
+        <h2><i class="fas fa-info-circle"></i> Overview</h2>
         <p>
             In the modern interlinked world, safeguarding networks has become 
             crucial for both organizations and individuals. Network security 
@@ -694,18 +162,20 @@
       </div>
 
       <!-- Network Security Fundamentals Section -->
+      <h2><i class="fas fa-bullseye"></i> Key Concepts in Network Security</h2>
       <div class="target-grid">
         <div class="target-card active" data-target="network-security">
-          <span class="difficulty easy">Beginner</span>
+          
           <div class="target-icon">
             <i class="fas fa-network-wired"></i>
           </div>
-          <h2>Network Security Fundamentals</h2>
+          <h2>1. Network Security Fundamentals</h2>
 
           <div class="attack-list">
             <div class="attack-item">
               <h3>Why Network Security Matters?</h3>
               <div class="attack-detail">
+                <br>
                 <p>
                     Network security is critical because nearly every aspect 
                     of modern business and personal life depends on secure 
@@ -769,6 +239,7 @@
             <div class="attack-item">
               <h3>Core Elements of Network Security</h3>
               <div class="attack-detail">
+                <br>
                 <p>
                     Effective network security requires a multi-layered approach 
                     addressing several key areas:
@@ -847,6 +318,7 @@
             <div class="attack-item">
               <h3>Security Principles and Best Practices</h3>
               <div class="attack-detail">
+                <br>
                 <p>
                     No matter which technologies are used, certain principles direct 
                     successful network security: 
@@ -907,43 +379,35 @@
               </div>
             </div>
 
-            <div class="protection-heading">The Human Element</div>
+            <h3 class="protection-heading"><i class="fas fa-user-shield"></i> The Human Element</h3>
             <ul class="protection-list">
               <li>
-                <strong>Security Culture:</strong>
-                Fostering a setting in which security is the duty of all.
+                <strong>Security Culture:</strong> Fostering a setting in which security is the duty of all.
               </li>
               <li>
-                <strong>Security Awareness:</strong>
-                Making sure users comprehend risks and their part in prevention.
+                <strong>Security Awareness:</strong> Making sure users comprehend risks and their part in prevention.
               </li>
               <li>
-                <strong>Social Engineering Resistance:</strong>
-                Educating users to identify manipulation efforts
+                <strong>Social Engineering Resistance:</strong> Educating users to identify manipulation efforts
               </li>
               <li>
-                <strong>Security Governance:</strong>
-                Setting up explicit policies, procedures, and responsibilities
+                <strong>Security Governance:</strong> Setting up explicit policies, procedures, and responsibilities
               </li>
             </ul>
 
-            <div class="protection-heading">Protection Measures</div>
+            <h3 class="protection-heading"><i class="fas fa-shield-alt"></i> Protection Measures</h3>
             <ul class="protection-list">
               <li>
-                <strong>Stay informed</strong>
-                about emerging threats and vulnerabilities
+                <strong>Stay informed</strong> about emerging threats and vulnerabilities
               </li>
               <li>
-                <strong>Regularly assess</strong>
-                security controls and practices
+                <strong>Regularly assess</strong> security controls and practices
               </li>
               <li>
-                <strong>Adopt security strategies</strong>
-                to address new technologies and business models
+                <strong>Adopt security strategies</strong> to address new technologies and business models
               </li>
               <li>
-                <strong>Participate in security communities</strong>
-                to share intelligence and best practices
+                <strong>Participate in security communities</strong> to share intelligence and best practices
               </li>
             </ul>
             <p>
@@ -954,60 +418,39 @@
 
             <!-- Quiz Section -->
             <div class="topic-quiz">
-              <h4><i class="fas fa-question-circle"></i> Knowledge Check</h4>
+              <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
               <div class="question">
-                <p>
-                  Which security mechanism is primarily used to verify the identity of a user or 
-                  system before granting access to resources?
-                </p>
-              </div>
-              <div class="options">
-                <div class="option" data-correct="false">
-                  <span class="option-letter">A</span>
-                  <span class="option-text"
-                    >Encryption</span
-                  >
-                </div>
-                <div class="option" data-correct="true">
-                  <span class="option-letter">B</span>
-                  <span class="option-text"
-                    >Authentication</span
-                  >
-                </div>
-                <div class="option" data-correct="false">
-                  <span class="option-letter">C</span>
-                  <span class="option-text"
-                    >Firewall</span
-                  >
-                </div>
-                <div class="option" data-correct="false">
-                  <span class="option-letter">D</span>
-                  <span class="option-text">Intrusion Detection System (IDS)</span>
+                <p>Which security mechanism is primarily used to verify the identity of a user or system before granting access to resources?</p>
+                <div class="options">
+                  <div class="option" data-correct="false">
+                    <span class="option-letter">A</span>
+                    <span class="option-text">Encryption</span>
+                  </div>
+                  <div class="option" data-correct="true">
+                    <span class="option-letter">B</span>
+                    <span class="option-text">Authentication</span>
+                  </div>
+                  <div class="option" data-correct="false">
+                    <span class="option-letter">C</span>
+                    <span class="option-text">Firewall</span>
+                  </div>
+                  <div class="option" data-correct="false">
+                    <span class="option-letter">D</span>
+                    <span class="option-text">Intrusion Detection System (IDS)</span>
+                  </div>
                 </div>
               </div>
-              <button class="topic-quiz-btn">Check Answer</button>
               <div class="topic-quiz-results" style="display: none">
-                <div class="correct-answer" style="display: none">
-                  <i class="fas fa-check-circle"></i> Correct! Authentication is the process 
-                  of verifying that users or systems are who they claim to be before granting
-                   access to protected resources. This typically involves validating credentials
-                    such as passwords, digital certificates, biometrics, or multi-factor combinations. 
-                    Authentication is a fundamental security control that establishes identity before 
-                    authorization decisions can be made.
-                </div>
-                <div class="incorrect-answer" style="display: none">
-                  <i class="fas fa-times-circle"></i> Incorrect. Encryption protects data confidentiality,
-                   firewalls filter network traffic, and IDS systems detect suspicious activities - but 
-                   none of these mechanisms verify user identities before granting access.
-                </div>
+                <p class="correct-answer" style="display: none">✅ Correct! Authentication is the process of verifying that users or systems are who they claim to be before granting access to protected resources.</p>
+                <p class="incorrect-answer" style="display: none">❌ Incorrect. Try again!</p>
               </div>
+              <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
             </div>
           </div>
         </div>
 
         <!-- Network Tapping Section -->
         <div class="target-card locked" data-target="network-tapping">
-          <span class="difficulty medium">Intermediate</span>
           <div class="target-icon">
             <i class="fas fa-database"></i>
           </div>
@@ -1295,7 +738,7 @@
               </div>
             </div>
 
-            <div class="protection-heading">Network Tap vs SPAN Port</div>
+            <h3 class="protection-heading"><i class="fas fa-exchange-alt"></i> Network Tap vs SPAN Port</h3>
             <ul class="protection-list">
               <li>
                 In contrast to SPAN (Switched Port Analyzer) ports that can lose packets during busy traffic times,
@@ -1306,54 +749,43 @@
 
             <!-- Quiz Section -->
             <div class="topic-quiz">
-              <h4><i class="fas fa-question-circle"></i> Knowledge Check</h4>
+              <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
               <div class="question">
                 <p>
                   Which of the following statements about network taps is MOST accurate?
                 </p>
+                <div class="options">
+                  <div class="option" data-correct="false">
+                    <span class="option-letter">A</span>
+                    <span class="option-text"
+                      >Network taps modify traffic as it passes through to eliminate security threats.</span
+                    >
+                  </div>
+                  <div class="option" data-correct="false">
+                    <span class="option-letter">B</span>
+                    <span class="option-text"
+                      >Network taps are always software-based solutions that can be deployed remotely.</span
+                    >
+                  </div>
+                  <div class="option" data-correct="true">
+                    <span class="option-letter">C</span>
+                    <span class="option-text">Network taps create a copy of network traffic without 
+                      alerting the targeted systems.</span>
+                  </div>
+                  <div class="option" data-correct="false">
+                    <span class="option-letter">D</span>
+                    <span class="option-text"
+                      >Network taps can only be installed by replacing existing network infrastructure.</span
+                    >
+                  </div>
+                </div>
               </div>
-              <div class="options">
-                <div class="option" data-correct="false">
-                  <span class="option-letter">A</span>
-                  <span class="option-text"
-                    >Network taps modify traffic as it passes through to eliminate security threats.</span
-                  >
-                </div>
-                <div class="option" data-correct="false">
-                  <span class="option-letter">B</span>
-                  <span class="option-text"
-                    >Network taps are always software-based solutions that can be deployed remotely.</span
-                  >
-                </div>
-                <div class="option" data-correct="true">
-                  <span class="option-letter">C</span>
-                  <span class="option-text">Network taps create a copy of network traffic without 
-                    alerting the targeted systems.</span>
-                </div>
-                <div class="option" data-correct="false">
-                  <span class="option-letter">D</span>
-                  <span class="option-text"
-                    >Network taps can only be installed by replacing existing network infrastructure.</span
-                  >
-                </div>
-              </div>
-              <button class="topic-quiz-btn">Check Answer</button>
               <div class="topic-quiz-results" style="display: none">
-                <div class="correct-answer" style="display: none">
-                  <i class="fas fa-check-circle"></i> Correct! Network taps are passive devices that 
-                  create exact duplicates of network traffic without detection or interference. The 
-                  incorrect options mischaracterize taps by suggesting they actively modify traffic, 
-                  are limited to software implementations, or require infrastructure replacement - all 
-                  of which contradict the fundamental passive monitoring nature of network taps.
-                </div>
-                <div class="incorrect-answer" style="display: none">
-                  <i class="fas fa-times-circle"></i> Incorrect. Network taps are passive devices that 
-                  create exact duplicates of network traffic without detection or interference. The 
-                  incorrect options mischaracterize taps by suggesting they actively modify traffic, 
-                  are limited to software implementations, or require infrastructure replacement - all 
-                  of which contradict the fundamental passive monitoring nature of network taps.
-                </div>
+                <p class="correct-answer" style="display: none">✅ Correct! Network taps are passive devices that 
+                create exact duplicates of network traffic without detection or interference.</p>
+                <p class="incorrect-answer" style="display: none">❌ Incorrect. Try again!</p>
               </div>
+              <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
             </div>
           </div>
 
@@ -1367,7 +799,6 @@
 
         <!-- Wireless Network Pirating Section -->
         <div class="target-card locked" data-target="wireless-network-pirating">
-          <span class="difficulty medium">Intermediate</span>
           <div class="target-icon">
             <i class="fas fa-wrench"></i>
           </div>
@@ -1498,7 +929,7 @@
               </div>
             </div>
 
-            <div class="protection-heading">Protection Measures</div>
+            <h3 class="protection-heading"><i class="fas fa-shield-alt"></i> Protection Measures</h3>
             <div>
               <p><strong>For Home Networks:</strong></p>
               <ul class="protection-list">
@@ -1586,7 +1017,7 @@
             </div>
           </div>
           
-          <div class="protection-heading">Tools and Resources</div>
+          <h3 class="protection-heading"><i class="fas fa-tools"></i> Tools and Resources</h3>
             <ul class="protection-list">
               <li>
                 <strong>Network analyzers:</strong> Applications such as Wireshark assist in comprehending 
@@ -1675,7 +1106,6 @@
 
         <!-- Advance Network Forensics Section -->
         <div class="target-card locked" data-target="advanced-network-forensics">
-          <span class="difficulty hard">Advanced</span>
           <div class="target-icon">
             <i class="fas fa-user-secret"></i>
           </div>
@@ -1852,7 +1282,7 @@
               </div>
             </div>
 
-           <div class="protection-heading">Forensic Tools and Resources</div>
+           <h3 class="protection-heading"><i class="fas fa-search"></i> Forensic Tools and Resources</h3>
             <ul class="protection-list">
               <li>
                 <strong>Packet Analysis Tools:</strong> Wireshark, tcpdump, and Zeek offer comprehensive packet examination features. 
@@ -1871,85 +1301,68 @@
               </li>
             </ul>
           
-          <!-- Quiz Section -->
+                      <!-- Quiz Section -->
             <div class="topic-quiz">
-              <h4><i class="fas fa-question-circle"></i> Knowledge Check</h4>
+              <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
               <div class="question">
                 <p>
                   During a network forensic investigation, what is the primary 
                   purpose of establishing a timeline of events?
                 </p>
+                <div class="options">
+                  <div class="option" data-correct="true">
+                    <span class="option-letter">A</span>
+                    <span class="option-text"
+                      >To correlate activities across multiple data sources 
+                      and identify causal relationships</span
+                    >
+                  </div>
+                  <div class="option" data-correct="false">
+                    <span class="option-letter">B</span>
+                    <span class="option-text"
+                      >To determine which security products to purchase for future protection </span
+                    >
+                  </div>
+                  <div class="option" data-correct="false">
+                    <span class="option-letter">C</span>
+                    <span class="option-text"
+                      >To establish who is legally liable for the security breach </span
+                    >
+                  </div>
+                  <div class="option" data-correct="false">
+                    <span class="option-letter">D</span>
+                    <span class="option-text"
+                      > To meet minimum requirements for cyber insurance claims</span
+                    >
+                  </div>
+                </div>
               </div>
-              <div class="options">
-                <div class="option" data-correct="true">
-                  <span class="option-letter">A</span>
-                  <span class="option-text"
-                    >To correlate activities across multiple data sources 
-                    and identify causal relationships</span
-                  >
-                </div>
-                <div class="option" data-correct="false">
-                  <span class="option-letter">B</span>
-                  <span class="option-text"
-                    >To determine which security products to purchase for future protection </span
-                  >
-                </div>
-                <div class="option" data-correct="false">
-                  <span class="option-letter">C</span>
-                  <span class="option-text"
-                    >To establish who is legally liable for the security breach </span
-                  >
-                </div>
-                <div class="option" data-correct="false">
-                  <span class="option-letter">D</span>
-                  <span class="option-text"
-                    > To meet minimum requirements for cyber insurance claims</span
-                  >
-                </div>
-              </div>
-              <button class="topic-quiz-btn">Check Answer</button>
               <div class="topic-quiz-results" style="display: none">
-                <div class="correct-answer" style="display: none">
-                  <i class="fas fa-check-circle"></i> Correct! Creating a timeline of events 
-                  is a critical component of network forensics because it allows investigators 
-                  to correlate activities that may appear in different logs and data sources. 
-                  This correlation helps establish the sequence and potential causality between 
-                  events, revealing how an attack progressed through the network. By synthesizing 
-                  timestamp data from various systems (firewalls, servers, endpoints, etc.), 
-                  investigators can reconstruct the attack path, identify the initial compromise 
-                  vector, and understand lateral movement—information crucial for complete remediation 
-                  and future prevention.
-                </div>
-                <div class="incorrect-answer" style="display: none">
-                  <i class="fas fa-times-circle"></i> Incorrect. Future security purchases, legal 
-                  liability determination, and insurance claim requirements are business or legal 
-                  concerns rather than forensic investigation objectives. None address the technical 
-                  purpose of timeline creation in reconstructing the sequence of events across multiple 
-                  systems during a security incident.
-                </div>
+                <p class="correct-answer" style="display: none">✅ Correct! Creating a timeline of events allows investigators to correlate activities across different logs and data sources, revealing how an attack progressed through the network.</p>
+                <p class="incorrect-answer" style="display: none">❌ Incorrect. Try again!</p>
               </div>
+              <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
             </div>
         
-              <!-- <div class="lock-overlay">
+              <div class="lock-overlay">
                 <i class="fas fa-lock"></i>
                 <div class="lock-message">
                   Complete the previous section to unlock
                 </div>
-              </div> -->
+              </div>
             </div>
           </div>
           
 
         <!-- Zero Trust Architecture Section -->
-         <div class="target-card locked" data-target="zero-trust-architechture">
-          <span class="difficulty hard">Advanced</span>
+        <div class="target-card locked" data-target="zero-trust-architechture">
           <div class="target-icon">
-            <i class="fas fa-user-secret"></i>
+            <i class="fas fa-user-shield"></i>
           </div>
           <h2>Zero Trust Architecture</h2>
 
           <div class="attack-item">
-            <h3>Fundamental Zero Trsut Principles</h3>
+            <h3>Fundamental Zero Trust Principles</h3>
             <div class="attack-detail">
               <p>Zero Trust Architecture (ZTA) is a security framework that posits that 
                 no user or system should be automatically trusted, regardless of whether 
@@ -2086,7 +1499,7 @@
             </div>
           </div>
 
-          <div class="protection-heading">Recommended Technologies and Resources</div>
+          <h3 class="protection-heading"><i class="fas fa-laptop-code"></i> Recommended Technologies and Resources</h3>
             <ul class="protection-list">
               <li>
                 <strong>Identity Providers:</strong> Services that centrally handle authentication and authorization.
@@ -2109,86 +1522,67 @@
 
           <!-- Quiz Section -->
           <div class="topic-quiz">
-            <h4><i class="fas fa-question-circle"></i> Knowledge Check</h4>
+            <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
             <div class="question">
               <p>
                 Which component is MOST essential for implementing the access control 
                 aspect of Zero Trust Architecture?
               </p>
+              <div class="options">
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text"
+                    >Network segmentation using VLANs</span
+                  >
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">B</span>
+                  <span class="option-text"
+                    >Identity and Access Management (IAM) with strong MFA</span
+                  >
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">C</span>
+                  <span class="option-text"
+                    >Regular vulnerability scanning of all endpoints</span
+                  >
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text"
+                    >Intrusion Detection Systems at network boundaries</span
+                  >
+                </div>
+              </div>
             </div>
-            <div class="options">
-              <div class="option" data-correct="false">
-                <span class="option-letter">A</span>
-                <span class="option-text"
-                  >Network segmentation using VLANs</span
-                >
-              </div>
-              <div class="option" data-correct="true">
-                <span class="option-letter">B</span>
-                <span class="option-text"
-                  >Identity and Access Management (IAM) with strong MFA</span
-                >
-              </div>
-              <div class="option" data-correct="false">
-                <span class="option-letter">C</span>
-                <span class="option-text"
-                  >Regular vulnerability scanning of all endpoints</span>
-              </div>
-              <div class="option" data-correct="false">
-                <span class="option-letter">D</span>
-                <span class="option-text"
-                  >Intrusion Detection Systems at network boundaries</span
-                >
-              </div>
-            </div>
-            <button class="topic-quiz-btn">Check Answer</button>
             <div class="topic-quiz-results" style="display: none">
-              <div class="correct-answer" style="display: none">
-                <i class="fas fa-check-circle"></i> Correct! While all options contribute to security, 
-                Identity and Access Management (IAM) with Multi-Factor Authentication (MFA) is the 
-                cornerstone of Zero Trust access control. Since Zero Trust operates on the principle 
-                that identity is the new security perimeter, IAM systems provide the critical function 
-                of authenticating users and determining their access privileges. MFA adds an essential 
-                layer by requiring multiple verification methods, significantly reducing the risk of 
-                credential theft. Without robust identity verification and access control, other Zero 
-                Trust components cannot effectively enforce the principle of least privilege access based 
-                on who users are rather than where they're connecting from.
-              </div>
-              <div class="incorrect-answer" style="display: none">
-                <i class="fas fa-times-circle"></i> Incorrect. Network segmentation controls traffic flow, 
-                vulnerability scanning identifies weaknesses, and intrusion detection identifies threats -
-                 but none of these mechanisms verify user identities before granting access, which is the 
-                 cornerstone principle of Zero Trust security architecture.
-              </div>
+              <p class="correct-answer" style="display: none">✅ Correct! Identity and Access Management with MFA is the cornerstone of Zero Trust access control since it authenticates users and determines their access privileges.</p>
+              <p class="incorrect-answer" style="display: none">❌ Incorrect. Try again!</p>
             </div>
+            <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
           </div>
 
-            <!-- <div class="lock-overlay">
+            <div class="lock-overlay">
               <i class="fas fa-lock"></i>
               <div class="lock-message">
                 Complete the previous section to unlock
               </div>
-            </div> -->
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Conclusion Section -->
+
       <div class="conclusion">
-        <h2>Safeguarding the Digital Perimeter</h2>
+        <h2>Conclusion</h2>
         <p>
-          Network security remains a critical component of organizational defense strategy,
-           requiring continuous adaptation to evolving threats. Implementing layered security 
-           controls, maintaining vigilance through monitoring, and adopting robust architectural 
-           frameworks like Zero Trust can significantly reduce risk exposure. As attack surfaces 
-           expand with increasingly complex networks, security professionals must balance protection 
-           with operational needs while staying informed about emerging vulnerabilities and attack methodologies.
+          Network security remains a critical component of organizational defense strategy. Understanding key principles, implementing robust protection measures, and staying informed about emerging threats can significantly reduce risk exposure. As attack surfaces evolve, security professionals must balance protection with operational needs while maintaining vigilance against new vulnerabilities.
         </p>
       </div>
     </div>
 
-    <footer>
-      <p>&copy; 2023 Cybersec Academy. All rights reserved.</p>
+    <footer style="background: #1c2a3a; padding: 20px 0; text-align: center; margin-top: 50px; box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);">
+      <p style="margin: 0; color: #88ccf1;">&copy; 2025 Cybersecurity Academy</p>
     </footer>
 
     <!-- Celebration Container -->
@@ -2350,6 +1744,41 @@
             });
           }, true);
         });
+        
+        // Fix quiz options clickability
+        const fixQuizOptions = function() {
+          document.querySelectorAll(".option").forEach(option => {
+            // Ensure the options are clickable
+            option.style.pointerEvents = "auto";
+            option.style.cursor = "pointer";
+            
+            // Add a direct click handler to guarantee functionality
+            option.addEventListener("click", function(e) {
+              e.stopPropagation();
+              
+              // Find all sibling options and remove selected class
+              const allOptions = this.parentElement.querySelectorAll(".option");
+              allOptions.forEach(opt => opt.classList.remove("selected"));
+              
+              // Add selected class to clicked option
+              this.classList.add("selected");
+              
+              console.log("Option clicked:", this.querySelector(".option-text").textContent);
+            });
+          });
+          
+          // Fix quiz buttons
+          document.querySelectorAll(".topic-quiz-btn").forEach(button => {
+            button.style.pointerEvents = "auto";
+            button.style.cursor = "pointer";
+          });
+        };
+        
+        // Apply quiz fixes
+        fixQuizOptions();
+        
+        // For extra security, apply again after a brief delay
+        setTimeout(fixQuizOptions, 1000);
       });
     </script>
     <script src="js/network-security.js"></script>

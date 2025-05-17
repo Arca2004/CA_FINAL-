@@ -192,18 +192,39 @@ document.addEventListener("DOMContentLoaded", function () {
   const tabBtns = document.querySelectorAll(".tab-btn");
   const tabContents = document.querySelectorAll(".tab-content");
 
+  // Function to set active tab
+  function setActiveTab(tabName) {
+    // Remove active class from all buttons and contents
+    tabBtns.forEach((b) => b.classList.remove("active"));
+    tabContents.forEach((c) => c.classList.remove("active"));
+
+    // Add active class to specified tab button
+    const targetBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+    if (targetBtn) {
+      targetBtn.classList.add("active");
+    }
+
+    // Show corresponding content
+    const targetContent = document.getElementById(`${tabName}-content`);
+    if (targetContent) {
+      targetContent.classList.add("active");
+    }
+
+    // Save selection to localStorage
+    localStorage.setItem("selectedLearnTab", tabName);
+  }
+
+  // Check if there's a saved tab preference
+  const savedTab = localStorage.getItem("selectedLearnTab");
+  if (savedTab) {
+    setActiveTab(savedTab);
+  }
+
+  // Add click event listeners to tab buttons
   tabBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
-      // Remove active class from all buttons and contents
-      tabBtns.forEach((b) => b.classList.remove("active"));
-      tabContents.forEach((c) => c.classList.remove("active"));
-
-      // Add active class to clicked button
-      btn.classList.add("active");
-
-      // Show corresponding content
       const targetTab = btn.getAttribute("data-tab");
-      document.getElementById(`${targetTab}-content`).classList.add("active");
+      setActiveTab(targetTab);
     });
   });
 
