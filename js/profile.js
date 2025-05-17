@@ -207,6 +207,9 @@ document.addEventListener("DOMContentLoaded", function () {
         // User is signed in with Firebase
         updateProfileUI(user);
 
+        // Load user progress from Firestore
+        loadUserProgress(user.uid);
+
         if (loginLink) loginLink.style.display = "none";
         if (profileContainer) profileContainer.style.display = "block";
         if (profileInitial) profileInitial.textContent = getUserInitial(user);
@@ -220,6 +223,9 @@ document.addEventListener("DOMContentLoaded", function () {
           if (profileContainer) profileContainer.style.display = "block";
           if (profileInitial)
             profileInitial.textContent = getUserInitial(currentUser);
+          
+          // Fall back to localStorage progress data
+          updateProgressFromLocalStorage();
         } else {
           // No user is signed in, redirect to login
           window.location.href = "login.html";
@@ -235,6 +241,9 @@ document.addEventListener("DOMContentLoaded", function () {
         if (profileContainer) profileContainer.style.display = "block";
         if (profileInitial)
           profileInitial.textContent = getUserInitial(currentUser);
+        
+        // Fall back to localStorage progress data
+        updateProgressFromLocalStorage();
       } else {
         // No user is signed in, redirect to login
         window.location.href = "login.html";
@@ -268,14 +277,151 @@ document.addEventListener("DOMContentLoaded", function () {
     if (emailInput) {
       emailInput.value = user.email || user.username || "";
     }
-
-    // Update progress data
-    updateProgressData();
+    
+    // Update join date
+    if (joinDateEl) {
+      if (user.metadata && user.metadata.creationTime) {
+        joinDateEl.textContent = formatDate(user.metadata.creationTime);
+      } else {
+        joinDateEl.textContent = "2025"; // Fallback
+      }
+    }
+  }
+  
+  // Format date for display
+  function formatDate(dateStr) {
+    try {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    } catch (e) {
+      console.error("Error formatting date:", e);
+      return "2025"; // Fallback
+    }
+  }
+  
+  // Load progress data from Firestore
+  function loadUserProgress(userId) {
+    if (!firebase.firestore) {
+      console.error("Firestore is not available");
+      updateProgressFromLocalStorage();
+      return;
+    }
+    
+    firebase.firestore().collection("userProgress").doc(userId).get()
+      .then((doc) => {
+        if (doc.exists) {
+          // Update UI with Firestore progress data
+          const data = doc.data();
+          updateProgressUI(data);
+        } else {
+          // Initialize user progress document if it doesn't exist
+          const initialData = {
+            completedModules: 0,
+            totalModules: 4,
+            completedTopics: 0,
+            totalTimeMinutes: 0,
+            completionPercentage: 0,
+            lastUpdated: new Date(),
+            modules: {
+              introCybersec: { completedQuizzes: [], progressPercentage: 0 },
+              attackTargets: { completedQuizzes: [], progressPercentage: 0 },
+              phishingAttacks: { completedQuizzes: [], progressPercentage: 0 },
+              malwareInfections: { completedQuizzes: [], progressPercentage: 0 }
+            }
+          };
+          
+          firebase.firestore().collection("userProgress").doc(userId).set(initialData)
+            .then(() => {
+              console.log("Created new user progress document");
+              updateProgressUI(initialData);
+            })
+            .catch(error => {
+              console.error("Error creating user progress document:", error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.error("Error loading user progress:", error);
+        updateProgressFromLocalStorage();
+      });
+  }
+  
+  // Update progress UI with Firestore data
+  function updateProgressUI(data) {
+    // Update overview stats
+    const completedModules = document.getElementById("completed-modules");
+    const completedTopics = document.getElementById("completed-topics");
+    const totalTime = document.getElementById("total-time");
+    const completionPercentage = document.getElementById("completion-percentage");
+    
+    if (completedModules) {
+      completedModules.textContent = `${data.completedModules || 0}/${data.totalModules || 4}`;
+    }
+    
+    if (completedTopics) {
+      completedTopics.textContent = data.completedTopics || 0;
+    }
+    
+    if (totalTime) {
+      const hours = Math.floor((data.totalTimeMinutes || 0) / 60);
+      const minutes = (data.totalTimeMinutes || 0) % 60;
+      totalTime.textContent = hours > 0 ? 
+        (minutes > 0 ? `${hours}h ${minutes}m` : `${hours}h`) : 
+        (minutes > 0 ? `${minutes}m` : '0h');
+    }
+    
+    if (completionPercentage) {
+      completionPercentage.textContent = `${Math.round(data.completionPercentage || 0)}%`;
+    }
+    
+    // Update module progress bars
+    updateModuleProgressBars(data.modules || {});
+  }
+  
+  // Update module progress bars
+  function updateModuleProgressBars(modules) {
+    // Introduction to Cybersecurity
+    const introProg = document.getElementById("intro-progress");
+    if (introProg && modules.introCybersec) {
+      const progress = modules.introCybersec.progressPercentage || 0;
+      introProg.style.width = `${progress}%`;
+      introProg.parentElement.nextElementSibling.textContent = `${Math.round(progress)}% complete`;
+    }
+    
+    // Attack Targets
+    const attackProg = document.getElementById("attack-progress");
+    if (attackProg && modules.attackTargets) {
+      const progress = modules.attackTargets.progressPercentage || 0;
+      attackProg.style.width = `${progress}%`;
+      attackProg.parentElement.nextElementSibling.textContent = `${Math.round(progress)}% complete`;
+    }
+    
+    // Phishing Attacks
+    const phishingProg = document.getElementById("phishing-progress");
+    if (phishingProg && modules.phishingAttacks) {
+      const progress = modules.phishingAttacks.progressPercentage || 0;
+      phishingProg.style.width = `${progress}%`;
+      phishingProg.parentElement.nextElementSibling.textContent = `${Math.round(progress)}% complete`;
+    }
+    
+    // Malware Infections
+    const malwareProg = document.getElementById("malware-progress");
+    if (malwareProg && modules.malwareInfections) {
+      const progress = modules.malwareInfections.progressPercentage || 0;
+      malwareProg.style.width = `${progress}%`;
+      malwareProg.parentElement.nextElementSibling.textContent = `${Math.round(progress)}% complete`;
+    }
   }
 
-  // Update progress data
-  function updateProgressData() {
+  // Update progress data from localStorage (fallback)
+  function updateProgressFromLocalStorage() {
     // Get progress data from localStorage
+    const introCompletedQuizzes = 
+      JSON.parse(localStorage.getItem("introCompletedQuizzes")) || [];
     const attackCompletedSections =
       JSON.parse(localStorage.getItem("attackCompletedSections")) || [];
     const attackCompletedQuizzes =
@@ -286,13 +432,14 @@ document.addEventListener("DOMContentLoaded", function () {
       JSON.parse(localStorage.getItem("phishingCompletedQuizzes")) || [];
 
     // Calculate completion percentages
-    const introTopicsTotal = 4;
+    const introTopicsTotal = 5;
     const attackTopicsTotal = 5;
     const phishingTopicsTotal = 4;
     const malwareTopicsTotal = 4;
 
-    // Just placeholder data for now - would need to integrate with actual learning progress tracking
-    const introCompletion = 0;
+    const introCompletion = Math.round(
+      (introCompletedQuizzes.length / introTopicsTotal) * 100
+    );
     const attackCompletion = Math.round(
       (attackCompletedSections.length / attackTopicsTotal) * 100
     );
@@ -336,13 +483,15 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
     const modulesCompleted =
-      (introCompletion > 0 ? 1 : 0) +
-      (attackCompletion > 0 ? 1 : 0) +
-      (phishingCompletion > 0 ? 1 : 0) +
-      (malwareCompletion > 0 ? 1 : 0);
+      (introCompletion === 100 ? 1 : 0) +
+      (attackCompletion === 100 ? 1 : 0) +
+      (phishingCompletion === 100 ? 1 : 0) +
+      (malwareCompletion === 100 ? 1 : 0);
 
     const topicsCompleted =
-      attackCompletedSections.length + phishingCompletedSections.length;
+      introCompletedQuizzes.length + 
+      attackCompletedSections.length + 
+      phishingCompletedSections.length;
 
     const averageCompletion = Math.round(
       (introCompletion +
@@ -359,9 +508,6 @@ document.addEventListener("DOMContentLoaded", function () {
       totalTime.textContent = `${Math.round(topicsCompleted * 0.5)}h`;
     if (completionPercentage)
       completionPercentage.textContent = `${averageCompletion}%`;
-
-    // Update achievements
-    // This would need to be integrated with a proper achievements system
   }
 
   // Handle profile settings form submission

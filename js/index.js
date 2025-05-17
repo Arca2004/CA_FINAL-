@@ -325,79 +325,212 @@ document.addEventListener("DOMContentLoaded", function () {
     // Check Firebase authentication first
     if (firebase && firebase.auth && firebase.auth().currentUser) {
       isUserLoggedIn = true;
+      // User is logged in with Firebase, load progress from Firestore
+      loadProgressFromFirestore(firebase.auth().currentUser.uid);
     } else {
       // Fallback to localStorage check for backward compatibility
       const currentUser = JSON.parse(localStorage.getItem("currentUser"));
       isUserLoggedIn = !!currentUser;
+      
+      if (isUserLoggedIn) {
+        // Load progress from localStorage
+        loadProgressFromLocalStorage();
+      } else {
+        // If no user is logged in, reset progress bars
+        resetProgressUI();
+      }
+    }
+  }
+
+  // Reset progress UI when no user is logged in
+  function resetProgressUI() {
+    document
+      .querySelectorAll(".module-card .progress-fill")
+      .forEach((fill) => {
+        fill.style.width = "0%";
+      });
+
+    document
+      .querySelectorAll(".module-card .stat-counter")
+      .forEach((counter) => {
+        counter.textContent = "0";
+        counter.setAttribute("data-target", "0");
+      });
+  }
+
+  // Load progress from Firestore
+  function loadProgressFromFirestore(userId) {
+    if (!firebase.firestore) {
+      console.error("Firestore is not available");
+      loadProgressFromLocalStorage();
+      return;
     }
 
-    // If no user is logged in, ensure all progress bars show 0%
-    if (!isUserLoggedIn) {
-      document
-        .querySelectorAll(".module-card .progress-fill")
-        .forEach((fill) => {
-          fill.style.width = "0%";
-        });
+    firebase.firestore().collection("userProgress").doc(userId).get()
+      .then((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          updateProgressUI(data);
+        } else {
+          // Create initial progress document for new users
+          const initialData = {
+            completedModules: 0,
+            totalModules: 4,
+            completedTopics: 0,
+            totalTimeMinutes: 0,
+            completionPercentage: 0,
+            lastUpdated: new Date(),
+            modules: {
+              introCybersec: { completedQuizzes: [], progressPercentage: 0 },
+              attackTargets: { completedQuizzes: [], progressPercentage: 0 },
+              phishingAttacks: { completedQuizzes: [], progressPercentage: 0 },
+              malwareInfections: { completedQuizzes: [], progressPercentage: 0 }
+            }
+          };
+          
+          firebase.firestore().collection("userProgress").doc(userId).set(initialData)
+            .then(() => {
+              console.log("Created new user progress document");
+              updateProgressUI(initialData);
+            })
+            .catch(error => {
+              console.error("Error creating user progress document:", error);
+              resetProgressUI();
+            });
+        }
+      })
+      .catch((error) => {
+        console.error("Error loading user progress:", error);
+        loadProgressFromLocalStorage();
+      });
+  }
 
-      document
-        .querySelectorAll(".module-card .stat-counter")
-        .forEach((counter) => {
-          counter.textContent = "0";
-          counter.setAttribute("data-target", "0");
-        });
-
-      return; // Exit early - don't show any progress for visitors
-    }
-
-    // Only proceed with updating progress if a user is logged in
-
-    // Attack Targets module
-    const attackTargetsCard = document.querySelector(
-      ".module-card:nth-child(2)"
+  // Load progress from localStorage (fallback)
+  function loadProgressFromLocalStorage() {
+    // Intro to Cybersecurity module
+    const introCompletedQuizzes = JSON.parse(
+      localStorage.getItem("introCompletedQuizzes") || "[]"
     );
-    if (attackTargetsCard) {
-      const attackCompletedSections = JSON.parse(
-        localStorage.getItem("attackCompletedSections") || "[]"
-      );
-      const progressPercentage = Math.round(
-        (attackCompletedSections.length / 5) * 100
-      );
+    const introTopicsTotal = 5;
+    const introProgress = Math.round(
+      (introCompletedQuizzes.length / introTopicsTotal) * 100
+    );
+    
+    // Attack Targets module
+    const attackCompletedSections = JSON.parse(
+      localStorage.getItem("attackCompletedSections") || "[]"
+    );
+    const attackTopicsTotal = 5;
+    const attackProgress = Math.round(
+      (attackCompletedSections.length / attackTopicsTotal) * 100
+    );
+    
+    // Phishing Attacks module
+    const phishingCompletedSections = JSON.parse(
+      localStorage.getItem("phishingCompletedSections") || "[]"
+    );
+    const phishingTopicsTotal = 4;
+    const phishingProgress = Math.round(
+      (phishingCompletedSections.length / phishingTopicsTotal) * 100
+    );
+    
+    // Create data object similar to Firestore structure
+    const progressData = {
+      modules: {
+        introCybersec: { 
+          completedQuizzes: introCompletedQuizzes,
+          progressPercentage: introProgress
+        },
+        attackTargets: { 
+          completedQuizzes: attackCompletedSections,
+          progressPercentage: attackProgress
+        },
+        phishingAttacks: { 
+          completedQuizzes: phishingCompletedSections,
+          progressPercentage: phishingProgress
+        },
+        malwareInfections: { 
+          completedQuizzes: [],
+          progressPercentage: 0
+        }
+      }
+    };
+    
+    // Update UI with the progress data
+    updateProgressUI(progressData);
+  }
 
+  // Update UI with progress data
+  function updateProgressUI(data) {
+    // Introduction to Cybersecurity module
+    const introCard = document.querySelector(".module-card:nth-child(1)");
+    if (introCard) {
+      const introModule = data.modules?.introCybersec || {};
+      const progressPercentage = introModule.progressPercentage || 0;
+      
+      const progressFill = introCard.querySelector(".progress-fill");
+      if (progressFill) {
+        progressFill.style.width = `${progressPercentage}%`;
+      }
+      
+      const completionRate = introCard.querySelector(".completion-rate .stat-counter");
+      if (completionRate) {
+        completionRate.textContent = Math.round(progressPercentage);
+        completionRate.setAttribute("data-target", Math.round(progressPercentage));
+      }
+    }
+    
+    // Attack Targets module
+    const attackTargetsCard = document.querySelector(".module-card:nth-child(2)");
+    if (attackTargetsCard) {
+      const attackModule = data.modules?.attackTargets || {};
+      const progressPercentage = attackModule.progressPercentage || 0;
+      
       const progressFill = attackTargetsCard.querySelector(".progress-fill");
       if (progressFill) {
         progressFill.style.width = `${progressPercentage}%`;
       }
-
-      const completionRate = attackTargetsCard.querySelector(
-        ".completion-rate .stat-counter"
-      );
+      
+      const completionRate = attackTargetsCard.querySelector(".completion-rate .stat-counter");
       if (completionRate) {
-        completionRate.textContent = progressPercentage;
-        completionRate.setAttribute("data-target", progressPercentage);
+        completionRate.textContent = Math.round(progressPercentage);
+        completionRate.setAttribute("data-target", Math.round(progressPercentage));
       }
     }
-
+    
     // Phishing Attacks module
     const phishingCard = document.querySelector(".module-card:nth-child(3)");
     if (phishingCard) {
-      const phishingCompletedSections = JSON.parse(
-        localStorage.getItem("phishingCompletedSections") || "[]"
-      );
-      const progressPercentage = Math.round(
-        (phishingCompletedSections.length / 3) * 100
-      );
-
+      const phishingModule = data.modules?.phishingAttacks || {};
+      const progressPercentage = phishingModule.progressPercentage || 0;
+      
       const progressFill = phishingCard.querySelector(".progress-fill");
       if (progressFill) {
         progressFill.style.width = `${progressPercentage}%`;
       }
-
-      const completionRate = phishingCard.querySelector(
-        ".completion-rate .stat-counter"
-      );
+      
+      const completionRate = phishingCard.querySelector(".completion-rate .stat-counter");
       if (completionRate) {
-        completionRate.textContent = progressPercentage;
-        completionRate.setAttribute("data-target", progressPercentage);
+        completionRate.textContent = Math.round(progressPercentage);
+        completionRate.setAttribute("data-target", Math.round(progressPercentage));
+      }
+    }
+    
+    // Malware Infections module (if it exists)
+    const malwareCard = document.querySelector(".module-card:nth-child(4)");
+    if (malwareCard) {
+      const malwareModule = data.modules?.malwareInfections || {};
+      const progressPercentage = malwareModule.progressPercentage || 0;
+      
+      const progressFill = malwareCard.querySelector(".progress-fill");
+      if (progressFill) {
+        progressFill.style.width = `${progressPercentage}%`;
+      }
+      
+      const completionRate = malwareCard.querySelector(".completion-rate .stat-counter");
+      if (completionRate) {
+        completionRate.textContent = Math.round(progressPercentage);
+        completionRate.setAttribute("data-target", Math.round(progressPercentage));
       }
     }
   }

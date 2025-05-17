@@ -255,6 +255,247 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Track module progress from all modules
   function updateModuleProgress() {
+    if (firebase && firebase.auth && firebase.auth().currentUser) {
+      // User is logged in with Firebase, load progress from Firestore
+      const userId = firebase.auth().currentUser.uid;
+      loadProgressFromFirestore(userId);
+    } else {
+      // Fallback to localStorage for backward compatibility
+      loadProgressFromLocalStorage();
+    }
+  }
+
+  // New function to load progress from Firestore
+  function loadProgressFromFirestore(userId) {
+    if (!firebase.firestore) {
+      console.error("Firestore is not available");
+      loadProgressFromLocalStorage();
+      return;
+    }
+
+    firebase.firestore().collection("userProgress").doc(userId).get()
+      .then((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          updateUIWithProgressData(data);
+        } else {
+          // Initialize user progress document if it doesn't exist
+          const initialData = {
+            completedModules: 0,
+            totalModules: 4,
+            completedTopics: 0,
+            totalTimeMinutes: 0,
+            completionPercentage: 0,
+            lastUpdated: new Date(),
+            modules: {
+              introCybersec: { completedQuizzes: [], progressPercentage: 0 },
+              attackTargets: { completedQuizzes: [], progressPercentage: 0 },
+              phishingAttacks: { completedQuizzes: [], progressPercentage: 0 },
+              malwareInfections: { completedQuizzes: [], progressPercentage: 0 }
+            }
+          };
+          
+          firebase.firestore().collection("userProgress").doc(userId).set(initialData)
+            .then(() => {
+              console.log("Created new user progress document");
+              updateUIWithProgressData(initialData);
+            })
+            .catch(error => {
+              console.error("Error creating user progress document:", error);
+              loadProgressFromLocalStorage();
+            });
+        }
+      })
+      .catch((error) => {
+        console.error("Error loading user progress:", error);
+        loadProgressFromLocalStorage();
+      });
+  }
+
+  // New function to update UI with progress data from either Firestore or localStorage
+  function updateUIWithProgressData(data) {
+    // Progress from Attack Targets module
+    const attackTargetsTopics = document.querySelector(
+      ".module-card:nth-child(2)"
+    );
+    
+    if (attackTargetsTopics) {
+      // Get attack targets progress from data
+      const attackTargetsModule = data.modules?.attackTargets || {};
+      const attackTargetsCompletedSections = attackTargetsModule.completedQuizzes || [];
+      const attackProgress = attackTargetsModule.progressPercentage || 0;
+      
+      // Update the attack topics list with check marks if we have progress
+      if (attackTargetsCompletedSections.length > 0) {
+        const topicsList = attackTargetsTopics.querySelectorAll(".module-topics li");
+        
+        // Map section IDs to topics in the list
+        const sectionToTopicMap = {
+          individuals: 0, // Understanding Attack Vectors
+          businesses: 1, // Common Target Types
+          government: 2, // Defense Strategies
+          infrastructure: 3, // CIA Triad
+          financial: 4, // 5th topic if any
+        };
+        
+        attackTargetsCompletedSections.forEach((section) => {
+          const topicIndex = sectionToTopicMap[section];
+          if (topicIndex !== undefined && topicsList[topicIndex]) {
+            const icon = topicsList[topicIndex].querySelector("i");
+            if (icon) {
+              icon.className = "fas fa-check-circle";
+            }
+          }
+        });
+        
+        // Update progress bar
+        const progressBar = attackTargetsTopics.querySelector(".progress");
+        if (progressBar) {
+          progressBar.style.width = `${attackProgress}%`;
+        }
+        
+        // Update module card visual state based on completion
+        if (attackProgress === 100) {
+          attackTargetsTopics.classList.add("completed");
+          const button = attackTargetsTopics.querySelector(".module-btn");
+          if (button) {
+            button.innerHTML = '<i class="fas fa-check-circle"></i> Completed';
+          }
+          
+          // Add visual indicator for completion
+          if (!attackTargetsTopics.querySelector(".completion-badge")) {
+            const badge = document.createElement("div");
+            badge.className = "completion-badge";
+            badge.innerHTML = '<i class="fas fa-medal"></i>';
+            attackTargetsTopics.appendChild(badge);
+          }
+        } else if (attackProgress > 0) {
+          // If any progress, update button to "Continue"
+          const button = attackTargetsTopics.querySelector(".module-btn");
+          if (button) {
+            button.innerHTML = '<i class="fas fa-play-circle"></i> Continue';
+          }
+          attackTargetsTopics.classList.add("active");
+          
+          // Keep card elevated
+          attackTargetsTopics.style.transform = "translateY(-10px)";
+          attackTargetsTopics.style.boxShadow = "0 10px 20px rgba(0, 0, 0, 0.2)";
+        }
+      }
+    }
+    
+    // Progress from Phishing Attacks module
+    const phishingTopics = document.querySelector(".module-card:nth-child(3)");
+    
+    if (phishingTopics) {
+      // Get phishing attacks progress from data
+      const phishingModule = data.modules?.phishingAttacks || {};
+      const phishingCompletedSections = phishingModule.completedQuizzes || [];
+      const phishingProgress = phishingModule.progressPercentage || 0;
+      
+      // Update the phishing topics list with check marks if we have progress
+      if (phishingCompletedSections.length > 0) {
+        const topicsList = phishingTopics.querySelectorAll(".module-topics li");
+        
+        // Map section IDs to topics in the list
+        const sectionToTopicMap = {
+          techniques: 0,
+          types: 1, 
+          prevention: 2,
+          simulation: 3
+        };
+        
+        phishingCompletedSections.forEach((section) => {
+          const topicIndex = sectionToTopicMap[section];
+          if (topicIndex !== undefined && topicsList[topicIndex]) {
+            const icon = topicsList[topicIndex].querySelector("i");
+            if (icon) {
+              icon.className = "fas fa-check-circle";
+            }
+          }
+        });
+        
+        // Update progress bar
+        const progressBar = phishingTopics.querySelector(".progress");
+        if (progressBar) {
+          progressBar.style.width = `${phishingProgress}%`;
+        }
+        
+        // Update module card visual state based on completion
+        if (phishingProgress === 100) {
+          phishingTopics.classList.add("completed");
+          const button = phishingTopics.querySelector(".module-btn");
+          if (button) {
+            button.innerHTML = '<i class="fas fa-check-circle"></i> Completed';
+          }
+          
+          // Add visual indicator for completion
+          if (!phishingTopics.querySelector(".completion-badge")) {
+            const badge = document.createElement("div");
+            badge.className = "completion-badge";
+            badge.innerHTML = '<i class="fas fa-medal"></i>';
+            phishingTopics.appendChild(badge);
+          }
+        } else if (phishingProgress > 0) {
+          // If any progress, update button to "Continue"
+          const button = phishingTopics.querySelector(".module-btn");
+          if (button) {
+            button.innerHTML = '<i class="fas fa-play-circle"></i> Continue';
+          }
+          phishingTopics.classList.add("active");
+          
+          // Keep card elevated
+          phishingTopics.style.transform = "translateY(-10px)";
+          phishingTopics.style.boxShadow = "0 10px 20px rgba(0, 0, 0, 0.2)";
+        }
+      }
+    }
+    
+    // Progress from Introduction to Cybersecurity module
+    const introTopics = document.querySelector(".module-card:nth-child(1)");
+    
+    if (introTopics) {
+      // Get intro progress from data
+      const introModule = data.modules?.introCybersec || {};
+      const introProgress = introModule.progressPercentage || 0;
+      
+      // Update progress bar
+      const progressBar = introTopics.querySelector(".progress");
+      if (progressBar) {
+        progressBar.style.width = `${introProgress}%`;
+      }
+      
+      // Update module card visual state based on completion
+      if (introProgress === 100) {
+        introTopics.classList.add("completed");
+        const button = introTopics.querySelector(".module-btn");
+        if (button) {
+          button.innerHTML = '<i class="fas fa-check-circle"></i> Completed';
+        }
+        
+        // Add visual indicator for completion
+        if (!introTopics.querySelector(".completion-badge")) {
+          const badge = document.createElement("div");
+          badge.className = "completion-badge";
+          badge.innerHTML = '<i class="fas fa-medal"></i>';
+          introTopics.appendChild(badge);
+        }
+      } else if (introProgress > 0) {
+        // If any progress, update button to "Continue"
+        const button = introTopics.querySelector(".module-btn");
+        if (button) {
+          button.innerHTML = '<i class="fas fa-play-circle"></i> Continue';
+        }
+        introTopics.classList.add("active");
+      }
+    }
+    
+    // Update overall progress based on all modules
+    updateOverallProgress(data);
+  }
+
+  // Fallback to localStorage for backward compatibility
+  function loadProgressFromLocalStorage() {
     // Debug log to show localStorage status
     console.log("localStorage keys:", {
       attackCompletedSections: JSON.parse(
@@ -269,214 +510,123 @@ document.addEventListener("DOMContentLoaded", function () {
       phishingCompletedQuizzes: JSON.parse(
         localStorage.getItem("phishingCompletedQuizzes") || "[]"
       ),
+      introCompletedQuizzes: JSON.parse(
+        localStorage.getItem("introCompletedQuizzes") || "[]"
+      )
     });
 
-    // Progress from Attack Targets module
-    const attackTargetsTopics = document.querySelector(
-      ".module-card:nth-child(2)"
+    // Get progress data from localStorage
+    const introCompletedQuizzes = JSON.parse(
+      localStorage.getItem("introCompletedQuizzes") || "[]"
     );
-    if (attackTargetsTopics) {
-      const attackTargetsCompletedSections =
-        JSON.parse(localStorage.getItem("attackCompletedSections")) || [];
-      const attackTargetsQuizzes =
-        JSON.parse(localStorage.getItem("attackCompletedQuizzes")) || [];
-
-      const attackTopicsTotal = 5; // Total number of topics in Attack Targets (updated to 5)
-      let attackTopicsCompleted = 0;
-
-      if (attackTargetsCompletedSections.length > 0) {
-        // Update the attack topics list with check marks
-        const topicsList =
-          attackTargetsTopics.querySelectorAll(".module-topics li");
-
-        // Map section IDs to topics in the list
-        const sectionToTopicMap = {
-          individuals: 0, // Understanding Attack Vectors
-          businesses: 1, // Common Target Types
-          government: 2, // Defense Strategies
-          infrastructure: 3, // CIA Triad
-          financial: 4, // 5th topic if any
-        };
-
-        attackTargetsCompletedSections.forEach((section) => {
-          const topicIndex = sectionToTopicMap[section];
-          if (topicIndex !== undefined && topicsList[topicIndex]) {
-            const icon = topicsList[topicIndex].querySelector("i");
-            if (icon) {
-              icon.className = "fas fa-check-circle";
-              attackTopicsCompleted++;
-            }
-          }
-        });
-
-        // Calculate progress percentage
-        const attackProgress = Math.round(
-          (attackTopicsCompleted / attackTopicsTotal) * 100
-        );
-        const progressBar = attackTargetsTopics.querySelector(".progress");
-        if (progressBar) {
-          progressBar.style.width = `${attackProgress}%`;
-        }
-
-        // Update button text if all topics completed
-        if (attackTopicsCompleted === attackTopicsTotal) {
-          const button = attackTargetsTopics.querySelector(".module-btn");
-          if (button) {
-            button.innerHTML = '<i class="fas fa-check"></i> Completed';
-          }
-          attackTargetsTopics.classList.add("completed");
-        } else {
-          // Make sure the card is marked as active
-          attackTargetsTopics.classList.add("active");
-
-          // Keep card elevated
-          attackTargetsTopics.style.transform = "translateY(-10px)";
-          attackTargetsTopics.style.boxShadow =
-            "0 10px 20px rgba(0, 0, 0, 0.2)";
-        }
-      }
-    }
-
-    // Progress from Phishing Attacks module
-    const phishingTopics = document.querySelector(".module-card:nth-child(3)");
-    if (phishingTopics) {
-      const phishingCompletedSections = JSON.parse(
-        localStorage.getItem("phishingCompletedSections") || "[]"
-      );
-      const phishingQuizzes = JSON.parse(
-        localStorage.getItem("phishingCompletedQuizzes") || "[]"
-      );
-
-      const phishingTopicsTotal = 4; // Total number of topics in Phishing
-      let phishingTopicsCompleted = 0;
-
-      if (phishingCompletedSections.length > 0) {
-        // Update the phishing topics list with check marks
-        const topicsList = phishingTopics.querySelectorAll(".module-topics li");
-
-        // Map section IDs to topics in the list
-        const sectionToTopicMap = {
-          techniques: 0, // Phishing Techniques
-          types: 1, // Email & Spear Phishing
-          prevention: 2, // Smishing & Vishing / Prevention Measures
-        };
-
-        phishingCompletedSections.forEach((section) => {
-          const topicIndex = sectionToTopicMap[section];
-          if (topicIndex !== undefined && topicsList[topicIndex]) {
-            const icon = topicsList[topicIndex].querySelector("i");
-            if (icon) {
-              icon.className = "fas fa-check-circle";
-              phishingTopicsCompleted++;
-            }
-          }
-        });
-
-        // Special case: if prevention is completed, mark 4th item as complete too
-        if (phishingCompletedSections.includes("prevention") && topicsList[3]) {
-          const icon = topicsList[3].querySelector("i");
-          if (icon) {
-            icon.className = "fas fa-check-circle";
-            phishingTopicsCompleted++;
-          }
-        }
-
-        // Calculate progress percentage
-        const phishingProgress = Math.round(
-          (phishingTopicsCompleted / phishingTopicsTotal) * 100
-        );
-        const progressBar = phishingTopics.querySelector(".progress");
-        if (progressBar) {
-          progressBar.style.width = `${phishingProgress}%`;
-        }
-
-        // Update button text if all sections completed
-        if (phishingTopicsCompleted === phishingTopicsTotal) {
-          const button = phishingTopics.querySelector(".module-btn");
-          if (button) {
-            button.innerHTML = '<i class="fas fa-check"></i> Completed';
-          }
-          phishingTopics.classList.add("completed");
-        } else if (phishingCompletedSections.length > 0) {
-          // If any sections are completed, update button text
-          const button = phishingTopics.querySelector(".module-btn");
-          if (button) {
-            button.innerHTML = '<i class="fas fa-play-circle"></i> Continue';
-          }
-          phishingTopics.classList.add("active");
-
-          // Keep card elevated
-          phishingTopics.style.transform = "translateY(-10px)";
-          phishingTopics.style.boxShadow = "0 10px 20px rgba(0, 0, 0, 0.2)";
-        }
-      }
-    }
-
-    // Update overall progress
-    updateOverallProgress();
-  }
-
-  // Update overall user progress
-  function updateOverallProgress() {
-    const totalModules = 3; // Introduction, Attack Targets, Phishing
-    let completedModules = 1; // Introduction is already completed
-
-    // Check if Attack Targets is completed
-    const attackTargetsTopics = document.querySelector(
-      ".module-card:nth-child(2)"
+    const attackCompletedSections = JSON.parse(
+      localStorage.getItem("attackCompletedSections") || "[]"
     );
-    if (
-      attackTargetsTopics &&
-      attackTargetsTopics.classList.contains("completed")
-    ) {
-      completedModules++;
-    }
-
-    // Check if Phishing is completed
-    const phishingTopics = document.querySelector(".module-card:nth-child(3)");
-    if (phishingTopics && phishingTopics.classList.contains("completed")) {
-      completedModules++;
-    }
-
-    // Update modules completed counter
-    document.querySelectorAll(".progress-stat .stat-number")[0].textContent =
-      completedModules;
-    localStorage.setItem("modulesCompleted", completedModules);
-
-    // Update overall progress percentage
-    const totalTopics = 12; // Assuming 4 topics per module, 3 modules
-    const attackCompletedSections =
-      JSON.parse(localStorage.getItem("attackCompletedSections")) || [];
+    const attackCompletedQuizzes = JSON.parse(
+      localStorage.getItem("attackCompletedQuizzes") || "[]"
+    );
     const phishingCompletedSections = JSON.parse(
       localStorage.getItem("phishingCompletedSections") || "[]"
     );
+    const phishingCompletedQuizzes = JSON.parse(
+      localStorage.getItem("phishingCompletedQuizzes") || "[]"
+    );
 
-    // Count intro module as 4 completed topics
-    let completedTopics = 4;
-    completedTopics += attackCompletedSections.length;
-    completedTopics += phishingCompletedSections.length;
+    // Calculate percentages
+    const introTopicsTotal = 5;
+    const attackTopicsTotal = 5;
+    const phishingTopicsTotal = 4;
+    
+    const introProgress = Math.round(
+      (introCompletedQuizzes.length / introTopicsTotal) * 100
+    );
+    const attackProgress = Math.round(
+      (attackCompletedSections.length / attackTopicsTotal) * 100
+    );
+    const phishingProgress = Math.round(
+      (phishingCompletedSections.length / phishingTopicsTotal) * 100
+    );
 
-    // Calculate overall progress percentage
-    const overallProgress = Math.round((completedTopics / totalTopics) * 100);
+    // Create a data object similar to Firestore structure
+    const progressData = {
+      completedModules: 0,
+      totalModules: 4,
+      completedTopics: introCompletedQuizzes.length + attackCompletedSections.length + phishingCompletedSections.length,
+      totalTimeMinutes: 0,
+      modules: {
+        introCybersec: {
+          completedQuizzes: introCompletedQuizzes,
+          progressPercentage: introProgress
+        },
+        attackTargets: {
+          completedQuizzes: attackCompletedSections,
+          progressPercentage: attackProgress
+        },
+        phishingAttacks: {
+          completedQuizzes: phishingCompletedSections,
+          progressPercentage: phishingProgress
+        },
+        malwareInfections: {
+          completedQuizzes: [],
+          progressPercentage: 0
+        }
+      }
+    };
+    
+    // Calculate completed modules
+    if (introProgress === 100) progressData.completedModules++;
+    if (attackProgress === 100) progressData.completedModules++;
+    if (phishingProgress === 100) progressData.completedModules++;
+    
+    // Calculate overall percentage
+    progressData.completionPercentage = Math.round(
+      (progressData.completedTopics / (introTopicsTotal + attackTopicsTotal + phishingTopicsTotal)) * 100
+    );
+    
+    // Estimate time spent (15 minutes per topic)
+    progressData.totalTimeMinutes = progressData.completedTopics * 15;
+    
+    // Update UI with this data
+    updateUIWithProgressData(progressData);
+  }
+
+  // Update the updateOverallProgress function to use the Firestore data structure
+  function updateOverallProgress(data) {
+    // Extract values from data
+    const completedModules = data.completedModules || 0;
+    const totalModules = data.totalModules || 4;
+    const completedTopics = data.completedTopics || 0;
+    const completionPercentage = data.completionPercentage || 0;
+    
+    // Update modules completed counter
+    const moduleCounters = document.querySelectorAll(".progress-stat .stat-number");
+    if (moduleCounters && moduleCounters[0]) {
+      moduleCounters[0].textContent = completedModules;
+    }
+    
+    // Store in localStorage for backward compatibility
+    localStorage.setItem("modulesCompleted", completedModules);
 
     // Update circular progress
     const progressElement = document.querySelector(".circular-progress");
     if (progressElement) {
-      progressElement.style.background = `conic-gradient(var(--cyber-green) ${overallProgress}%, var(--third-dark) 0)`;
-      document.querySelector(".progress-value").textContent =
-        overallProgress + "%";
+      progressElement.style.background = `conic-gradient(var(--cyber-green) ${completionPercentage}%, var(--third-dark) 0)`;
+      const progressValue = document.querySelector(".progress-value");
+      if (progressValue) {
+        progressValue.textContent = `${Math.round(completionPercentage)}%`;
+      }
     }
-
-    localStorage.setItem("userProgress", overallProgress);
+    
+    // Store in localStorage for backward compatibility
+    localStorage.setItem("userProgress", Math.round(completionPercentage));
 
     // Unlock intermediate path if beginner path is completed
-    if (completedModules === totalModules) {
+    if (completedModules >= 3) { // If at least the 3 beginner modules are completed
       const lockedModules = document.querySelectorAll(".module-card.locked");
       lockedModules.forEach((module) => {
         if (
-          module
-            .querySelector(".lock-message")
-            .textContent.includes("Complete Beginner Path First")
+          module.querySelector(".lock-message") &&
+          module.querySelector(".lock-message").textContent.includes("Complete Beginner Path First")
         ) {
           module.classList.remove("locked");
           module.querySelector(".lock-message").innerHTML =
@@ -485,233 +635,16 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
 
+    // Get completed sections for the timeline
+    const attackCompletedSections = data.modules?.attackTargets?.completedQuizzes || [];
+    const phishingCompletedSections = data.modules?.phishingAttacks?.completedQuizzes || [];
+    
     // Update progress timeline
     updateProgressTimeline(attackCompletedSections, phishingCompletedSections);
-  }
-
-  // Update progress timeline with module completion information
-  function updateProgressTimeline(
-    attackCompletedSections,
-    phishingCompletedSections
-  ) {
-    const timeline = document.querySelector(".timeline");
-    if (!timeline) return;
-
-    // Get current date for new entries
-    const currentDate = new Date();
-    const dateOptions = { month: "short", day: "numeric" };
-    const formattedDate = currentDate.toLocaleDateString("en-US", dateOptions);
-
-    // Create timeline item for Attack Targets progress if needed
-    if (attackCompletedSections.length > 0) {
-      // Check if we already have an Attack Targets entry
-      let attackTimelineItem = Array.from(
-        timeline.querySelectorAll(".timeline-content h4")
-      ).find((el) => el.textContent.includes("Attack Targets"));
-
-      if (!attackTimelineItem) {
-        // Create new timeline item
-        const timelineItem = document.createElement("div");
-        timelineItem.className = "timeline-item";
-
-        timelineItem.innerHTML = `
-                    <div class="timeline-date">${formattedDate}</div>
-                    <div class="timeline-content">
-                        <h4>Progress in Attack Targets</h4>
-                        <p>Completed ${attackCompletedSections.length}/4 sections of the module</p>
-                    </div>
-                `;
-
-        // Add as the first item (newest)
-        if (timeline.firstChild) {
-          timeline.insertBefore(timelineItem, timeline.firstChild);
-        } else {
-          timeline.appendChild(timelineItem);
-        }
-      } else {
-        // Update existing timeline item
-        const parentItem = attackTimelineItem.closest(".timeline-item");
-        const progressText = parentItem.querySelector("p");
-        progressText.textContent = `Completed ${attackCompletedSections.length}/4 sections of the module`;
-      }
-
-      // If Attack Targets is fully completed, add or update completion entry
-      if (attackCompletedSections.length === 4) {
-        let completionItem = Array.from(
-          timeline.querySelectorAll(".timeline-content h4")
-        ).find((el) => el.textContent.includes("Attack Targets Completed"));
-
-        if (!completionItem) {
-          // Create completion entry
-          const timelineItem = document.createElement("div");
-          timelineItem.className = "timeline-item";
-
-          timelineItem.innerHTML = `
-                        <div class="timeline-date">${formattedDate}</div>
-                        <div class="timeline-content">
-                            <h4>Attack Targets Completed</h4>
-                            <p>Finished all lessons and passed quizzes successfully</p>
-                        </div>
-                    `;
-
-          // Add as the first item (newest)
-          if (timeline.firstChild) {
-            timeline.insertBefore(timelineItem, timeline.firstChild);
-          } else {
-            timeline.appendChild(timelineItem);
-          }
-        }
-      }
-    }
-
-    // Create timeline item for Phishing Attacks progress if needed
-    if (phishingCompletedSections.length > 0) {
-      // Check if we already have a Phishing Attacks entry
-      let phishingTimelineItem = Array.from(
-        timeline.querySelectorAll(".timeline-content h4")
-      ).find((el) => el.textContent.includes("Progress in Phishing Attacks"));
-
-      if (!phishingTimelineItem) {
-        // Create new timeline item
-        const timelineItem = document.createElement("div");
-        timelineItem.className = "timeline-item";
-
-        timelineItem.innerHTML = `
-                    <div class="timeline-date">${formattedDate}</div>
-                    <div class="timeline-content">
-                        <h4>Progress in Phishing Attacks</h4>
-                        <p>Completed ${phishingCompletedSections.length}/3 sections of the module</p>
-                    </div>
-                `;
-
-        // Add as the first item (newest)
-        if (timeline.firstChild) {
-          timeline.insertBefore(timelineItem, timeline.firstChild);
-        } else {
-          timeline.appendChild(timelineItem);
-        }
-      } else {
-        // Update existing timeline item
-        const parentItem = phishingTimelineItem.closest(".timeline-item");
-        const progressText = parentItem.querySelector("p");
-        progressText.textContent = `Completed ${phishingCompletedSections.length}/3 sections of the module`;
-      }
-
-      // If Phishing Attacks is fully completed, add or update completion entry
-      if (phishingCompletedSections.length === 3) {
-        let completionItem = Array.from(
-          timeline.querySelectorAll(".timeline-content h4")
-        ).find((el) => el.textContent.includes("Phishing Attacks Completed"));
-
-        if (!completionItem) {
-          // Create completion entry
-          const timelineItem = document.createElement("div");
-          timelineItem.className = "timeline-item";
-
-          timelineItem.innerHTML = `
-                        <div class="timeline-date">${formattedDate}</div>
-                        <div class="timeline-content">
-                            <h4>Phishing Attacks Completed</h4>
-                            <p>Finished all lessons and passed quizzes successfully</p>
-                        </div>
-                    `;
-
-          // Add as the first item (newest)
-          if (timeline.firstChild) {
-            timeline.insertBefore(timelineItem, timeline.firstChild);
-          } else {
-            timeline.appendChild(timelineItem);
-          }
-        }
-      }
-    }
-
-    // Update goals section
-    updateGoals(attackCompletedSections, phishingCompletedSections);
-  }
-
-  // Update goals section based on module progress
-  function updateGoals(attackCompletedSections, phishingCompletedSections) {
-    const goalsSection = document.querySelector(".goals");
-    if (!goalsSection) return;
-
-    // Update Attack Targets goal
-    const goalHeadings = goalsSection.querySelectorAll(".goal-content h4");
-    let attackTargetsGoal = null;
-    let phishingAttacksGoal = null;
-
-    // Find the right goals by text content
-    goalHeadings.forEach((heading) => {
-      if (heading.textContent.includes("Complete Attack Targets Module")) {
-        attackTargetsGoal = heading;
-      } else if (
-        heading.textContent.includes("Start Phishing Attacks Module")
-      ) {
-        phishingAttacksGoal = heading;
-      }
-    });
-
-    // Update Attack Targets goal
-    if (attackTargetsGoal) {
-      const goalItem = attackTargetsGoal.closest(".goal");
-      const progressBar = goalItem.querySelector(".progress");
-      const progressPercentage = (attackCompletedSections.length / 5) * 100;
-
-      progressBar.style.width = `${progressPercentage}%`;
-      goalItem.querySelector("span").textContent = `${Math.round(
-        progressPercentage
-      )}%`;
-
-      // Update check mark if completed
-      if (attackCompletedSections.length === 5) {
-        goalItem.querySelector(".goal-check i").className =
-          "fas fa-check-circle";
-      }
-    }
-
-    // Update Phishing Attacks goal
-    if (phishingAttacksGoal) {
-      const goalItem = phishingAttacksGoal.closest(".goal");
-
-      if (phishingCompletedSections.length > 0) {
-        // Already started the module
-        goalItem.querySelector(".goal-check i").className =
-          "fas fa-check-circle";
-
-        // If not already converted to progress bar, convert
-        if (!goalItem.querySelector(".goal-progress")) {
-          const deadlineText = goalItem.querySelector("p");
-          const progressHtml = `
-                        <div class="goal-progress">
-                            <div class="progress-bar">
-                                <div class="progress" style="width: ${
-                                  (phishingCompletedSections.length / 3) * 100
-                                }%"></div>
-                            </div>
-                            <span>${Math.round(
-                              (phishingCompletedSections.length / 3) * 100
-                            )}%</span>
-                        </div>
-                    `;
-
-          deadlineText.outerHTML = progressHtml;
-        } else {
-          // Update existing progress bar
-          const progressBar = goalItem.querySelector(".progress");
-          const progressPercentage =
-            (phishingCompletedSections.length / 3) * 100;
-
-          progressBar.style.width = `${progressPercentage}%`;
-          goalItem.querySelector("span").textContent = `${Math.round(
-            progressPercentage
-          )}%`;
-        }
-
-        // Update the goal text if needed
-        if (phishingCompletedSections.length < 3) {
-          phishingAttacksGoal.textContent = "Complete Phishing Attacks Module";
-        }
-      }
+    
+    // Update learning goals if that function exists
+    if (typeof updateGoals === "function") {
+      updateGoals(attackCompletedSections, phishingCompletedSections);
     }
   }
 

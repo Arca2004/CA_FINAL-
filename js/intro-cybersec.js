@@ -33,11 +33,25 @@ document.addEventListener("DOMContentLoaded", function () {
     return "U";
   }
 
+  // Define topic progression order
+  const topicOrder = [
+    "application-security",
+    "cloud-security",
+    "identity-management",
+    "mobile-security",
+    "network-security",
+  ];
+
+  // Initialize variables
+  let completedQuizzes = [];
+  let currentUser = null;
+
   // Check for Firebase auth state
   if (firebase && firebase.auth) {
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
         // User is signed in with Firebase
+        currentUser = user;
         if (loginLink) loginLink.style.display = "none";
         if (profileContainer) profileContainer.style.display = "block";
         if (profileInitial) profileInitial.textContent = getUserInitial(user);
@@ -52,15 +66,26 @@ document.addEventListener("DOMContentLoaded", function () {
             initial: getUserInitial(user),
           })
         );
+
+        // Load user progress from Firestore
+        loadUserProgress(user.uid);
       } else {
         // Check localStorage for backward compatibility
-        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-        if (currentUser) {
+        const localUser = JSON.parse(localStorage.getItem("currentUser"));
+        if (localUser) {
           if (loginLink) loginLink.style.display = "none";
           if (profileContainer) profileContainer.style.display = "block";
           if (profileInitial)
-            profileInitial.textContent = getUserInitial(currentUser);
+            profileInitial.textContent = getUserInitial(localUser);
           if (profileName) profileName.textContent = ""; // No account name text
+          
+          // Fall back to local storage for progress
+          const storedQuizzes = localStorage.getItem("introCompletedQuizzes");
+          if (storedQuizzes) {
+            completedQuizzes = JSON.parse(storedQuizzes);
+            updateTopicAccessibility();
+            updateProgress();
+          }
         } else {
           if (loginLink) loginLink.style.display = "block";
           if (profileContainer) profileContainer.style.display = "none";
@@ -69,32 +94,146 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   } else {
     // Fallback for older version
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    if (currentUser) {
+    const localUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (localUser) {
       if (loginLink) loginLink.style.display = "none";
       if (profileContainer) profileContainer.style.display = "block";
       if (profileInitial)
-        profileInitial.textContent = getUserInitial(currentUser);
+        profileInitial.textContent = getUserInitial(localUser);
       if (profileName) profileName.textContent = ""; // No account name text
+      
+      // Fall back to local storage for progress
+      const storedQuizzes = localStorage.getItem("introCompletedQuizzes");
+      if (storedQuizzes) {
+        completedQuizzes = JSON.parse(storedQuizzes);
+        updateTopicAccessibility();
+        updateProgress();
+      }
     } else {
       if (loginLink) loginLink.style.display = "block";
       if (profileContainer) profileContainer.style.display = "none";
     }
   }
 
+  // Load user progress from Firestore
+  function loadUserProgress(userId) {
+    if (!firebase.firestore) {
+      console.error("Firestore is not available");
+      return;
+    }
+
+    firebase.firestore().collection("userProgress").doc(userId).get()
+      .then((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          if (data.modules && data.modules.introCybersec && data.modules.introCybersec.completedQuizzes) {
+            completedQuizzes = data.modules.introCybersec.completedQuizzes;
+          } else {
+            completedQuizzes = [];
+          }
+        } else {
+          // Create a new document for the user if it doesn't exist
+          firebase.firestore().collection("userProgress").doc(userId).set({
+            modules: {
+              introCybersec: {
+                completedQuizzes: [],
+                lastUpdated: new Date()
+              }
+            },
+            lastLogin: new Date()
+          });
+          completedQuizzes = [];
+        }
+        updateTopicAccessibility();
+        updateProgress();
+      })
+      .catch((error) => {
+        console.error("Error loading user progress:", error);
+        // Fall back to local storage
+        const storedQuizzes = localStorage.getItem("introCompletedQuizzes");
+        if (storedQuizzes) {
+          completedQuizzes = JSON.parse(storedQuizzes);
+          updateTopicAccessibility();
+          updateProgress();
+        }
+      });
+  }
+
+  // Save user progress to Firestore
+  function saveUserProgress(userId, topicId) {
+    if (!firebase.firestore || !userId) {
+      // Save to localStorage as backup
+      localStorage.setItem("introCompletedQuizzes", JSON.stringify(completedQuizzes));
+      return;
+    }
+
+    // Update the Firestore document
+    firebase.firestore().collection("userProgress").doc(userId).update({
+      [`modules.introCybersec.completedQuizzes`]: completedQuizzes,
+      [`modules.introCybersec.lastUpdated`]: new Date(),
+      [`modules.introCybersec.progressPercentage`]: (completedQuizzes.length / topicOrder.length) * 100
+    })
+    .then(() => {
+      console.log("Progress saved to Firestore");
+      
+      // Also update user's overall progress in profile
+      updateOverallProgress(userId);
+    })
+    .catch((error) => {
+      console.error("Error saving progress:", error);
+      // Save to localStorage as backup
+      localStorage.setItem("introCompletedQuizzes", JSON.stringify(completedQuizzes));
+    });
+  }
+
+  // Update overall progress for profile page
+  function updateOverallProgress(userId) {
+    if (!firebase.firestore || !userId) return;
+
+    firebase.firestore().collection("userProgress").doc(userId).get()
+      .then((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          const modules = data.modules || {};
+          
+          // Calculate total modules and completed modules
+          const modulesStats = {
+            total: 4, // Adjust based on your total modules
+            completed: 0,
+            topics: 0,
+            totalTimeMinutes: 0
+          };
+          
+          // Check intro module
+          if (modules.introCybersec) {
+            const introProgress = modules.introCybersec.completedQuizzes?.length || 0;
+            if (introProgress === topicOrder.length) {
+              modulesStats.completed++;
+            }
+            modulesStats.topics += introProgress;
+            modulesStats.totalTimeMinutes += introProgress * 15; // Estimate 15 min per topic
+          }
+          
+          // Check other modules (add more as they're implemented)
+          // if (modules.attackTargets) { ... }
+          // if (modules.phishingAttacks) { ... }
+          // if (modules.malwareInfections) { ... }
+          
+          // Update overall progress in user profile
+          firebase.firestore().collection("userProgress").doc(userId).update({
+            completedModules: modulesStats.completed,
+            totalModules: modulesStats.total,
+            completedTopics: modulesStats.topics,
+            totalTimeMinutes: modulesStats.totalTimeMinutes,
+            completionPercentage: (modulesStats.completed / modulesStats.total) * 100,
+            lastUpdated: new Date()
+          });
+        }
+      })
+      .catch(error => console.error("Error updating overall progress:", error));
+  }
+
   console.log("DOM loaded - applying locks");
-
-  // Define topic progression order
-  const topicOrder = [
-    "application-security",
-    "cloud-security",
-    "identity-management",
-    "mobile-security",
-    "network-security",
-  ];
-
-  // Initialize with no topics completed
-  const completedQuizzes = [];
 
   function isTopicAccessible(topicId) {
     const topicIndex = topicOrder.indexOf(topicId);
@@ -269,6 +408,43 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  // Reset progress button
+  const resetProgressBtn = document.getElementById("reset-progress");
+  if (resetProgressBtn) {
+    resetProgressBtn.addEventListener("click", function() {
+      if (confirm("Are you sure you want to reset your progress for this module? This cannot be undone.")) {
+        completedQuizzes = [];
+        
+        // Save to Firebase if logged in
+        if (currentUser && currentUser.uid) {
+          saveUserProgress(currentUser.uid);
+        } else {
+          localStorage.setItem("introCompletedQuizzes", JSON.stringify(completedQuizzes));
+        }
+        
+        updateTopicAccessibility();
+        updateProgress();
+        
+        // Re-enable all quiz buttons
+        document.querySelectorAll(".topic-quiz-btn").forEach(btn => {
+          btn.textContent = "Check Answer";
+          btn.classList.remove("success");
+          btn.disabled = false;
+        });
+        
+        // Reset all options
+        document.querySelectorAll(".option").forEach(opt => {
+          opt.classList.remove("selected", "correct", "incorrect");
+        });
+        
+        // Hide all results
+        document.querySelectorAll(".topic-quiz-results").forEach(res => {
+          res.style.display = "none";
+        });
+      }
+    });
+  }
+
   // Add event listeners for quiz buttons
   const topicQuizButtons = document.querySelectorAll(".topic-quiz-btn");
   topicQuizButtons.forEach((button) => {
@@ -300,15 +476,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
           if (!completedQuizzes.includes(targetId)) {
             completedQuizzes.push(targetId);
-            localStorage.setItem(
-              "introCompletedQuizzes",
-              JSON.stringify(completedQuizzes)
-            );
+            
+            // Save progress to Firestore if user is logged in
+            if (currentUser && currentUser.uid) {
+              saveUserProgress(currentUser.uid, targetId);
+            } else {
+              localStorage.setItem("introCompletedQuizzes", JSON.stringify(completedQuizzes));
+            }
 
             // Update accessibility for next topics
             updateTopicAccessibility();
             // Update the progress bar
             updateProgress();
+
+            // Check for module completion celebration
+            if (completedQuizzes.length === topicOrder.length) {
+              setTimeout(() => {
+                showCelebration();
+              }, 1000);
+            }
           }
 
           this.textContent = "Correct!";
@@ -338,11 +524,35 @@ document.addEventListener("DOMContentLoaded", function () {
     if (progressBar) {
       const progressPercentage = (completedQuizzes.length / totalTopics) * 100;
       progressBar.style.width = `${progressPercentage}%`;
+    }
+  }
 
-      // Check if all topics are completed and show celebration
-      if (completedQuizzes.length === totalTopics) {
-        // If you have a celebration modal, you can show it here
-        // showCelebration();
+  // Function to show celebration modal when module is completed
+  function showCelebration() {
+    const celebrationContainer = document.querySelector(".celebration-container");
+    if (celebrationContainer) {
+      celebrationContainer.classList.add("active");
+      
+      // Create sparkles for trophy
+      const trophySparkle = document.getElementById("trophy-sparkle");
+      if (trophySparkle) {
+        for (let i = 0; i < 10; i++) {
+          const sparkle = document.createElement("span");
+          sparkle.style.left = `${Math.random() * 100}%`;
+          sparkle.style.top = `${Math.random() * 100}%`;
+          sparkle.style.width = `${Math.random() * 5 + 2}px`;
+          sparkle.style.height = sparkle.style.width;
+          sparkle.style.animationDelay = `${Math.random() * 2}s`;
+          trophySparkle.appendChild(sparkle);
+        }
+      }
+      
+      // Close button for celebration
+      const celebrationBtn = document.querySelector(".celebration-btn");
+      if (celebrationBtn) {
+        celebrationBtn.addEventListener("click", function() {
+          celebrationContainer.classList.remove("active");
+        });
       }
     }
   }
