@@ -46,6 +46,27 @@
         z-index: 100;
       }
       
+      /* Critical fix for dropdown content */
+      .attack-item {
+        margin-bottom: 20px;
+        border-radius: 8px;
+        overflow: hidden;
+        background: rgba(44, 62, 80, 0.5);
+        transition: all 0.3s ease;
+      }
+      
+      .attack-detail {
+        padding: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.5s ease;
+      }
+      
+      .attack-item.expanded .attack-detail {
+        padding: 20px;
+        max-height: 2000px;
+      }
+      
       /* Enhanced lock styles for non-first topics */
       .target-card.locked[data-target="network-tapping"],
       .target-card.locked[data-target="wireless-network-pirating"],
@@ -887,11 +908,7 @@
             </div>
 
             <div class="protection-heading">The Human Element</div>
-            <div class="protection-list">
-              <p>
-                While technologies are essential, human factors significantly impact 
-                network security effectiveness:
-              </p> <br>
+            <ul class="protection-list">
               <li>
                 <strong>Security Culture:</strong>
                 Fostering a setting in which security is the duty of all.
@@ -908,14 +925,10 @@
                 <strong>Security Governance:</strong>
                 Setting up explicit policies, procedures, and responsibilities
               </li>
-            </div>
+            </ul>
 
             <div class="protection-heading">Protection Measures</div>
-            <div class="protection-list">
-              <p>
-                While technologies are essential, human factors significantly impact 
-                network security effectiveness:
-              </p> <br>
+            <ul class="protection-list">
               <li>
                 <strong>Stay informed</strong>
                 about emerging threats and vulnerabilities
@@ -932,12 +945,12 @@
                 <strong>Participate in security communities</strong>
                 to share intelligence and best practices
               </li>
-              <p>
-                By grasping these fundamental concepts of network security, organizations
-                can create more robust defenses against progressively advanced threats 
-                while facilitating the connectivity required for contemporary business activities. 
-              </p>
-            </div>
+            </ul>
+            <p>
+              By grasping these fundamental concepts of network security, organizations
+              can create more robust defenses against progressively advanced threats 
+              while facilitating the connectivity required for contemporary business activities. 
+            </p>
 
             <!-- Quiz Section -->
             <div class="topic-quiz">
@@ -1283,12 +1296,13 @@
             </div>
 
             <div class="protection-heading">Network Tap vs SPAN Port</div>
-            <div class="protection-list">
-              <p> In contrast to SPAN (Switched Port Analyzer) ports that can lose packets during busy traffic times,
-              Network TAPs offer a dependable and steady solution for monitoring all network data without the 
-              possibility of data loss. 
-              </p>
-              </div>
+            <ul class="protection-list">
+              <li>
+                In contrast to SPAN (Switched Port Analyzer) ports that can lose packets during busy traffic times,
+                Network TAPs offer a dependable and steady solution for monitoring all network data without the 
+                possibility of data loss.
+              </li>
+            </ul>
 
             <!-- Quiz Section -->
             <div class="topic-quiz">
@@ -1485,50 +1499,51 @@
             </div>
 
             <div class="protection-heading">Protection Measures</div>
-            <div class="protection-list">
-              <p> 
-                Establishing appropriate security protocols can greatly lower the likelihood of 
-                unauthorized access. Various settings demand unique strategies: 
-              </p> <br>
-              <p> For Home Networks:</p> <br>
-              <li>
-                <strong>WPA3/WPA2 with a robust password:</strong> Create intricate passwords 
-                containing at least 12 characters that combine letters, digits, and symbols. 
-              </li>
-              <li>
-                <strong>Alter default credentials:</strong> Modify factory usernames and passwords
-                 on all networking devices. 
-              </li>
-              <li>
-                <strong>Maintain updated firmware:</strong> Consistently look for and apply updates
-                 for your router's firmware. 
-              </li>
-              <li>
-                <strong>Activate guest networks:</strong> Allow distinct access for guests while 
-                safeguarding your primary network. 
-              </li>
-              <li>
-                <strong>Turn off WPS and remote management:</strong>  These functions frequently create security risks. 
-              </li> <br>
-              <p>For Organizations:</p> <br>
-              <li>
-                <strong>802.1X authentication:</strong> 
-                Demands separate authentication for every connection attempt. 
-              </li>
-              <li>
-                <strong>Enterprise-level encryption:</strong>Employs stronger key management compared to personal networks.
-              </li>
-              <li>
-                <strong>Network segmentation:</strong> Distinguishes sensitive systems from standard-use networks. 
-              </li>
-              <li>
-                <strong>Intrusion Detection Systems (IDS): </strong>
-                Watch for and notify about questionable actions. 
-              </li>
-              <li>
-                <strong>Routine security assessments:</strong>
-                Planned evaluations to discover and rectify weaknesses. 
-              </li>
+            <div>
+              <p><strong>For Home Networks:</strong></p>
+              <ul class="protection-list">
+                <li>
+                  <strong>WPA3/WPA2 with a robust password:</strong> Create intricate passwords 
+                  containing at least 12 characters that combine letters, digits, and symbols. 
+                </li>
+                <li>
+                  <strong>Alter default credentials:</strong> Modify factory usernames and passwords
+                  on all networking devices. 
+                </li>
+                <li>
+                  <strong>Maintain updated firmware:</strong> Consistently look for and apply updates
+                  for your router's firmware. 
+                </li>
+                <li>
+                  <strong>Activate guest networks:</strong> Allow distinct access for guests while 
+                  safeguarding your primary network. 
+                </li>
+                <li>
+                  <strong>Turn off WPS and remote management:</strong> These functions frequently create security risks. 
+                </li>
+              </ul>
+              
+              <p><strong>For Organizations:</strong></p>
+              <ul class="protection-list">
+                <li>
+                  <strong>802.1X authentication:</strong> 
+                  Demands separate authentication for every connection attempt. 
+                </li>
+                <li>
+                  <strong>Enterprise-level encryption:</strong> Employs stronger key management compared to personal networks.
+                </li>
+                <li>
+                  <strong>Network segmentation:</strong> Distinguishes sensitive systems from standard-use networks. 
+                </li>
+                <li>
+                  <strong>Intrusion Detection Systems (IDS):</strong>
+                  Watch for and notify about questionable actions. 
+                </li>
+                <li>
+                  <strong>Routine security assessments:</strong>
+                  Planned evaluations to discover and rectify weaknesses. 
+                </li>
+              </ul>
             </div>
           </div>
 
@@ -1572,11 +1587,7 @@
           </div>
           
           <div class="protection-heading">Tools and Resources</div>
-            <div class="protection-list">
-              <p> 
-                For individuals seeking to improve their understanding or evaluate their network security, 
-                these tools and resources offer important insights: 
-              </p> <br>
+            <ul class="protection-list">
               <li>
                 <strong>Network analyzers:</strong> Applications such as Wireshark assist in comprehending 
                 network traffic (solely for valid security evaluation).
@@ -1588,12 +1599,13 @@
                 <strong>NIST Special Publications:</strong> Government resources offering comprehensive security recommendations.
               </li>
               <li>
-                <strong>Activate guest networks:</strong> Allow distinct access for guests while 
+                <strong>Guest networks:</strong> Allow distinct access for guests while 
                 safeguarding your primary network. 
               </li>
               <li>
                 <strong>IEEE 802.11 Documentation:</strong> Authoritative technical guidelines for wireless networking.
-            </div>
+              </li>
+            </ul>
           
 
           <!-- Quiz Section -->
@@ -1841,10 +1853,7 @@
             </div>
 
            <div class="protection-heading">Forensic Tools and Resources</div>
-            <div class="protection-list">
-              <p> 
-                Specialized tools enhance successful network forensic investigations: 
-              </p> <br>
+            <ul class="protection-list">
               <li>
                 <strong>Packet Analysis Tools:</strong> Wireshark, tcpdump, and Zeek offer comprehensive packet examination features. 
               </li>
@@ -1859,7 +1868,8 @@
               </li>
               <li>
                 <strong>NIST Special Publications:</strong> Official guidelines for digital forensics processes by the government. 
-            </div>
+              </li>
+            </ul>
           
           <!-- Quiz Section -->
             <div class="topic-quiz">
@@ -2077,8 +2087,7 @@
           </div>
 
           <div class="protection-heading">Recommended Technologies and Resources</div>
-            <div class="protection-list">
-              <p>Several technologies and standards support Zero Trust implementation:</p> <br>
+            <ul class="protection-list">
               <li>
                 <strong>Identity Providers:</strong> Services that centrally handle authentication and authorization.
               </li>
@@ -2095,7 +2104,7 @@
               <li>
                 <strong>Security Orchestration, Automation, and Response (SOAR):</strong> Instruments that automate reactions to security incidents in a Zero Trust environment. 
               </li>
-            </div>
+            </ul>
           
 
           <!-- Quiz Section -->
@@ -2215,102 +2224,134 @@
 
     <!-- Direct fix script -->
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // Fix 1: Accordion functionality
-        const accordionHeaders = document.querySelectorAll(".attack-item h3");
-        accordionHeaders.forEach((header) => {
-          header.addEventListener("click", function () {
-            // Toggle expanded class on parent
-            const parentItem = this.parentElement;
-            const wasExpanded = parentItem.classList.contains("expanded");
+      // Immediate execution to fix the accordion functionality
+      (function() {
+        // Fix 1: Accordion functionality - Apply directly
+        const fixAccordion = function() {
+          const accordionHeaders = document.querySelectorAll(".attack-item h3");
+          accordionHeaders.forEach((header) => {
+            header.onclick = function(e) {
+              e.stopPropagation();
+              // Toggle expanded class on parent
+              const parentItem = this.parentElement;
+              const wasExpanded = parentItem.classList.contains("expanded");
 
-            // Close all other expanded items
-            document
-              .querySelectorAll(".attack-item.expanded")
-              .forEach((item) => {
-                if (item !== parentItem) {
-                  item.classList.remove("expanded");
-                }
-              });
+              // Close all other expanded items
+              document
+                .querySelectorAll(".attack-item.expanded")
+                .forEach((item) => {
+                  if (item !== parentItem) {
+                    item.classList.remove("expanded");
+                  }
+                });
 
-            // Toggle current item
-            if (wasExpanded) {
-              parentItem.classList.remove("expanded");
-            } else {
-              parentItem.classList.add("expanded");
-            }
+              // Toggle current item
+              if (wasExpanded) {
+                parentItem.classList.remove("expanded");
+              } else {
+                parentItem.classList.add("expanded");
+              }
+            };
           });
-        });
+        };
+
+        // Apply fixes immediately and on DOM content loaded
+        fixAccordion();
+        document.addEventListener("DOMContentLoaded", fixAccordion);
 
         // Fix 2: Quiz functionality
-        const quizOptions = document.querySelectorAll(".option");
-        quizOptions.forEach((option) => {
-          option.addEventListener("click", function () {
-            // Find all sibling options and remove selected class
-            const allOptions = this.parentElement.querySelectorAll(".option");
-            allOptions.forEach((opt) => opt.classList.remove("selected"));
+        document.addEventListener("DOMContentLoaded", function() {
+          const quizOptions = document.querySelectorAll(".option");
+          quizOptions.forEach((option) => {
+            option.addEventListener("click", function () {
+              // Find all sibling options and remove selected class
+              const allOptions = this.parentElement.querySelectorAll(".option");
+              allOptions.forEach((opt) => opt.classList.remove("selected"));
 
-            // Add selected class to clicked option
-            this.classList.add("selected");
+              // Add selected class to clicked option
+              this.classList.add("selected");
+            });
           });
-        });
 
-        // Fix 3: Check answer buttons
-        const checkButtons = document.querySelectorAll(".topic-quiz-btn");
-        checkButtons.forEach((button) => {
-          button.addEventListener("click", function () {
-            const quizSection = this.closest(".topic-quiz");
-            const selectedOption =
-              quizSection.querySelector(".option.selected");
-            const resultsDiv = quizSection.querySelector(".topic-quiz-results");
-            const correctFeedback =
-              quizSection.querySelector(".correct-answer");
-            const incorrectFeedback =
-              quizSection.querySelector(".incorrect-answer");
+          // Fix 3: Check answer buttons
+          const checkButtons = document.querySelectorAll(".topic-quiz-btn");
+          checkButtons.forEach((button) => {
+            button.addEventListener("click", function () {
+              const quizSection = this.closest(".topic-quiz");
+              const selectedOption =
+                quizSection.querySelector(".option.selected");
+              const resultsDiv = quizSection.querySelector(".topic-quiz-results");
+              const correctFeedback =
+                quizSection.querySelector(".correct-answer");
+              const incorrectFeedback =
+                quizSection.querySelector(".incorrect-answer");
 
-            if (!selectedOption) {
-              alert("Please select an answer first.");
-              return;
-            }
-
-            // Show results
-            resultsDiv.style.display = "block";
-
-            if (selectedOption.getAttribute("data-correct") === "true") {
-              correctFeedback.style.display = "block";
-              incorrectFeedback.style.display = "none";
-              selectedOption.classList.add("correct");
-
-              // Mark section as completed (if we had user progress tracking)
-              const targetCard = quizSection.closest(".target-card");
-              if (targetCard) {
-                const nextCard = targetCard.nextElementSibling;
-                if (
-                  nextCard &&
-                  nextCard.classList.contains("target-card") &&
-                  nextCard.classList.contains("locked")
-                ) {
-                  nextCard.classList.remove("locked");
-                  const lockOverlay = nextCard.querySelector(".lock-overlay");
-                  if (lockOverlay) {
-                    lockOverlay.style.display = "none";
-                  }
-                }
+              if (!selectedOption) {
+                alert("Please select an answer first.");
+                return;
               }
 
-              // Update button text
-              this.textContent = "Continue";
-              this.classList.add("success");
-            } else {
-              correctFeedback.style.display = "none";
-              incorrectFeedback.style.display = "block";
-              selectedOption.classList.add("incorrect");
-            }
+              // Show results
+              resultsDiv.style.display = "block";
+
+              if (selectedOption.getAttribute("data-correct") === "true") {
+                correctFeedback.style.display = "block";
+                incorrectFeedback.style.display = "none";
+                selectedOption.classList.add("correct");
+
+                // Mark section as completed (if we had user progress tracking)
+                const targetCard = quizSection.closest(".target-card");
+                if (targetCard) {
+                  const nextCard = targetCard.nextElementSibling;
+                  if (
+                    nextCard &&
+                    nextCard.classList.contains("target-card") &&
+                    nextCard.classList.contains("locked")
+                  ) {
+                    nextCard.classList.remove("locked");
+                    const lockOverlay = nextCard.querySelector(".lock-overlay");
+                    if (lockOverlay) {
+                      lockOverlay.style.display = "none";
+                    }
+                  }
+                }
+
+                // Update button text
+                this.textContent = "Continue";
+                this.classList.add("success");
+              } else {
+                correctFeedback.style.display = "none";
+                incorrectFeedback.style.display = "block";
+                selectedOption.classList.add("incorrect");
+              }
+            });
           });
+        });
+      })();
+    </script>
+
+    <script>
+      // Final fix to ensure all dropdowns are properly initialized
+      window.addEventListener('load', function() {
+        // Ensure all dropdowns work properly
+        document.querySelectorAll(".attack-item h3").forEach(header => {
+          header.style.cursor = "pointer";
+          header.addEventListener('click', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            const parentItem = this.parentElement;
+            parentItem.classList.toggle('expanded');
+            
+            // Close all other expanded items
+            document.querySelectorAll(".attack-item.expanded").forEach(item => {
+              if (item !== parentItem) {
+                item.classList.remove("expanded");
+              }
+            });
+          }, true);
         });
       });
     </script>
-
     <script src="js/network-security.js"></script>
     <script src="js/mobile-menu.js"></script>
   </body>
