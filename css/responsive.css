@@ -1,0 +1,456 @@
+/* Responsive Styles for Cybersec Academy */
+
+/* Base Mobile Styles (for devices under 768px) */
+@media screen and (max-width: 767px) {
+  /* General Styling */
+  body {
+    font-size: 14px;
+  }
+
+  .container,
+  .hero-container,
+  .about-hero-container,
+  .form-container,
+  .profile-content-container {
+    width: 95%;
+    padding: 0 10px;
+  }
+
+  /* Header & Navigation */
+  header {
+    padding: 10px 15px; /* Consistent padding */
+    height: 60px; /* Smaller height on mobile */
+  }
+
+  .logo {
+    max-width: 180px;
+    margin-left: 5px; /* Add a little margin to the left */
+  }
+
+  /* Logo adjustments for mobile */
+  .logo-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 1.2rem;
+  }
+
+  .logo-text {
+    font-size: 1.5rem;
+  }
+
+  .academy {
+    font-size: 0.8rem;
+    margin-top: -3px;
+  }
+
+  /* Hamburger Menu Styles */
+  .hamburger-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
+    z-index: 9999;
+    position: relative;
+    margin-right: 5px; /* Add margin to the right */
+  }
+
+  .hamburger-menu span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: #0c8a46; /* Changed to green to match site color scheme */
+    border-radius: 3px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 8px rgba(12, 138, 70, 0.7); /* Adjusted glow to match green */
+  }
+
+  .hamburger-menu.open span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+  }
+
+  .hamburger-menu.open span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger-menu.open span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+  }
+
+  .close-menu {
+    display: none;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+  }
+
+  .nav-links.active .close-menu {
+    display: block;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 350px;
+    height: 100vh;
+    background-color: #0c1f2c;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 80px 20px 20px;
+    transition: right 0.3s ease;
+    z-index: 999;
+    overflow-y: auto;
+  }
+
+  .nav-links.active {
+    right: 0;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .nav-links li {
+    margin: 10px 0;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    transition-delay: calc(0.1s * var(--i));
+  }
+
+  .nav-links.active li {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .nav-links a {
+    margin: 10px 0;
+    font-size: 18px;
+    width: 100%;
+  }
+
+  .nav-links a:hover {
+    color: #ffcc00;
+    transform: translateX(5px);
+  }
+
+  /* Ensure profile dropdown works in mobile */
+  .profile-container {
+    margin: 15px 0;
+    width: 100%;
+  }
+
+  .profile-dropdown {
+    position: static;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+    margin-top: 10px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+    display: none;
+  }
+
+  .profile-dropdown.active {
+    max-height: 300px;
+    opacity: 1;
+    visibility: visible;
+    display: block;
+  }
+
+  .profile-link {
+    justify-content: flex-start;
+    width: 100%;
+    padding: 8px 0;
+  }
+
+  /* Hero Sections */
+  .hero {
+    padding: 50px 0 70px;
+    text-align: center;
+  }
+
+  .hero-content {
+    max-width: 100%;
+  }
+
+  .hero h1 {
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+  }
+
+  .hero p {
+    font-size: 1rem;
+    margin-bottom: 25px;
+  }
+
+  .hero-image {
+    display: none; /* Hide on mobile for simplicity */
+  }
+
+  .glitch,
+  .sub-glitch {
+    font-size: 2rem;
+  }
+
+  .sub-glitch {
+    font-size: 1.2rem;
+  }
+
+  /* Buttons */
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn {
+    margin: 5px 0;
+    width: 100%;
+    max-width: 250px;
+    padding: 12px 15px;
+  }
+
+  /* Grid Layouts */
+  .grid-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .grid-item {
+    margin-bottom: 20px;
+  }
+
+  /* Learning Modules */
+  .module-card {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .module-card-header {
+    flex-direction: column;
+  }
+
+  .tab-btn {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .tab-content {
+    padding: 15px;
+  }
+
+  /* Profile Page */
+  .profile-banner {
+    height: 120px;
+  }
+
+  .profile-info {
+    padding: 15px;
+    margin-top: -50px;
+  }
+
+  .profile-photo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profile-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .profile-progress {
+    grid-template-columns: 1fr;
+  }
+
+  /* About Us Page */
+  .about-description {
+    font-size: 16px;
+  }
+
+  .tech-icons {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .tech-icon {
+    margin: 5px;
+  }
+
+  .team-card {
+    flex-direction: column;
+  }
+
+  /* Forms */
+  .form-group input,
+  .form-group textarea {
+    font-size: 16px; /* Better for mobile input */
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Footer */
+  .footer-grid,
+  .footer-container,
+  .footer-links {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .footer-section,
+  .link-group {
+    margin-bottom: 20px;
+  }
+
+  .social-icons {
+    justify-content: center;
+    margin-top: 20px;
+  }
+}
+
+/* Tablet Styles (768px to 1023px) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  /* General Adjustments for Tablets */
+  .container,
+  .hero-container {
+    width: 90%;
+  }
+
+  /* Hide hamburger menu on tablets and larger */
+  .hamburger-menu,
+  .close-menu {
+    display: none;
+  }
+
+  /* Grid Layouts for Tablets */
+  .grid-container,
+  .module-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .team-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Hero Section Adjustments */
+  .hero-content {
+    width: 60%;
+  }
+
+  .hero-image {
+    width: 40%;
+  }
+
+  /* Footer */
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Landscape Orientation for Mobile */
+@media screen and (max-width: 767px) and (orientation: landscape) {
+  body {
+    height: auto;
+  }
+
+  .hero-container {
+    min-height: auto;
+    padding: 30px 0;
+  }
+
+  .header {
+    position: relative;
+  }
+}
+
+/* Higher Resolution Phone Screens */
+@media screen and (max-width: 480px) {
+  .glitch {
+    font-size: 1.8rem;
+  }
+
+  .sub-glitch {
+    font-size: 1rem;
+  }
+
+  .tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .tab-btn {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  /* Extra small adjustments */
+  .module-topics li {
+    font-size: 12px;
+  }
+}
+
+/* Interactive Elements Adjustments for Touch Devices */
+@media (hover: none) {
+  .module-card:hover,
+  .feature-card:hover,
+  .team-card:hover {
+    transform: none !important;
+  }
+
+  .nav-link:hover {
+    background-color: transparent;
+  }
+
+  /* Increase tap target sizes */
+  button,
+  .nav-link,
+  .social-link {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Default state for hamburger menu (desktop) */
+@media screen and (min-width: 768px) {
+  .hamburger-menu,
+  .close-menu {
+    display: none;
+  }
+
+  .nav-links {
+    display: flex;
+  }
+
+  /* Reset profile dropdown behavior for desktop */
+  .profile-container {
+    position: relative;
+  }
+
+  .profile-dropdown {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    width: auto;
+    min-width: 180px;
+  }
+
+  .profile-container:hover .profile-dropdown {
+    opacity: 1;
+    visibility: visible;
+    display: block;
+  }
+}
+
+/* Hamburger Menu Specific Styles */
+.hamburger-menu span {
+  background-color: #0c8a46 !important; /* Force green color for hamburger */
+  box-shadow: 0 0 8px rgba(12, 138, 70, 0.7) !important; /* Enhanced glow for green */
+}

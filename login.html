@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cyber Academy - Login</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+    <!-- Firebase Config -->
+    <script src="firebase-config.js"></script>
+    <link rel="stylesheet" href="css/responsive.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: "Poppins", sans-serif;
+        color: white;
+        overflow: hidden;
+        position: relative;
+        background: url("img/what-is-cybersecurity.jpg") no-repeat center
+          center/cover;
+      }
+
+      /* Blurred Background Overlay */
+      body::before {
+        content: "";
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+        background: inherit;
+        filter: blur(15px);
+        z-index: -1;
+      }
+
+      .container {
+        position: relative;
+        width: 100%;
+        max-width: 380px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        backdrop-filter: blur(20px);
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        padding-bottom: 15px;
+      }
+
+      .header {
+        height: 120px;
+        background: url("img/what-is-cybersecurity.jpg") no-repeat center
+          center/cover;
+        clip-path: ellipse(100% 80% at 50% 20%);
+      }
+
+      .form-container {
+        padding: 15px;
+        text-align: center;
+      }
+
+      h2 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #ffcc00;
+        text-shadow: 2px 2px 5px rgba(255, 204, 0, 0.5);
+        margin-bottom: 3px;
+      }
+
+      p {
+        color: white;
+        font-size: 13px;
+        font-weight: 500;
+        margin-bottom: 12px;
+      }
+
+      .input-group {
+        position: relative;
+        margin-bottom: 10px;
+      }
+
+      .input-group i {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 13px;
+      }
+
+      .password-toggle {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 13px;
+        cursor: pointer;
+        transition: color 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        z-index: 2;
+      }
+      
+      .password-toggle:hover {
+        color: #ffcc00;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px 35px 10px 30px;
+        border: none;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.1);
+        font-size: 13px;
+        outline: none;
+        color: white;
+        transition: all 0.3s;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      input:focus {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 204, 0, 0.5);
+        box-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
+      }
+
+      .error-message {
+        color: #ff6b6b !important;
+        font-size: 12px;
+        margin-top: 8px;
+        display: none;
+      }
+
+      .options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        margin-bottom: 12px;
+      }
+
+      .options label {
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        color: white;
+      }
+
+      .options input[type="checkbox"] {
+        width: 14px;
+        height: 14px;
+        accent-color: #ffcc00;
+        margin-right: 6px;
+      }
+
+      .login-btn {
+        width: 100%;
+        background: #ffcc00;
+        color: black;
+        border: none;
+        padding: 10px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+        box-shadow: 0 4px 8px rgba(255, 204, 0, 0.3);
+        margin-bottom: 12px;
+      }
+
+      .login-btn:hover {
+        background: #ff9900;
+        box-shadow: 0 6px 12px rgba(255, 204, 0, 0.5);
+        transform: scale(1.02);
+      }
+
+      .create-account {
+        margin-top: 10px;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .create-account a {
+        color: #ffcc00;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.3s;
+      }
+
+      .create-account a:hover {
+        color: #ff9900;
+        text-decoration: underline;
+      }
+
+      @media (max-height: 700px) {
+        .container {
+          max-width: 350px;
+        }
+        
+        .header {
+          height: 100px;
+        }
+        
+        .form-container {
+          padding: 12px;
+        }
+        
+        .input-group {
+          margin-bottom: 8px;
+        }
+        
+        input {
+          padding: 8px 8px 8px 28px;
+        }
+        
+        .options {
+          margin-bottom: 8px;
+        }
+        
+        .login-btn {
+          padding: 8px;
+          margin-bottom: 8px;
+        }
+      }
+
+      /* Notification system */
+      .notification {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 12px 20px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+        display: none;
+        max-width: 90%;
+        text-align: center;
+        animation: fadeIn 0.3s ease-in-out;
+      }
+
+      .notification.error {
+        background: rgba(255, 70, 70, 0.95);
+        border-left: 4px solid #ff0000;
+      }
+
+      .notification.success {
+        background: rgba(70, 200, 120, 0.95);
+        border-left: 4px solid #00a550;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translate(-50%, -20px); }
+        to { opacity: 1; transform: translate(-50%, 0); }
+      }
+      
+      /* Modal styles */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 1001;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .modal-content {
+        background: rgba(15, 15, 15, 0.95);
+        border-radius: 12px;
+        padding: 25px;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 204, 0, 0.2);
+        position: relative;
+        animation: modalFadeIn 0.3s ease-out;
+      }
+      
+      @keyframes modalFadeIn {
+        from { opacity: 0; transform: translateY(-30px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      .modal-title {
+        color: #ffcc00;
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        text-align: center;
+      }
+      
+      .modal-text {
+        color: white;
+        font-size: 14px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      
+      .close-modal {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 20px;
+        cursor: pointer;
+        transition: color 0.3s;
+      }
+      
+      .close-modal:hover {
+        color: #ffcc00;
+      }
+      
+      .modal-btn {
+        width: 100%;
+        background: #ffcc00;
+        color: black;
+        border: none;
+        padding: 10px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 10px;
+      }
+      
+      .modal-btn:hover {
+        background: #ff9900;
+        transform: scale(1.02);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header"></div>
+      <div class="form-container">
+        <h2>Cyber Academy</h2>
+        <p>Welcome to Cyber Academy</p>
+
+        <!-- Notification system -->
+        <div class="notification" id="notification"></div>
+
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input type="text" id="username" placeholder="Enter Email" />
+        </div>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="password" placeholder="Enter Password" />
+          <span class="password-toggle" onclick="togglePasswordVisibility('password')">
+            <i class="fas fa-eye"></i>
+          </span>
+        </div>
+        <p class="error-message" id="error-msg">Incorrect credentials!</p>
+        <div class="options">
+          <label><input type="checkbox" id="remember" /> Remember Me</label>
+          <a
+            href="#"
+            onclick="openForgotPasswordModal(); return false;"
+            style="color: #ffcc00; text-decoration: none; font-weight: 500"
+            >Forgot Password?</a
+          >
+        </div>
+        <button class="login-btn" onclick="login()">LOGIN</button>
+        <p class="create-account">
+          Create Account? <a href="signup.html">Sign Up</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal" onclick="closeForgotPasswordModal()">&times;</span>
+        <h3 class="modal-title">Reset Password</h3>
+        <p class="modal-text">Enter your email address and we'll send you a link to reset your password.</p>
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="resetEmail" placeholder="Enter your email" />
+        </div>
+        <button class="modal-btn" onclick="sendPasswordReset()">RESET PASSWORD</button>
+      </div>
+    </div>
+
+    <script>
+      // Toggle password visibility
+      function togglePasswordVisibility(inputId) {
+        const passwordInput = document.getElementById(inputId);
+        const toggleIcon = passwordInput.nextElementSibling.querySelector('i');
+        
+        if (passwordInput.type === 'password') {
+          passwordInput.type = 'text';
+          toggleIcon.classList.remove('fa-eye');
+          toggleIcon.classList.add('fa-eye-slash');
+        } else {
+          passwordInput.type = 'password';
+          toggleIcon.classList.remove('fa-eye-slash');
+          toggleIcon.classList.add('fa-eye');
+        }
+      }
+
+      // Show notification
+      function showNotification(message, type) {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.className = 'notification';
+        notification.classList.add(type);
+        notification.style.display = 'block';
+        
+        // Hide notification after 5 seconds
+        setTimeout(() => {
+          notification.style.display = 'none';
+        }, 5000);
+      }
+
+      // Check if there's a user already signed in
+      document.addEventListener("DOMContentLoaded", function () {
+        firebase.auth().onAuthStateChanged(function (user) {
+          if (user) {
+            // User is signed in, redirect to index (add a slight delay)
+            console.log("User detected, redirecting shortly..."); // Added for debugging
+            setTimeout(() => {
+              window.location.href = "index.html";
+            }, 100); // Small delay (100ms) to allow state propagation
+          }
+
+          // Check remembered user from localStorage for transition support
+          const rememberedUser = localStorage.getItem("rememberedUser");
+          if (rememberedUser) {
+            const user = JSON.parse(rememberedUser);
+            document.getElementById("username").value = user.username;
+            document.getElementById("password").value = user.password;
+            document.getElementById("remember").checked = true;
+          }
+        });
+      });
+
+      function login() {
+        // Get input values
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const remember = document.getElementById("remember").checked;
+        const errorMsg = document.getElementById("error-msg");
+
+        // Check if fields are empty
+        if (username === "" || password === "") {
+          showNotification("Email and password cannot be empty!", "error");
+          return;
+        }
+
+        // Sign in with email and password
+        // Note: Firebase uses email/password auth, so username should be email format
+        firebase
+          .auth()
+          .signInWithEmailAndPassword(username, password)
+          .then((userCredential) => {
+            // User signed in successfully
+            const user = userCredential.user;
+
+            // If remember me is checked during the transition period
+            if (remember) {
+              localStorage.setItem(
+                "rememberedUser",
+                JSON.stringify({
+                  username: username,
+                  password: password,
+                })
+              );
+            } else {
+              localStorage.removeItem("rememberedUser");
+            }
+
+            // Store user info in localStorage for backward compatibility
+            localStorage.setItem(
+              "currentUser",
+              JSON.stringify({
+                username: user.email,
+                fullname: user.displayName || "Cyber Academy User",
+              })
+            );
+
+            errorMsg.style.display = "none"; // Hide error message
+            showNotification("Login successful! Redirecting...", "success");
+            document.body.style.opacity = "0"; // Smooth fade-out effect
+            setTimeout(() => {
+              window.location.href = "index.html"; // Redirect after fade-out
+            }, 1000);
+          })
+          .catch((error) => {
+            // Handle errors
+            console.error("Firebase Auth Error:", error.code, error.message);
+            if (
+              error.code === "auth/user-not-found" ||
+              error.code === "auth/wrong-password" ||
+              error.code === "auth/invalid-login-credentials"
+            ) {
+              showNotification("Incorrect email or password!", "error");
+            } else if (error.code === "auth/invalid-email") {
+              showNotification("Please enter a valid email address!", "error");
+            } else {
+              // Clean up error message to make it more user-friendly
+              let errorMessage = error.message || "An error occurred during login";
+              
+              // Extract just the message part if it's a JSON string
+              if (typeof errorMessage === 'string' && errorMessage.includes('{"error":')) {
+                try {
+                  const errorObj = JSON.parse(errorMessage);
+                  errorMessage = errorObj.error.message || "Authentication failed";
+                } catch (e) {
+                  // If parsing fails, just use a generic message
+                  errorMessage = "Authentication failed. Please try again.";
+                }
+              }
+              
+              // Remove Firebase prefixes if present
+              errorMessage = errorMessage.replace("Firebase: ", "").replace("Error (auth/", "").replace(")", "");
+              
+              showNotification("Login failed: " + errorMessage, "error");
+            }
+
+            // Legacy login fallback during transition period
+            legacyLogin(username, password, remember);
+          });
+      }
+
+      // Legacy login function for backward compatibility during transition
+      function legacyLogin(username, password, remember) {
+        // Get users from localStorage
+        const users = JSON.parse(localStorage.getItem("users") || "[]");
+
+        // Add default admin user if no users exist yet
+        if (users.length === 0) {
+          users.push({
+            username: "admin",
+            password: "password123",
+          });
+          localStorage.setItem("users", JSON.stringify(users));
+        }
+
+        // Check if user exists and password matches
+        const user = users.find(
+          (u) => u.username === username && u.password === password
+        );
+
+        if (user) {
+          if (remember) {
+            localStorage.setItem(
+              "rememberedUser",
+              JSON.stringify({
+                username: username,
+                password: password,
+              })
+            );
+          } else {
+            localStorage.removeItem("rememberedUser");
+          }
+
+          localStorage.setItem(
+            "currentUser",
+            JSON.stringify({
+              username: user.username,
+              fullname: user.fullname || "Admin User",
+            })
+          );
+
+          const errorMsg = document.getElementById("error-msg");
+          errorMsg.style.display = "none";
+          showNotification("Login successful! Redirecting...", "success");
+          document.body.style.opacity = "0";
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 1000);
+
+          // Migrate user to Firebase
+          migrateUserToFirebase(
+            username,
+            password,
+            user.fullname || "Admin User",
+            user.email || `${username}@example.com`
+          );
+        }
+      }
+
+      // Function to migrate localStorage users to Firebase
+      function migrateUserToFirebase(username, password, fullname, email) {
+        // Create user in Firebase Auth
+        firebase
+          .auth()
+          .createUserWithEmailAndPassword(email, password)
+          .then((userCredential) => {
+            // Update profile with fullname
+            return userCredential.user.updateProfile({
+              displayName: fullname,
+            });
+          })
+          .then(() => {
+            console.log("User migrated to Firebase successfully");
+
+            // Save additional user data to Firestore
+            return firebase
+              .firestore()
+              .collection("users")
+              .doc(firebase.auth().currentUser.uid)
+              .set({
+                username: username,
+                fullname: fullname,
+                email: email,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                migrated: true,
+              });
+          })
+          .catch((error) => {
+            console.error("Error migrating user to Firebase:", error);
+          });
+      }
+
+      // Allow pressing "Enter" to trigger login
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+          login();
+        }
+      });
+
+      // Forgot Password Modal Functions
+      function openForgotPasswordModal() {
+        document.getElementById('forgotPasswordModal').style.display = 'flex';
+        
+        // Try to use the email from the login form
+        const loginEmail = document.getElementById('username').value.trim();
+        if (loginEmail && loginEmail.includes('@')) {
+          document.getElementById('resetEmail').value = loginEmail;
+        }
+      }
+      
+      function closeForgotPasswordModal() {
+        document.getElementById('forgotPasswordModal').style.display = 'none';
+      }
+      
+      // Close modal if user clicks outside of it
+      window.onclick = function(event) {
+        const modal = document.getElementById('forgotPasswordModal');
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      }
+      
+      // Send password reset email
+      function sendPasswordReset() {
+        const email = document.getElementById('resetEmail').value.trim();
+        
+        if (!email) {
+          showNotification("Please enter your email address", "error");
+          return;
+        }
+        
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          showNotification("Please enter a valid email address", "error");
+          return;
+        }
+        
+        // Show loading state
+        const resetButton = document.querySelector('.modal-btn');
+        const originalText = resetButton.textContent;
+        resetButton.textContent = 'SENDING...';
+        resetButton.disabled = true;
+        
+        // Send reset email using Firebase
+        firebase.auth().sendPasswordResetEmail(email)
+          .then(() => {
+            showNotification("Password reset email sent! Check your inbox.", "success");
+            closeForgotPasswordModal();
+          })
+          .catch((error) => {
+            console.error("Password Reset Error:", error);
+            
+            // Handle specific errors
+            if (error.code === 'auth/user-not-found') {
+              showNotification("No account found with this email address", "error");
+            } else {
+              // Clean up error message
+              let errorMessage = error.message || "Failed to send reset email";
+              errorMessage = errorMessage.replace("Firebase: ", "").replace("Error (auth/", "").replace(")", "");
+              showNotification("Error: " + errorMessage, "error");
+            }
+          })
+          .finally(() => {
+            // Reset button state
+            resetButton.textContent = originalText;
+            resetButton.disabled = false;
+          });
+      }
+      
+      // Allow pressing "Enter" to trigger password reset when in the modal
+      document.getElementById('resetEmail').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+          sendPasswordReset();
+        }
+      });
+    </script>
+  </body>
+</html>

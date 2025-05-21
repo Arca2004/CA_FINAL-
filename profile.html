@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profile | Cybersec Academy</title>
+    <link rel="stylesheet" href="cyberindex.css" />
+    <link rel="stylesheet" href="css/profile.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="icon" type="image/png" href="img/favicon.png" />
+    <link rel="stylesheet" href="css/profile-dropdown.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+    <!-- Firebase Config -->
+    <script src="firebase-config.js"></script>
+  </head>
+  <body>
+    <div class="scanner-lines"></div>
+
+    <div class="noise-overlay"></div>
+
+    <header>
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="logo-text">
+          <span class="cyber">CYBER</span><span class="sec">SEC</span>
+          <span class="academy">Academy</span>
+        </div>
+      </div>
+      <nav>
+        <div class="hamburger-menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <ul class="nav-links">
+          <li>
+            <a href="index.html" class="nav-link"
+              ><i class="fas fa-home"></i> Home</a
+            >
+          </li>
+          <li>
+            <a href="learn.html" class="nav-link"
+              ><i class="fas fa-graduation-cap"></i> Learn</a
+            >
+          </li>
+          <li>
+            <a href="about-us.html" class="nav-link"
+              ><i class="fas fa-info-circle"></i> About Us</a
+            >
+          </li>
+          <li id="auth-nav-item">
+            <a href="login.html" class="nav-link" id="login-link">
+              <i class="fas fa-user"></i> Login
+            </a>
+            <div
+              class="profile-container"
+              id="profile-container"
+              style="display: none"
+            >
+              <div class="profile-avatar" id="profile-avatar">
+                <span id="profile-initial"></span>
+              </div>
+              <div class="profile-dropdown">
+                <a href="profile.html"><i class="fas fa-user-circle"></i> Profile</a>
+                <a href="profile.html#settings-content" class="quiz-settings"><i class="fas fa-tasks"></i> Quiz Settings</a>
+                <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section id="profile-hero">
+        <div class="hero-container">
+          <div class="particle-container">
+            <div id="particles-js"></div>
+          </div>
+
+          <div class="hero-content">
+            <div class="glitch-text">
+              <h1 class="glitch" data-text="YOUR PROFILE">YOUR PROFILE</h1>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="profile-details">
+        <div class="profile-card">
+          <div class="profile-header">
+            <div class="large-avatar">
+              <span id="large-profile-initial"></span>
+            </div>
+            <div class="profile-info">
+              <h2 id="profile-name">Loading...</h2>
+              <p id="profile-email">Loading...</p>
+              <div class="account-stats">
+                <div class="stat">
+                  <i class="fas fa-shield-alt"></i>
+                  <span>Member since: <span id="join-date">2025</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tabs-container">
+            
+
+            <div class="tab-content active" id="settings-content">
+              <div class="settings-grid">
+                <div class="settings-card">
+                  <h3><i class="fas fa-user-edit"></i> Profile Settings</h3>
+                  <form id="profile-settings-form">
+                    <div class="form-group">
+                      <label for="display-name">Display Name</label>
+                      <input
+                        type="text"
+                        id="display-name"
+                        placeholder="Your display name"
+                      />
+                    </div>
+                   
+                    <button type="submit" class="settings-btn">
+                      Save Changes
+                    </button>
+                  </form>
+                </div>
+
+                <!-- Removed Notification Settings section -->
+
+              </div>
+
+              <div class="settings-card learning-preferences">
+                <h3><i class="fas fa-graduation-cap"></i> Learning Preferences</h3>
+                <div class="toggle-setting">
+                  <div class="toggle-label">
+                    <strong>Disable All Quizzes</strong>
+                    <p class="setting-description">Turn off quizzes across all modules if you prefer to focus only on learning content.</p>
+                  </div>
+                  <label class="toggle">
+                    <input type="checkbox" id="disable-quizzes-toggle" />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="redesigned-footer">
+        <div class="footer-main">
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <div class="logo-icon">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <div>
+                <span class="cyber">CYBER</span><span class="sec">SEC</span>
+                <span class="academy">Academy</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="footer-nav">
+            <div class="footer-nav-section">
+              <h4>Navigation</h4>
+              <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="learn.html"
+                  ><i class="fas fa-graduation-cap"></i> Learn</a
+                >
+                <a href="about-us.html"
+                  ><i class="fas fa-info-circle"></i> About Us</a
+                >
+              </div>
+            </div>
+
+            <div class="footer-nav-section">
+              <h4>Learning Paths</h4>
+              <div class="nav-links">
+                <a href="learn.html#beginner-content"
+                  ><i class="fas fa-shield-alt"></i> Beginner</a
+                >
+                <a href="learn.html#intermediate-content"
+                  ><i class="fas fa-user-shield"></i> Intermediate</a
+                >
+                <a href="learn.html#advanced-content"
+                  ><i class="fas fa-shield-virus"></i> Advanced</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-bottom">
+          <p class="copyright">
+            &copy; 2025 Cybersec Academy. All rights reserved.
+          </p>
+          <div class="tech-stack">
+            <div class="tech-icons">
+              <span><i class="fab fa-html5"></i> HTML5</span>
+              <span><i class="fab fa-css3-alt"></i> CSS3</span>
+              <span><i class="fab fa-js"></i> JavaScript</span>
+              <span><i class="fab fa-github"></i> GitHub</span>
+              <span><i class="fas fa-fire"></i> Firebase</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/mobile-menu.js"></script>
+  </body>
+
+  <!-- Quiz Disable Confirmation Modal -->
+  <div class="confirmation-modal" id="quiz-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <i class="fas fa-question-circle"></i>
+        <h3>Confirm Quiz Settings</h3>
+      </div>
+      <div class="modal-body">
+        <p id="quiz-modal-message">Are you sure you want to disable quizzes across all modules? This will hide quiz sections so you can focus solely on the learning content.</p>
+        <div class="modal-actions">
+          <button class="modal-btn btn-cancel" id="quiz-cancel">Cancel</button>
+          <button class="modal-btn btn-confirm" id="quiz-confirm">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* Redesigned Footer Styles - Isolated to avoid conflicts */
+    footer .redesigned-footer {
+      padding: 40px 30px 20px;
+      background: var(--secondary-dark);
+      color: var(--text-secondary);
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    footer .footer-main {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-bottom: 25px;
+    }
+
+    footer .footer-brand {
+      flex: 1;
+      min-width: 220px;
+      max-width: 350px;
+    }
+
+    footer .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    footer .footer-nav {
+      display: flex;
+      flex: 2;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    footer .footer-nav-section {
+      min-width: 160px;
+    }
+
+    footer .footer-nav-section h4 {
+      color: var(--text-light);
+      margin-bottom: 15px;
+      font-size: 1rem;
+      position: relative;
+      padding-bottom: 8px;
+    }
+
+    footer .footer-nav-section h4:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 30px;
+      height: 2px;
+      background: var(--cyber-blue);
+    }
+
+    footer .nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    footer .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      opacity: 0.8;
+      font-size: 0.95rem;
+    }
+
+    footer .nav-links a:hover {
+      color: var(--cyber-blue);
+      transform: translateX(3px);
+      opacity: 1;
+    }
+
+    footer .nav-links a i {
+      font-size: 0.85rem;
+      width: 18px;
+    }
+
+    footer .footer-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+      margin: 15px 0;
+    }
+
+    footer .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      padding-top: 15px;
+    }
+
+    footer .copyright {
+      font-size: 0.85rem;
+      opacity: 0.7;
+    }
+
+    footer .tech-icons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    footer .tech-icons span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    footer .tech-icons i {
+      color: var(--cyber-blue);
+      font-size: 1rem;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      footer .footer-main {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      footer .footer-nav {
+        width: 100%;
+      }
+
+      footer .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</html>

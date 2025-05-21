@@ -1,0 +1,134 @@
+/* Profile dropdown styles */
+.profile-container {
+  position: relative;
+  cursor: pointer;
+}
+
+.profile-avatar {
+  width: 32px;
+  height: 32px;
+  background-color: #0c8a46;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  border: 2px solid #0fe16b;
+  box-shadow: 0 0 10px rgba(15, 225, 107, 0.5);
+  transition: all 0.3s ease;
+}
+
+.profile-avatar:hover {
+  box-shadow: 0 0 15px rgba(15, 225, 107, 0.8);
+  transform: scale(1.05);
+}
+
+.profile-initial {
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  background-color: #0a1a2a;
+  border: 1px solid #0fe16b;
+  border-radius: 5px;
+  min-width: 180px;
+  z-index: 100;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.profile-container:hover .profile-dropdown,
+.profile-dropdown:hover {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.profile-dropdown a {
+  display: block;
+  padding: 12px 15px;
+  color: #e0e0e0;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s;
+  border-bottom: 1px solid rgba(15, 225, 107, 0.1);
+}
+
+.profile-dropdown a:last-child {
+  border-bottom: none;
+}
+
+.profile-dropdown a:hover {
+  background-color: rgba(15, 225, 107, 0.1);
+  color: #0fe16b;
+}
+
+.profile-dropdown a i {
+  margin-right: 10px;
+  width: 16px;
+  text-align: center;
+}
+
+/* For JS toggle functionality */
+.profile-dropdown.active {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Mobile-specific dropdown styles */
+@media screen and (max-width: 767px) {
+  .profile-container {
+    position: static;
+    width: 100%;
+    margin: 15px 0;
+  }
+
+  .profile-dropdown {
+    position: static;
+    width: 100%;
+    background-color: rgba(15, 225, 107, 0.05);
+    border-radius: 5px;
+    margin-top: 10px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+    display: none;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .profile-dropdown.active {
+    max-height: 300px;
+    opacity: 1;
+    visibility: visible;
+    display: block;
+  }
+
+  /* Override hover behavior in mobile */
+  .profile-container:hover .profile-dropdown {
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: none;
+  }
+
+  /* Make sure JS toggle works in mobile */
+  .profile-dropdown.active {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+}

@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Introduction To Cybersecurity - Cybersec Academy</title>
+    <link rel="stylesheet" href="css/intro-cybersec.css" />
+    <link rel="stylesheet" href="cyberindex.css" />
+    <link rel="stylesheet" href="css/profile-dropdown.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="icon" type="image/png" href="img/favicon.png" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="stylesheet" href="css/quiz-letters.css" />
+    <!-- Force lock styles to be visible during development -->
+    <style>
+      /* Quiz Styles Override to Ensure Consistency */
+      .topic-quiz .options {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px !important;
+        margin-bottom: 20px !important;
+      }
+      
+      .topic-quiz .option {
+        background: #1c2a3a !important;
+        padding: 15px !important;
+        border-radius: 6px !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        border: 2px solid transparent !important;
+      }
+      
+      .option-letter {
+        background: rgba(92, 219, 149, 0.2) !important;
+        color: #5cdb95 !important;
+      }
+      
+      @media (max-width: 768px) {
+        .topic-quiz .options {
+          grid-template-columns: 1fr !important;
+        }
+      }
+      
+      /* Force lock styles to be visible for debugging */
+      .target-card.locked[data-target="cloud-security"],
+      .target-card.locked[data-target="identity-management"],
+      .target-card.locked[data-target="mobile-security"],
+      .target-card.locked[data-target="network-security"] {
+        position: relative;
+        filter: grayscale(0.8) brightness(0.7);
+        border: 3px solid #e74c3c !important;
+        overflow: hidden;
+      }
+      
+      /* Wiggle animation for lock icon */
+      @keyframes wiggle {
+        0%, 100% { transform: rotate(0); }
+        20% { transform: rotate(-8deg); }
+        40% { transform: rotate(8deg); }
+        60% { transform: rotate(-4deg); }
+        80% { transform: rotate(4deg); }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="scanner-lines"></div>
+
+    <div class="noise-overlay"></div>
+
+    <header>
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="logo-text">
+          <span class="cyber">CYBER</span><span class="sec">SEC</span>
+          <span class="academy">Academy</span>
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li>
+            <a href="index.html" class="nav-link"
+              ><i class="fas fa-home"></i> Home</a
+            >
+          </li>
+          <li>
+            <a href="learn.html" class="nav-link"
+              ><i class="fas fa-graduation-cap"></i> Learn</a
+            >
+          </li>
+          <li>
+            <a href="about-us.html" class="nav-link"
+              ><i class="fas fa-info-circle"></i> About Us</a
+            >
+          </li>
+          <li id="auth-nav-item">
+            <a href="login.html" class="nav-link" id="login-link"
+              ><i class="fas fa-user"></i> Login</a
+            >
+            <div class="profile-container" id="profile-container" style="display: none;">
+              <div class="profile-avatar" id="profile-avatar">
+                <span id="profile-initial">U</span>
+              </div>
+              <div class="profile-info">
+                <span id="profile-name"></span>
+                <div class="profile-dropdown">
+                  <a href="profile.html"><i class="fas fa-user-circle"></i> Profile</a>
+                  <a href="profile.html#settings-content" class="quiz-settings"><i class="fas fa-tasks"></i> Quiz Settings</a>
+                  <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1>Introduction to Cybersecurity</h1>
+        <p>
+          Cybersecurity is a discipline that covers how to defend devices and
+          services from electronic attacks by nefarious actors such as hackers,
+          spammers, and cybercriminals.
+        </p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="progress-container">
+        <h3>Module Progress</h3>
+        <div class="progress-bar">
+          <div class="progress" id="module-progress"></div>
+        </div>
+        <div
+          style="display: flex; justify-content: space-between; margin-top: 5px"
+        >
+          <span>0%</span>
+          <span>100%</span>
+        </div>
+        <div class="progress-controls">
+          <button id="reset-progress" class="btn btn-danger">
+            Reset Progress
+          </button>
+        </div>
+      </div>
+
+      <!-- Adding progress tracker similar to attack-targets.html -->
+      <div class="progress-tracker">
+        <div class="progress-node active" data-topic="application-security" data-tooltip="Application Security - In Progress">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-node locked" data-topic="cloud-security" data-tooltip="Cloud Security - Locked (Complete Application Security first)">
+          <i class="fas fa-cloud"></i>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-node locked" data-topic="identity-management" data-tooltip="Identity Management - Locked (Complete Cloud Security first)">
+          <i class="fas fa-user-lock"></i>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-node locked" data-topic="mobile-security" data-tooltip="Mobile Security - Locked (Complete Identity Management first)">
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-node locked" data-topic="network-security" data-tooltip="Network Security - Locked (Complete Mobile Security first)">
+          <i class="fas fa-network-wired"></i>
+        </div>
+      </div>
+
+      <section class="overview">
+        <h2><i class="fas fa-info-circle"></i> Overview</h2>
+        <br />
+        <p>
+          Cybersecurity is the practice of protecting networks, systems, and
+          data from cyber threats. As technology evolves, attackers exploit
+          vulnerabilities, making cybersecurity awareness essential for
+          individuals, businesses, and organizations.
+        </p>
+      </section>
+
+      <h2><i class="fas fa-bullseye"></i> Key Concepts in Cybersecurity</h2>
+
+      <div class="target-grid">
+        <!-- Subdomain: Application Security -->
+        <div class="target-card" data-target="application-security">
+          <span class="difficulty easy">Easy</span>
+          <div class="target-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h2>1. Application Security</h2>
+          <br />
+          <p>
+            Application security involves implementing defenses in software and
+            services to protect against threats. This includes writing secure
+            code, designing secure architectures, and validating data inputs to
+            minimize unauthorized access or modification.
+          </p>
+
+          <!-- Practical Exercise: Secure Coding -->
+          <div class="practical-exercise">
+            <h4>Practical Exercise: Secure Coding</h4>
+            <p>Identify vulnerabilities in the following code snippet:</p>
+            <div class="terminal">
+              <pre><span class="output">function login(username, password) {
+        const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
+        database.query(query, (err, result) => {
+            if (err) throw err;
+            return result;
+        });
+    }</span></pre>
+            </div>
+            <p>
+              <strong>Vulnerability:</strong> SQL Injection. Use parameterized
+              queries to prevent attackers from injecting malicious SQL code.
+            </p>
+          </div>
+
+          <!-- Protection Measures -->
+          <h3 class="protection-heading">Protection Measures:</h3>
+          <ul class="protection-list">
+            <li>Use secure coding practices and frameworks.</li>
+            <li>Validate and sanitize all user inputs.</li>
+            <li>Regularly update and patch software.</li>
+          </ul>
+
+          <!-- Mini-Quiz -->
+          <div class="topic-quiz">
+            <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
+            <div class="question">
+              <p>
+                What is the primary risk of not validating user inputs in an
+                application?
+              </p>
+              <div class="options">
+                <div class="option" data-correct="true">
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Exposure to SQL injection attacks</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Increased server load</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Improved user experience</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Faster application performance</span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-quiz-results" style="display: none">
+              <p class="correct-answer" style="display: none">
+                ✅ Correct! Unvalidated inputs can lead to SQL injection,
+                allowing attackers to manipulate databases.
+              </p>
+              <p class="incorrect-answer" style="display: none">
+                ❌ Incorrect. Try again!
+              </p>
+            </div>
+            <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
+          </div>
+        </div>
+
+        <!-- Subdomain: Cloud Security -->
+        <div class="target-card" data-target="cloud-security">
+          <span class="difficulty medium">Medium</span>
+          <div class="target-icon">
+            <i class="fas fa-cloud"></i>
+          </div>
+          <h2>2. Cloud Security</h2>
+          <br />
+          <p>
+            Cloud security focuses on creating secure architectures and
+            applications for organizations using cloud service providers like
+            AWS, Google Cloud, and Azure. It involves protecting data,
+            applications, and infrastructure in the cloud.
+          </p>
+
+          <!-- Practical Exercise: Cloud Misconfiguration -->
+          <div class="practical-exercise">
+            <h4>Practical Exercise: Cloud Misconfiguration</h4>
+            <p>Identify the misconfiguration in this AWS S3 bucket policy:</p>
+            <div class="terminal">
+              <pre><span class="output">{
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Principal": "*",
+                "Action": "s3:GetObject",
+                "Resource": "arn:aws:s3:::my-bucket/*"
+            }
+        ]
+    }</span></pre>
+            </div>
+            <p>
+              <strong>Issue:</strong> The bucket is publicly accessible.
+              Restrict access to specific users or roles.
+            </p>
+          </div>
+
+          <!-- Protection Measures -->
+          <h3 class="protection-heading">Protection Measures:</h3>
+          <ul class="protection-list">
+            <li>Encrypt data at rest and in transit.</li>
+            <li>Use identity and access management (IAM) policies.</li>
+            <li>Regularly audit cloud configurations.</li>
+          </ul>
+
+          <!-- Mini-Quiz -->
+          <div class="topic-quiz">
+            <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
+            <div class="question">
+              <p>
+                What is the primary risk of a misconfigured cloud storage
+                bucket?
+              </p>
+              <div class="options">
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Increased storage costs</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Improved data retrieval speed</span>
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Unauthorized access to sensitive data</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Reduced server performance</span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-quiz-results" style="display: none">
+              <p class="correct-answer" style="display: none">
+                ✅ Correct! Misconfigured buckets can expose sensitive data to
+                unauthorized users.
+              </p>
+              <p class="incorrect-answer" style="display: none">
+                ❌ Incorrect. Try again!
+              </p>
+            </div>
+            <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
+          </div>
+        </div>
+
+        <!-- Subdomain: Identity Management and Data Security -->
+        <div class="target-card" data-target="identity-management">
+          <span class="difficulty medium">Medium</span>
+          <div class="target-icon">
+            <i class="fas fa-user-lock"></i>
+          </div>
+          <h2>3. Identity Management and Data Security</h2>
+          <br />
+          <p>
+            This subdomain focuses on ensuring that only authorized individuals
+            can access an organization's information systems. It involves
+            implementing authentication protocols, securing data storage, and
+            managing user identities.
+          </p>
+
+          <!-- Practical Exercise: Two-Factor Authentication -->
+          <div class="practical-exercise">
+            <h4>Practical Exercise: Two-Factor Authentication (2FA)</h4>
+            <p>Explain why 2FA is important and how it works:</p>
+            <div class="terminal">
+              <pre><span class="output">Two-Factor Authentication adds an extra layer of security by requiring:
+    1. Something you know (e.g., password)
+    2. Something you have (e.g., a code sent to your phone)</span></pre>
+            </div>
+            <p>
+              <strong>Benefit:</strong> Even if a password is compromised,
+              attackers cannot access the account without the second factor.
+            </p>
+          </div>
+
+          <!-- Protection Measures -->
+          <h3 class="protection-heading">Protection Measures:</h3>
+          <ul class="protection-list">
+            <li>Implement multi-factor authentication (MFA).</li>
+            <li>Encrypt sensitive data at rest and in transit.</li>
+            <li>Regularly review and update access controls.</li>
+          </ul>
+
+          <!-- Mini-Quiz -->
+          <div class="topic-quiz">
+            <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
+            <div class="question">
+              <p>What is the primary purpose of multi-factor authentication?</p>
+              <div class="options">
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text">To simplify the login process</span>
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">B</span>
+                  <span class="option-text">To add an extra layer of security</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">To reduce the need for passwords</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">To increase server performance</span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-quiz-results" style="display: none">
+              <p class="correct-answer" style="display: none">
+                ✅ Correct! MFA adds an extra layer of security by requiring
+                multiple forms of verification.
+              </p>
+              <p class="incorrect-answer" style="display: none">
+                ❌ Incorrect. Try again!
+              </p>
+            </div>
+            <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
+          </div>
+        </div>
+
+        <!-- Subdomain: Mobile Security -->
+        <div class="target-card" data-target="mobile-security">
+          <span class="difficulty easy">Easy</span>
+          <div class="target-icon">
+            <i class="fas fa-mobile-alt"></i>
+          </div>
+          <h2>4. Mobile Security</h2>
+          <br />
+          <p>
+            Mobile security focuses on protecting data stored on mobile devices
+            like smartphones, tablets, and laptops. It involves securing devices
+            from threats like malware, unauthorized access, and theft.
+          </p>
+
+          <!-- Practical Exercise: Mobile Device Management -->
+          <div class="practical-exercise">
+            <h4>Practical Exercise: Mobile Device Management (MDM)</h4>
+            <p>List three best practices for securing mobile devices:</p>
+            <div class="terminal">
+              <pre><span class="output">1. Use strong passwords or biometric authentication.
+    2. Enable remote wipe in case of theft or loss.
+    3. Keep the device's operating system and apps updated.</span></pre>
+            </div>
+          </div>
+
+          <!-- Protection Measures -->
+          <h3 class="protection-heading">Protection Measures:</h3>
+          <ul class="protection-list">
+            <li>Use encryption for data stored on devices.</li>
+            <li>Install mobile antivirus software.</li>
+            <li>Educate users about mobile security risks.</li>
+          </ul>
+
+          <!-- Mini-Quiz -->
+          <div class="topic-quiz">
+            <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
+            <div class="question">
+              <p>What is the primary risk of not securing mobile devices?</p>
+              <div class="options">
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Reduced battery life</span>
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Unauthorized access to sensitive data</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Slower device performance</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Increased storage usage</span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-quiz-results" style="display: none">
+              <p class="correct-answer" style="display: none">
+                ✅ Correct! Unsecured mobile devices can lead to data breaches
+                and unauthorized access.
+              </p>
+              <p class="incorrect-answer" style="display: none">
+                ❌ Incorrect. Try again!
+              </p>
+            </div>
+            <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
+          </div>
+        </div>
+
+        <!-- Subdomain: Network Security -->
+        <div class="target-card" data-target="network-security">
+          <span class="difficulty hard">Hard</span>
+          <div class="target-icon">
+            <i class="fas fa-network-wired"></i>
+          </div>
+          <h2>5. Network Security</h2>
+          <br />
+          <p>
+            Network security involves protecting the integrity, confidentiality,
+            and availability of data as it is transmitted across or accessed
+            through networks. It includes hardware and software mechanisms to
+            prevent unauthorized access and disruptions.
+          </p>
+
+          <!-- Practical Exercise: Firewall Configuration -->
+          <div class="practical-exercise">
+            <h4>Practical Exercise: Firewall Configuration</h4>
+            <p>Identify the issue in this firewall rule:</p>
+            <div class="terminal">
+              <pre><span class="output">Allow all traffic from 0.0.0.0/0 to port 22 (SSH)</span></pre>
+            </div>
+            <p>
+              <strong>Issue:</strong> This rule allows SSH access from any IP
+              address, which is a security risk. Restrict access to specific IP
+              ranges.
+            </p>
+          </div>
+
+          <!-- Protection Measures -->
+          <h3 class="protection-heading">Protection Measures:</h3>
+          <ul class="protection-list">
+            <li>Use firewalls and intrusion detection systems (IDS).</li>
+            <li>Segment networks to limit access.</li>
+            <li>Regularly monitor and update network configurations.</li>
+          </ul>
+
+          <!-- Mini-Quiz -->
+          <div class="topic-quiz">
+            <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
+            <div class="question">
+              <p>What is the primary purpose of network segmentation?</p>
+              <div class="options">
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text">To increase network speed</span>
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">B</span>
+                  <span class="option-text">To limit the spread of attacks</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">To reduce hardware costs</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">To simplify network management</span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-quiz-results" style="display: none">
+              <p class="correct-answer" style="display: none">
+                ✅ Correct! Network segmentation limits the spread of attacks by
+                isolating network segments.
+              </p>
+              <p class="incorrect-answer" style="display: none">
+                ❌ Incorrect. Try again!
+              </p>
+            </div>
+            <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="conclusion">
+        <h2>Conclusion</h2>
+        <p>
+          By understanding the diverse aspects of cybersecurity and implementing
+          tailored protective measures, individuals, businesses, and
+          organizations can significantly reduce their vulnerability to cyber
+          threats. Cybersecurity is a shared responsibility that requires
+          proactive measures, continuous monitoring, and collaboration.
+        </p>
+      </div>
+
+      <div class="lesson-navigation" style="margin-top: 32px;">
+        <div class="nav-container">
+          <a href="learn.html" class="nav-button back">
+            <i class="fas fa-arrow-left"></i> Back to Learning Hub
+          </a>
+          <a href="attack-targets.html" class="nav-button next">
+            Next Lesson: Attack Targets <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2025 Cybersecurity Academy</p>
+    </footer>
+
+    <!-- Module Completion Celebration Modal -->
+    <div class="celebration-container">
+      <div class="celebration-content">
+        <div class="achievement-unlocked">Achievement Unlocked!</div>
+        <div class="trophy-animation">
+          <div class="trophy">
+            <i class="fas fa-trophy"></i>
+          </div>
+          <div id="trophy-sparkle" class="trophy-sparkle"></div>
+        </div>
+        <h2 class="celebration-title">Module Completed</h2>
+        <p class="celebration-text">
+          Congratulations on completing the Introduction to Cybersecurity module! You've gained critical knowledge about cybersecurity fundamentals and how to defend against threats.
+        </p>
+        <div class="celebration-stats">
+          <div class="stat-item">
+            <div class="stat-value">5/5</div>
+            <div class="stat-label">Topics Completed</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">100%</div>
+            <div class="stat-label">Module Progress</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">5/5</div>
+            <div class="stat-label">Knowledge Checks</div>
+          </div>
+        </div>
+        <button class="celebration-btn">Continue Learning</button>
+      </div>
+    </div>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="firebase-config.js"></script>
+    
+    <script src="js/intro-cybersec.js"></script>
+  </body>
+</html>
+

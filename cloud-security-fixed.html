@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cloud Security & Attacks - Cybersec Academy</title>
+    <link rel="stylesheet" href="cyberindex.css" />
+    <link rel="stylesheet" href="css/cloud-security.css" />
+    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="css/profile-dropdown.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="stylesheet" href="css/quiz-letters.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="icon" type="image/png" href="img/favicon.png" />
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+    <!-- Firebase Config -->
+    <script src="firebase-config.js"></script>
+
+    <!-- Enhanced lock styles to match other pages -->
+    <style>
+      /* Enhanced lock styles for non-first topics */
+      .target-card.locked[data-target="data-breaches"],
+      .target-card.locked[data-target="misconfiguration"],
+      .target-card.locked[data-target="account-hijacking"],
+      .target-card.locked[data-target="insider-threats"] {
+        position: relative;
+        filter: grayscale(0.8) brightness(0.7);
+        border: 3px solid #e74c3c !important;
+        overflow: hidden;
+      }
+
+      /* Lock overlay styles */
+      .debug-lock-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(14, 22, 33, 0.8);
+        backdrop-filter: blur(2px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+      }
+
+      .debug-lock-overlay i {
+        font-size: 5rem;
+        color: #e74c3c;
+        margin-bottom: 15px;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        animation: wiggle 2.5s infinite ease-in-out;
+      }
+
+      .debug-lock-message {
+        background: rgba(231, 76, 60, 0.9);
+        color: white;
+        padding: 15px 25px;
+        border-radius: 5px;
+        font-weight: bold;
+        text-align: center;
+        max-width: 80%;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+        font-size: 1.2rem;
+      }
+
+      /* Wiggle animation for lock icon */
+      @keyframes wiggle {
+        0%,
+        100% {
+          transform: rotate(0);
+        }
+        20% {
+          transform: rotate(-8deg);
+        }
+        40% {
+          transform: rotate(8deg);
+        }
+        60% {
+          transform: rotate(-4deg);
+        }
+        80% {
+          transform: rotate(4deg);
+        }
+      }
+      
+      /* Progress container styles */
+      .progress-container {
+        background: #1c2a3a;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+      
+      .progress-bar {
+        height: 20px;
+        background: #2c3e50;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 10px;
+      }
+      
+      .progress {
+        height: 100%;
+        background: linear-gradient(to right, #0cebeb, #20e3b2, #29ffc6);
+        border-radius: 10px;
+        width: 0%;
+        transition: width 1s ease-in-out;
+      }
+      
+      .progress-controls {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 10px;
+      }
+      
+      .btn-danger {
+        background: #e74c3c;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.3s;
+      }
+      
+      .btn-danger:hover {
+        background: #c0392b;
+      }
+      
+      /* Lesson navigation styles */
+      .lesson-navigation {
+        margin-top: 20px;
+        width: 100%;
+      }
+      
+      .nav-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+      }
+      
+      .nav-button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 15px;
+        background: #1c2a3a;
+        color: #5cdb95;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+        border: 1px solid rgba(92, 219, 149, 0.3);
+      }
+      
+      .nav-button:hover {
+        background: #2c3e50;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+      
+      .nav-button.back {
+        padding-right: 20px;
+      }
+      
+      .nav-button.next {
+        padding-left: 20px;
+      }
+      
+      /* Notification styles */
+      .notification {
+        background-color: #27ae60;
+        color: white;
+        text-align: center;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        animation: fadeOut 3s forwards;
+        position: relative;
+      }
+      
+      @keyframes fadeOut {
+        0% {
+          opacity: 1;
+        }
+        70% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+      
+      /* Trophy animation styles */
+      .trophy-animation {
+        position: relative;
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 15px;
+      }
+      
+      .trophy {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        color: #f1c40f;
+        font-size: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform-origin: center bottom;
+        animation: trophyBounce 1s ease-out;
+      }
+      
+      .trophy-sparkle {
+        position: absolute;
+        width: 120%;
+        height: 120%;
+        top: -10%;
+        left: -10%;
+        pointer-events: none;
+      }
+      
+      .trophy-sparkle span {
+        position: absolute;
+        background: white;
+        border-radius: 50%;
+        animation: sparkle 2s infinite;
+      }
+      
+      @keyframes trophyBounce {
+        0% {
+          transform: scale(0.1) translateY(-100px);
+          opacity: 0;
+        }
+        60% {
+          transform: scale(1.2) translateY(10px);
+          opacity: 1;
+        }
+        80% {
+          transform: scale(0.9) translateY(-5px);
+        }
+        100% {
+          transform: scale(1) translateY(0);
+        }
+      }
+      
+      @keyframes sparkle {
+        0%, 100% {
+          opacity: 0;
+          transform: scale(0);
+        }
+        20%, 80% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      
+      .achievement-unlocked {
+        background: linear-gradient(to right, #f1c40f, #f39c12);
+        color: #0e1621;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        display: inline-block;
+        margin-bottom: 15px;
+        font-weight: bold;
+        animation: pulseScale 2s infinite;
+      }
+      
+      @keyframes pulseScale {
+        0%, 100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+      
+      /* Celebration container styling */
+      .celebration-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.5s ease;
+        backdrop-filter: blur(5px);
+      }
+      
+      .celebration-container.active {
+        opacity: 1;
+        visibility: visible;
+      }
+      
+      .celebration-content {
+        background: #1c2a3a;
+        border-radius: 15px;
+        padding: 40px;
+        text-align: center;
+        max-width: 500px;
+        width: 90%;
+        position: relative;
+        animation: scaleIn 0.5s ease forwards;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        border: 2px solid #5cdb95;
+        position: relative;
+        overflow: hidden;
+        margin: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      
+      .celebration-content::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: conic-gradient(
+          transparent,
+          rgba(92, 219, 149, 0.1),
+          transparent,
+          rgba(136, 204, 241, 0.1),
+          transparent
+        );
+        animation: rotate 10s linear infinite;
+        z-index: -1;
+      }
+      
+      .celebration-title {
+        color: #5cdb95;
+        font-size: 2rem;
+        margin: 5px 0 0 0;
+        position: relative;
+        display: inline-block;
+        font-family: "Rajdhani", sans-serif;
+      }
+      
+      .celebration-title::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(to right, transparent, #5cdb95, transparent);
+      }
+      
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      
+      @keyframes scaleIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      
+      /* Add confetti animation */
+      .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: #f94144;
+        opacity: 0.8;
+        animation: confetti-fall 5s linear infinite;
+        z-index: 999;
+      }
+      
+      @keyframes confetti-fall {
+        0% {
+          transform: translateY(0) rotate(0deg);
+          opacity: 0.8;
+        }
+        100% {
+          transform: translateY(100vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="scanner-lines"></div>
+
+    <div class="noise-overlay"></div>
+
+    <header>
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="logo-text">
+          <span class="cyber">CYBER</span><span class="sec">SEC</span>
+          <span class="academy">Academy</span>
+        </div>
+      </div>
+      <nav>
+        <div class="hamburger-menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <ul class="nav-links">
+          <li>
+            <a href="index.html" class="nav-link"
+              ><i class="fas fa-home"></i> Home</a
+            >
+          </li>
+          <li>
+            <a href="learn.html" class="nav-link"
+              ><i class="fas fa-graduation-cap"></i> Learn</a
+            >
+          </li>
+          <li>
+            <a href="about-us.html" class="nav-link"
+              ><i class="fas fa-info-circle"></i> About Us</a
+            >
+          </li>
+          <li id="auth-nav-item">
+            <a href="login.html" class="nav-link" id="login-link">
+              <i class="fas fa-user"></i> Login
+            </a>
+            <div class="profile-container" id="profile-container" style="display: none;">
+              <div class="profile-avatar" id="profile-avatar">
+                <span id="profile-initial">U</span>
+              </div>
+              <div class="profile-info">
+                <span id="profile-name"></span>
+                <div class="profile-dropdown">
+                  <a href="profile.html"><i class="fas fa-user-circle"></i> Profile</a>
+                  <a href="profile.html#settings-content" class="quiz-settings"><i class="fas fa-tasks"></i> Quiz Settings</a>
+                  <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1>Cloud Security & Attacks</h1>
+        <p>
+          Understanding common cloud security threats, attack vectors, and
+          implementing effective protection strategies for cloud environments
+        </p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Add module progress container -->
+      <div class="progress-container">
+        <h3>Module Progress</h3>
+        <div class="progress-bar">
+          <div class="progress" id="module-progress"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+          <span>0%</span>
+          <span>100%</span>
+        </div>
+        <div class="progress-controls">
+          <button id="reset-progress" class="btn btn-danger">Reset Progress</button>
+        </div>
+      </div>
+      
+      <!-- Progress tracker -->
+      <div class="progress-tracker">
+        <div
+          class="progress-node active"
+          data-topic="cloud-basics"
+          data-tooltip="Cloud Security Fundamentals"
+        >
+          <i class="fas fa-cloud"></i>
+        </div>
+        <div class="progress-line"></div>
+        <div
+          class="progress-node locked"
+          data-topic="data-breaches"
+          data-tooltip="Data Breaches"
+        >
+          <i class="fas fa-database"></i>
+        </div>
+        <div class="progress-line"></div>
+        <div
+          class="progress-node locked"
+          data-topic="misconfiguration"
+          data-tooltip="Cloud Misconfigurations"
+        >
+          <i class="fas fa-wrench"></i>
+        </div>
+        <div class="progress-line"></div>
+        <div
+          class="progress-node locked"
+          data-topic="account-hijacking"
+          data-tooltip="Account Hijacking"
+        >
+          <i class="fas fa-user-secret"></i>
+        </div>
+        <div class="progress-line"></div>
+        <div
+          class="progress-node locked"
+          data-topic="insider-threats"
+          data-tooltip="Insider Threats"
+        >
+          <i class="fas fa-user-shield"></i>
+        </div>
+      </div>
+
+      <!-- Introduction Section -->
+      <div class="overview">
+        <h2>Overview</h2>
+        <p>
+          As organizations increasingly migrate to cloud environments, new
+          security challenges emerge that differ from traditional on-premises
+          security concerns. Cloud computing introduces a shared responsibility
+          model where both the cloud service provider and the customer have
+          important roles in maintaining security. In this module, you'll learn
+          about common cloud security threats, how attackers exploit cloud
+          vulnerabilities, and the best practices to protect your cloud assets
+          and data.
+        </p>
+      </div>
+
+      <!-- Cloud Security Fundamentals Section -->
+      <div class="target-grid">
+        <div class="target-card active" data-target="cloud-basics">
+          <span class="difficulty easy">Beginner</span>
+          <div class="target-icon">
+            <i class="fas fa-cloud"></i>
+          </div>
+          <h2>Cloud Security Fundamentals</h2>
+
+          <div class="attack-list">
+            <div class="attack-item">
+              <h3>Understanding Cloud Computing</h3>
+              <div class="attack-detail">
+                <p>
+                  Cloud computing is the delivery of computing
+                  services—including servers, storage, databases, networking,
+                  software, analytics, and intelligence—over the internet to
+                  offer faster innovation, flexible resources, and economies of
+                  scale.
+                </p>
+                <h4>Key Cloud Service Models</h4>
+                <ul>
+                  <li>
+                    <strong>Infrastructure as a Service (IaaS):</strong>
+                    Provides virtualized computing resources over the internet
+                    (e.g., Amazon EC2, Microsoft Azure VMs)
+                  </li>
+                  <li>
+                    <strong>Platform as a Service (PaaS):</strong> Provides a
+                    platform allowing customers to develop, run, and manage
+                    applications (e.g., AWS Elastic Beanstalk, Google App
+                    Engine)
+                  </li>
+                  <li>
+                    <strong>Software as a Service (SaaS):</strong> Delivers
+                    software applications over the internet, on-demand and
+                    typically on a subscription basis (e.g., Microsoft 365,
+                    Salesforce)
+                  </li>
+                </ul>
+                <h4>Cloud Deployment Models</h4>
+                <ul>
+                  <li>
+                    <strong>Public Cloud:</strong> Resources owned and operated
+                    by a third-party cloud service provider
+                  </li>
+                  <li>
+                    <strong>Private Cloud:</strong> Cloud infrastructure
+                    operated solely for a single organization
+                  </li>
+                  <li>
+                    <strong>Hybrid Cloud:</strong> Combination of public and
+                    private clouds with orchestration between them
+                  </li>
+                  <li>
+                    <strong>Multi-Cloud:</strong> Using services from multiple
+                    cloud providers
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Shared Responsibility Model</h3>
+              <div class="attack-detail">
+                <p>
+                  The shared responsibility model is a security framework that
+                  defines which security tasks are handled by the cloud provider
+                  and which are handled by the customer. Understanding this
+                  model is crucial for effective cloud security:
+                </p>
+                <h4>Cloud Provider Responsibilities</h4>
+                <ul>
+                  <li>Physical security of data centers</li>
+                  <li>Network and infrastructure security</li>
+                  <li>Hypervisor and host operating system security</li>
+                  <li>Service-specific security features</li>
+                </ul>
+                <h4>Customer Responsibilities</h4>
+                <ul>
+                  <li>Data security and encryption</li>
+                  <li>Identity and access management</li>
+                  <li>Application security</li>
+                  <li>Operating system security for IaaS workloads</li>
+                  <li>Network traffic protection</li>
+                  <li>Client and endpoint security</li>
+                </ul>
+                <p>
+                  The exact division of responsibilities varies based on the
+                  service model (IaaS, PaaS, SaaS) being used. In general, the
+                  customer assumes more security responsibility in IaaS models
+                  compared to SaaS models.
+                </p>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Common Cloud Security Threats</h3>
+              <div class="attack-detail">
+                <p>
+                  Cloud environments face various security threats that
+                  organizations must be prepared to address:
+                </p>
+                <ul>
+                  <li>
+                    <strong>Data Breaches:</strong> Unauthorized access to
+                    sensitive data stored in the cloud
+                  </li>
+                  <li>
+                    <strong
+                      >Misconfiguration and Inadequate Change Control:</strong
+                    >
+                    Improperly configured cloud resources that expose data or
+                    services
+                  </li>
+                  <li>
+                    <strong
+                      >Lack of Cloud Security Architecture and Strategy:</strong
+                    >
+                    Failing to design security into cloud deployments
+                  </li>
+                  <li>
+                    <strong
+                      >Insufficient Identity, Credential, Access and Key
+                      Management:</strong
+                    >
+                    Weak authentication and authorization controls
+                  </li>
+                  <li>
+                    <strong>Account Hijacking:</strong> Compromised user
+                    accounts leading to unauthorized access
+                  </li>
+                  <li>
+                    <strong>Insider Threats:</strong> Risks posed by current or
+                    former employees, contractors, or business associates
+                  </li>
+                  <li>
+                    <strong>Insecure Interfaces and APIs:</strong>
+                    Vulnerabilities in the interfaces used to interact with
+                    cloud services
+                  </li>
+                  <li>
+                    <strong>Abuse and Nefarious Use of Cloud Services:</strong>
+                    Using cloud resources for malicious purposes like
+                    crypto-mining or DDoS attacks
+                  </li>
+                  <li>
+                    <strong>Denial of Service (DoS) Attacks:</strong>
+                    Overwhelming cloud resources to make them unavailable
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="protection-heading">Protection Measures</div>
+            <div class="protection-list">
+              <li>
+                <strong
+                  >Implement Strong Identity and Access Management:</strong
+                >
+                Use multi-factor authentication, role-based access control, and
+                the principle of least privilege to secure cloud resource
+                access.
+              </li>
+              <li>
+                <strong>Data Encryption:</strong> Encrypt sensitive data both in
+                transit and at rest in the cloud to protect it even if
+                unauthorized access occurs.
+              </li>
+              <li>
+                <strong>Security Monitoring and Logging:</strong> Implement
+                comprehensive logging, monitoring, and alerting to detect and
+                respond to security incidents.
+              </li>
+              <li>
+                <strong>Regular Security Assessments:</strong> Perform routine
+                vulnerability assessments, penetration testing, and security
+                audits of your cloud environment.
+              </li>
+              <li>
+                <strong>Security Training and Awareness:</strong> Ensure all
+                users understand cloud security risks and best practices to
+                minimize human error.
+              </li>
+              <li>
+                <strong>Cloud Security Posture Management (CSPM):</strong> Use
+                tools to automatically assess your cloud environment for
+                misconfigurations and compliance issues.
+              </li>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="topic-quiz">
+              <h4><i class="fas fa-question-circle"></i> Knowledge Check</h4>
+              <div class="question">
+                <p>
+                  In the shared responsibility model for cloud security, which
+                  of the following is typically the customer's responsibility?
+                </p>
+              </div>
+              <div class="options">
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text"
+                    >Physical security of data centers</span
+                  >
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">B</span>
+                  <span class="option-text"
+                    >Network infrastructure maintenance</span
+                  >
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">C</span>
+                  <span class="option-text"
+                    >Data encryption and access management</span
+                  >
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Hypervisor security</span>
+                </div>
+              </div>
+              <button class="topic-quiz-btn">Check Answer</button>
+              <div class="topic-quiz-results" style="display: none">
+                <div class="correct-answer" style="display: none">
+                  <i class="fas fa-check-circle"></i> Correct! While cloud
+                  providers are responsible for security "of" the cloud
+                  (infrastructure), customers are responsible for security "in"
+                  the cloud, including protecting their data through encryption
+                  and proper access management.
+                </div>
+                <div class="incorrect-answer" style="display: none">
+                  <i class="fas fa-times-circle"></i> Incorrect. The physical
+                  security of data centers, network infrastructure, and
+                  hypervisor security are typically the cloud provider's
+                  responsibility. Customers are responsible for their data,
+                  including encryption and access management.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Breaches Section -->
+        <div class="target-card locked" data-target="data-breaches">
+          <span class="difficulty medium">Intermediate</span>
+          <div class="target-icon">
+            <i class="fas fa-database"></i>
+          </div>
+          <h2>Data Breaches in the Cloud</h2>
+
+          <div class="attack-list">
+            <div class="attack-item">
+              <h3>What are Cloud Data Breaches?</h3>
+              <div class="attack-detail">
+                <p>
+                  Cloud data breaches occur when sensitive, protected, or
+                  confidential information stored in cloud services is viewed,
+                  stolen, or used by an unauthorized individual. These breaches
+                  can be particularly damaging due to the volume of data often
+                  stored in cloud environments.
+                </p>
+                <p>
+                  Unlike traditional on-premises breaches, cloud data breaches
+                  can affect multiple customers if they occur at the provider
+                  level, though most breaches result from customer
+                  misconfigurations or credential theft rather than provider
+                  vulnerabilities.
+                </p>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Common Causes of Cloud Data Breaches</h3>
+              <div class="attack-detail">
+                <h4>1. Insecure APIs and User Interfaces</h4>
+                <p>
+                  Organizations use various APIs and user interfaces to manage
+                  cloud services. If these interfaces have vulnerabilities or
+                  are poorly secured, attackers can exploit them to access
+                  sensitive data.
+                </p>
+
+                <h4>2. Weak Authentication Mechanisms</h4>
+                <p>
+                  Inadequate credential management, such as weak passwords,
+                  failure to implement multi-factor authentication, or improper
+                  key management can allow attackers to gain unauthorized
+                  access.
+                </p>
+
+                <h4>3. Data Storage Misconfigurations</h4>
+                <p>
+                  Incorrectly configured storage settings, such as public access
+                  to Amazon S3 buckets or Azure Blob Storage, are a leading
+                  cause of cloud data breaches. These misconfigurations can
+                  expose sensitive data to the internet without requiring
+                  authentication.
+                </p>
+
+                <h4>4. Insufficient Data Encryption</h4>
+                <p>
+                  Failing to encrypt sensitive data both in transit and at rest
+                  makes it vulnerable if unauthorized access occurs. Proper
+                  encryption ensures data remains protected even if perimeter
+                  defenses are compromised.
+                </p>
+
+                <h4>5. Inadequate Access Controls</h4>
+                <p>
+                  Overly permissive access policies, lack of role-based access
+                  controls, or failure to implement the principle of least
+                  privilege can provide users with unnecessary access to
+                  sensitive data.
+                </p>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Real-World Examples</h3>
+              <div class="attack-detail">
+                <ul>
+                  <li>
+                    <strong>Capital One (2019):</strong> A misconfigured web
+                    application firewall allowed an attacker to access an AWS S3
+                    bucket containing credit application data of over 100
+                    million customers. The breach resulted in a $80 million
+                    fine.
+                  </li>
+                  <li>
+                    <strong>Marriott International (2018):</strong> Attackers
+                    gained unauthorized access to Marriott's Starwood cloud
+                    database, exposing personal information of approximately 500
+                    million guests. The breach went undetected for four years.
+                  </li>
+                  <li>
+                    <strong>Twitch (2021):</strong> A server misconfiguration
+                    led to a massive data leak, including the platform's source
+                    code and creator payout information being exposed.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="protection-heading">Protection Measures</div>
+            <div class="protection-list">
+              <li>
+                <strong>Data Classification and Discovery:</strong> Understand
+                what sensitive data you have in the cloud and where it's stored.
+                Use automated tools to discover and classify data to ensure
+                appropriate security controls.
+              </li>
+              <li>
+                <strong>Comprehensive Encryption Strategy:</strong> Implement
+                end-to-end encryption for sensitive data, both in transit and at
+                rest. Ensure proper key management practices.
+              </li>
+              <li>
+                <strong>Cloud Security Posture Management:</strong> Use
+                automated tools to continuously monitor cloud environments for
+                misconfigurations, compliance violations, and unusual access
+                patterns.
+              </li>
+              <li>
+                <strong>Data Loss Prevention (DLP):</strong> Implement DLP tools
+                that can detect and prevent unauthorized transmission of
+                sensitive data outside your cloud environment.
+              </li>
+              <li>
+                <strong>Regular Security Assessments:</strong> Conduct routine
+                security audits, penetration testing, and vulnerability
+                assessments of your cloud environments.
+              </li>
+              <li>
+                <strong>Incident Response Plan:</strong> Develop and regularly
+                test a cloud-specific incident response plan to quickly address
+                any data breaches.
+              </li>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="topic-quiz">
+              <h4><i class="fas fa-question-circle"></i> Knowledge Check</h4>
+              <div class="question">
+                <p>
+                  Which of the following is a leading cause of data breaches in
+                  cloud environments?
+                </p>
+              </div>
+              <div class="options">
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text"
+                    >Physical infiltration of cloud data centers</span
+                  >
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">B</span>
+                  <span class="option-text"
+                    >Storage misconfigurations (like public access to storage
+                    buckets)</span
+                  >
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Hypervisor vulnerabilities</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text"
+                    >Natural disasters affecting data centers</span
+                  >
+                </div>
+              </div>
+              <button class="topic-quiz-btn">Check Answer</button>
+              <div class="topic-quiz-results" style="display: none">
+                <div class="correct-answer" style="display: none">
+                  <i class="fas fa-check-circle"></i> Correct! Storage
+                  misconfigurations, such as publicly accessible storage
+                  buckets, are among the most common causes of cloud data
+                  breaches. Many high-profile breaches have occurred due to
+                  improperly configured access settings on cloud storage
+                  resources.
+                </div>
+                <div class="incorrect-answer" style="display: none">
+                  <i class="fas fa-times-circle"></i> Incorrect. While physical
+                  security, hypervisor security, and disaster recovery are
+                  important considerations, most cloud data breaches occur due
+                  to customer-side misconfigurations, particularly storage
+                  settings that inadvertently expose data to the public
+                  internet.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lock-overlay">
+            <i class="fas fa-lock"></i>
+            <div class="lock-message">
+              Complete the previous section to unlock
+            </div>
+          </div>
+        </div>
+
+        <!-- Cloud Misconfigurations Section -->
+        <div class="target-card locked" data-target="misconfiguration">
+          <span class="difficulty medium">Intermediate</span>
+          <div class="target-icon">
+            <i class="fas fa-wrench"></i>
+          </div>
+          <h2>Cloud Misconfigurations</h2>
+
+          <div class="attack-list">
+            <div class="attack-item">
+              <h3>Understanding Cloud Misconfigurations</h3>
+              <div class="attack-detail">
+                <p>
+                  Cloud misconfigurations occur when computing assets are set up incorrectly, 
+                  often leaving them vulnerable to attack. These configuration errors are one 
+                  of the leading causes of cloud security breaches and data leaks.
+                </p>
+                <p>
+                  In cloud environments, the ease of deployment and the complex nature of 
+                  configuration settings can lead to oversight and errors that create security gaps.
+                </p>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Common Types of Cloud Misconfigurations</h3>
+              <div class="attack-detail">
+                <h4>1. Unrestricted Inbound/Outbound Access</h4>
+                <p>
+                  Security groups or firewall rules that allow traffic from any source 
+                  (0.0.0.0/0) to sensitive ports or services.
+                </p>
+
+                <h4>2. Default Credentials</h4>
+                <p>
+                  Using default or weak credentials for cloud services, databases, 
+                  or management interfaces.
+                </p>
+
+                <h4>3. Excessive Permissions</h4>
+                <p>
+                  Assigning more permissions than necessary to users, roles, or service 
+                  accounts, violating the principle of least privilege.
+                </p>
+
+                <h4>4. Unencrypted Data Storage</h4>
+                <p>
+                  Storing sensitive data without encryption, both at rest and in transit.
+                </p>
+
+                <h4>5. Public Access to Storage</h4>
+                <p>
+                  Misconfigured storage buckets or containers that allow public access 
+                  to sensitive data.
+                </p>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Real-World Examples</h3>
+              <div class="attack-detail">
+                <ul>
+                  <li>
+                    <strong>Capital One (2019):</strong> A misconfigured web application 
+                    firewall allowed an attacker to access sensitive data affecting over 
+                    100 million customers.
+                  </li>
+                  <li>
+                    <strong>Imperva (2019):</strong> A misconfigured AWS API key exposed 
+                    customer data including email addresses and hashed passwords.
+                  </li>
+                  <li>
+                    <strong>Microsoft (2019):</strong> A misconfigured database exposed 
+                    250 million customer support records.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="protection-heading">Protection Measures</div>
+            <div class="protection-list">
+              <li>
+                <strong>Cloud Security Posture Management (CSPM):</strong> Implement 
+                automated tools to continuously monitor and remediate cloud misconfigurations.
+              </li>
+              <li>
+                <strong>Infrastructure as Code (IaC) Security:</strong> Scan IaC templates 
+                for security issues before deployment.
+              </li>
+              <li>
+                <strong>Regular Compliance Checks:</strong> Perform regular audits against 
+                security benchmarks and compliance frameworks.
+              </li>
+              <li>
+                <strong>Least Privilege Access:</strong> Implement the principle of least 
+                privilege for all users and services.
+              </li>
+              <li>
+                <strong>Configuration Baselines:</strong> Establish secure configuration 
+                baselines for all cloud services.
+              </li>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="topic-quiz">
+              <h4><i class="fas fa-question-circle"></i> Knowledge Check</h4>
+              <div class="question">
+                <p>
+                  Which of the following is a best practice to prevent cloud misconfigurations?
+                </p>
+              </div>
+              <div class="options">
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Granting full admin access to all developers</span>
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Implementing automated configuration scanning tools</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Making all storage buckets publicly accessible</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Using default security settings for all services</span>
+                </div>
+              </div>
+              <button class="topic-quiz-btn">Check Answer</button>
+              <div class="topic-quiz-results" style="display: none">
+                <div class="correct-answer" style="display: none">
+                  <i class="fas fa-check-circle"></i> Correct! Automated configuration scanning 
+                  tools can continuously monitor cloud environments for misconfigurations and 
+                  security issues, helping to identify and remediate problems before they can 
+                  be exploited.
+                </div>
+                <div class="incorrect-answer" style="display: none">
+                  <i class="fas fa-times-circle"></i> Incorrect. Granting excessive permissions, 
+                  making resources publicly accessible, and using default settings are common 
+                  causes of cloud misconfigurations. Automated scanning tools help identify and 
+                  prevent these issues.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lock-overlay">
+            <i class="fas fa-lock"></i>
+            <div class="lock-message">
+              Complete the previous section to unlock
+            </div>
+          </div>
+        </div>
+
+        <!-- Account Hijacking Section -->
+        <div class="target-card locked" data-target="account-hijacking">
+          <span class="difficulty hard">Advanced</span>
+          <div class="target-icon">
+            <i class="fas fa-user-secret"></i>
+          </div>
+          <h2>Account Hijacking</h2>
+
+          <div class="attack-list">
+            <div class="attack-item">
+              <h3>Understanding Account Hijacking</h3>
+              <div class="attack-detail">
+                <p>
+                  Account hijacking is a type of attack where an attacker gains unauthorized 
+                  access to another user's account credentials. In cloud environments, this 
+                  can be particularly devastating as compromised accounts often have access 
+                  to multiple cloud services and sensitive data.
+                </p>
+                <p>
+                  Once attackers gain access to cloud accounts, they can steal data, compromise 
+                  other systems, launch additional attacks, or use cloud resources for malicious 
+                  purposes like cryptocurrency mining.
+                </p>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Common Account Hijacking Techniques</h3>
+              <div class="attack-detail">
+                <h4>1. Phishing Attacks</h4>
+                <p>
+                  Creating fake login pages or sending deceptive emails to trick users 
+                  into revealing their credentials.
+                </p>
+
+                <h4>2. Credential Stuffing</h4>
+                <p>
+                  Using previously leaked username/password combinations to gain access, 
+                  exploiting users who reuse passwords across multiple services.
+                </p>
+
+                <h4>3. Brute Force Attacks</h4>
+                <p>
+                  Systematically attempting many password combinations until finding the 
+                  correct one, often targeting accounts without multi-factor authentication.
+                </p>
+
+                <h4>4. Session Hijacking</h4>
+                <p>
+                  Stealing or forging authentication tokens to take over active user sessions 
+                  without needing the actual password.
+                </p>
+
+                <h4>5. Man-in-the-Middle Attacks</h4>
+                <p>
+                  Intercepting communications between users and cloud services to steal 
+                  credentials or session information.
+                </p>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Real-World Examples</h3>
+              <div class="attack-detail">
+                <ul>
+                  <li>
+                    <strong>Tesla (2018):</strong> Attackers gained access to Tesla's AWS 
+                    environment through compromised credentials and used the computing 
+                    resources for cryptocurrency mining.
+                  </li>
+                  <li>
+                    <strong>Dropbox (2012):</strong> An employee's reused password was 
+                    compromised in a third-party breach, allowing attackers to access 
+                    a document containing user email addresses.
+                  </li>
+                  <li>
+                    <strong>GitHub (2019):</strong> Attackers used stolen OAuth tokens to 
+                    download data from dozens of organizations' private repositories.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="protection-heading">Protection Measures</div>
+            <div class="protection-list">
+              <li>
+                <strong>Multi-Factor Authentication (MFA):</strong> Implement MFA for all 
+                user accounts, especially for privileged users and administrative access.
+              </li>
+              <li>
+                <strong>Strong Password Policies:</strong> Enforce complex passwords and 
+                regular password rotation, and prevent password reuse.
+              </li>
+              <li>
+                <strong>Security Awareness Training:</strong> Train users to recognize 
+                phishing attempts and follow secure credential management practices.
+              </li>
+              <li>
+                <strong>Anomaly Detection:</strong> Implement systems that can detect 
+                unusual login patterns, locations, or activities.
+              </li>
+              <li>
+                <strong>Just-in-Time Access:</strong> Provide temporary elevated privileges 
+                only when needed rather than permanent administrative access.
+              </li>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="topic-quiz">
+              <h4><i class="fas fa-question-circle"></i> Knowledge Check</h4>
+              <div class="question">
+                <p>
+                  Which of the following is the most effective way to prevent account hijacking?
+                </p>
+              </div>
+              <div class="options">
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Using the same password across multiple services</span>
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Implementing multi-factor authentication</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Sharing login credentials with team members</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Storing passwords in plain text files</span>
+                </div>
+              </div>
+              <button class="topic-quiz-btn">Check Answer</button>
+              <div class="topic-quiz-results" style="display: none">
+                <div class="correct-answer" style="display: none">
+                  <i class="fas fa-check-circle"></i> Correct! Multi-factor authentication 
+                  adds an additional layer of security beyond passwords. Even if an attacker 
+                  obtains a user's password, they would still need the second factor (like a 
+                  physical token or mobile device) to gain access to the account.
+                </div>
+                <div class="incorrect-answer" style="display: none">
+                  <i class="fas fa-times-circle"></i> Incorrect. Using the same password across 
+                  services, sharing credentials, and storing passwords in plain text all increase 
+                  the risk of account hijacking. Multi-factor authentication is the most effective 
+                  option listed for preventing unauthorized access.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lock-overlay">
+            <i class="fas fa-lock"></i>
+            <div class="lock-message">
+              Complete the previous section to unlock
+            </div>
+          </div>
+        </div>
+
+        <!-- Insider Threats Section -->
+        <div class="target-card locked" data-target="insider-threats">
+          <span class="difficulty hard">Advanced</span>
+          <div class="target-icon">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <h2>Insider Threats</h2>
+
+          <div class="attack-list">
+            <div class="attack-item">
+              <h3>Understanding Insider Threats</h3>
+              <div class="attack-detail">
+                <p>
+                  Insider threats refer to security risks that originate from within the 
+                  organization. In cloud environments, these threats can be particularly 
+                  dangerous as insiders often have legitimate access to sensitive systems 
+                  and data.
+                </p>
+                <p>
+                  Insider threats can be malicious (intentional harm) or negligent 
+                  (accidental actions), but both types can lead to significant data 
+                  breaches, service disruptions, or compliance violations.
+                </p>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Types of Insider Threats</h3>
+              <div class="attack-detail">
+                <h4>1. Malicious Insiders</h4>
+                <p>
+                  Current or former employees, contractors, or business partners who 
+                  deliberately misuse their access to harm the organization, often 
+                  motivated by financial gain, revenge, or ideology.
+                </p>
+
+                <h4>2. Negligent Insiders</h4>
+                <p>
+                  Users who unintentionally cause security incidents through carelessness, 
+                  lack of awareness, or by falling victim to social engineering attacks.
+                </p>
+
+                <h4>3. Compromised Insiders</h4>
+                <p>
+                  Legitimate users whose credentials have been stolen or whose systems 
+                  have been compromised, allowing attackers to operate with the user's 
+                  privileges.
+                </p>
+
+                <h4>4. Third-Party Risks</h4>
+                <p>
+                  Vendors, contractors, or partners with access to your cloud environment 
+                  who may have weaker security controls or malicious intent.
+                </p>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Real-World Examples</h3>
+              <div class="attack-detail">
+                <ul>
+                  <li>
+                    <strong>Twitter (2020):</strong> Employees with administrative access 
+                    were socially engineered, resulting in the compromise of high-profile 
+                    accounts for a cryptocurrency scam.
+                  </li>
+                  <li>
+                    <strong>Waymo (2018):</strong> A former engineer allegedly stole 
+                    trade secrets related to self-driving technology before leaving to 
+                    join a competitor.
+                  </li>
+                  <li>
+                    <strong>Capital One (2019):</strong> A former AWS employee exploited 
+                    her knowledge of cloud misconfigurations to access sensitive customer data.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="protection-heading">Protection Measures</div>
+            <div class="protection-list">
+              <li>
+                <strong>Principle of Least Privilege:</strong> Grant users only the minimum 
+                access required for their job functions.
+              </li>
+              <li>
+                <strong>Segregation of Duties:</strong> Require multiple people to complete 
+                sensitive tasks, preventing any single person from having excessive control.
+              </li>
+              <li>
+                <strong>User Activity Monitoring:</strong> Implement tools to monitor and 
+                analyze user behavior, especially for privileged accounts.
+              </li>
+              <li>
+                <strong>Data Loss Prevention:</strong> Deploy DLP solutions to detect and 
+                prevent unauthorized data transfers.
+              </li>
+              <li>
+                <strong>Security Awareness Training:</strong> Educate users about security 
+                policies, safe practices, and the impact of security incidents.
+              </li>
+              <li>
+                <strong>Offboarding Procedures:</strong> Implement thorough processes for 
+                revoking access when employees leave the organization.
+              </li>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="topic-quiz">
+              <h4><i class="fas fa-question-circle"></i> Knowledge Check</h4>
+              <div class="question">
+                <p>
+                  Which principle is most effective in mitigating insider threats?
+                </p>
+              </div>
+              <div class="options">
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Giving all employees administrative access</span>
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Principle of least privilege</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Sharing credentials among team members</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Disabling all security monitoring</span>
+                </div>
+              </div>
+              <button class="topic-quiz-btn">Check Answer</button>
+              <div class="topic-quiz-results" style="display: none">
+                <div class="correct-answer" style="display: none">
+                  <i class="fas fa-check-circle"></i> Correct! The principle of least privilege 
+                  ensures that users have only the minimum access required to perform their job 
+                  functions, limiting the potential damage from both malicious and negligent 
+                  insider actions.
+                </div>
+                <div class="incorrect-answer" style="display: none">
+                  <i class="fas fa-times-circle"></i> Incorrect. Giving excessive permissions, 
+                  sharing credentials, and disabling security monitoring all increase the risk 
+                  from insider threats. The principle of least privilege is a fundamental security 
+                  practice that limits the potential damage from insider actions.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lock-overlay">
+            <i class="fas fa-lock"></i>
+            <div class="lock-message">
+              Complete the previous section to unlock
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conclusion Section -->
+      <div class="conclusion">
+        <h2>Securing Your Cloud Journey</h2>
+        <p>
+          As organizations continue to migrate to the cloud, understanding and
+          addressing cloud security threats becomes increasingly vital. By
+          implementing proper security controls, following the shared
+          responsibility model, and staying informed about evolving threats, you
+          can help ensure your organization's cloud deployment remains secure
+          and resilient.
+        </p>
+        <p>
+          Remember: Cloud security is a continuous process, not a one-time
+          implementation. Regular assessments, updates to security practices,
+          and ongoing education are essential components of an effective cloud
+          security strategy.
+        </p>
+      </div>
+      
+      <!-- Add lesson navigation section -->
+      <div class="lesson-navigation" style="margin-top: 32px;">
+        <div class="nav-container">
+          <a href="malware.html" class="nav-button back">
+            <i class="fas fa-arrow-left"></i> Back to Malware Tactics
+          </a>
+          <a href="password-theft.html" class="nav-button next">
+            Next Lesson: Password Security <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2023 Cybersec Academy. All rights reserved.</p>
+    </footer>
+
+    <!-- Celebration container for completing sections -->
+    <div class="celebration-container">
+      <div class="celebration-content">
+        <div class="achievement-unlocked">Achievement Unlocked!</div>
+        <div class="trophy-animation">
+          <div class="trophy">
+            <i class="fas fa-trophy"></i>
+          </div>
+          <div id="trophy-sparkle" class="trophy-sparkle"></div>
+        </div>
+        <h2 class="celebration-title">Module Completed</h2>
+        <p class="celebration-text">
+          Congratulations on completing the Cloud Security module! You've gained valuable knowledge about cloud security threats, attack vectors, and protection strategies for cloud environments.
+        </p>
+        <div class="celebration-stats">
+          <div class="stat-item">
+            <div class="stat-value">5/5</div>
+            <div class="stat-label">Topics Completed</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">100%</div>
+            <div class="stat-label">Module Progress</div>
+          </div>
+        </div>
+        <button class="celebration-btn">Continue Learning</button>
+        <div class="lesson-navigation">
+          <div class="nav-container">
+            <a href="learn.html" class="nav-button back">
+              <i class="fas fa-arrow-left"></i> Back to Learning Hub
+            </a>
+            <a href="network-security.html" class="nav-button next">
+              Next Module: Network Security <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Load mobile menu script first -->
+    <script src="js/mobile-menu.js"></script>
+    
+    <!-- Load our fixed cloud security JS file -->
+    <script src="js/cloud-security-fixed.js"></script>
+  </body>
+</html> 

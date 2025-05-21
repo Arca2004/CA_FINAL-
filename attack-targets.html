@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attack Targets - Cybersec Academy</title>
+    <link rel="stylesheet" href="attack-targets.css" />
+    <link rel="stylesheet" href="cyberindex.css" />
+    <link rel="stylesheet" href="css/attack-targets.css" />
+    <link rel="stylesheet" href="css/index.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="icon" type="image/png" href="img/favicon.png" />
+    <link rel="stylesheet" href="css/profile-dropdown.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="stylesheet" href="css/quiz-letters.css" />
+    <!-- Enhanced lock styles to match intro-cybersec.html -->
+    <style>
+      /* Quiz Styles Override to Ensure Consistency */
+      .topic-quiz .options {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px !important;
+        margin-bottom: 20px !important;
+      }
+      
+      .topic-quiz .option {
+        background: #1c2a3a !important;
+        padding: 15px !important;
+        border-radius: 6px !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        border: 2px solid transparent !important;
+      }
+      
+      .option-letter {
+        background: rgba(92, 219, 149, 0.2) !important;
+        color: #5cdb95 !important;
+      }
+      
+      @media (max-width: 768px) {
+        .topic-quiz .options {
+          grid-template-columns: 1fr !important;
+        }
+      }
+      
+      /* Enhanced lock styles for the attack targets */
+      .target-card.locked[data-target="businesses"],
+      .target-card.locked[data-target="government"],
+      .target-card.locked[data-target="infrastructure"],
+      .target-card.locked[data-target="financial"] {
+        position: relative;
+        filter: grayscale(0.8) brightness(0.7);
+        border: 3px solid #e74c3c !important;
+        overflow: hidden;
+      }
+
+      /* Lock overlay styles */
+      .debug-lock-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(14, 22, 33, 0.8);
+        backdrop-filter: blur(2px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+      }
+
+      .debug-lock-overlay i {
+        font-size: 5rem;
+        color: #e74c3c;
+        margin-bottom: 15px;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        animation: wiggle 2.5s infinite ease-in-out;
+      }
+
+      .debug-lock-message {
+        background: rgba(231, 76, 60, 0.9);
+        color: white;
+        padding: 15px 25px;
+        border-radius: 5px;
+        font-weight: bold;
+        text-align: center;
+        max-width: 80%;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+        font-size: 1.2rem;
+      }
+
+      /* Wiggle animation for lock icon */
+      @keyframes wiggle {
+        0%,
+        100% {
+          transform: rotate(0);
+        }
+        20% {
+          transform: rotate(-8deg);
+        }
+        40% {
+          transform: rotate(8deg);
+        }
+        60% {
+          transform: rotate(-4deg);
+        }
+        80% {
+          transform: rotate(4deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="scanner-lines"></div>
+
+    <div class="noise-overlay"></div>
+
+    <!-- Module Completion Celebration Modal -->
+    <div class="celebration-container">
+      <div class="celebration-content">
+        <div class="achievement-unlocked">Achievement Unlocked!</div>
+        <div class="trophy-animation">
+          <div class="trophy">
+            <i class="fas fa-trophy"></i>
+          </div>
+          <div id="trophy-sparkle" class="trophy-sparkle"></div>
+        </div>
+        <h2 class="celebration-title">Module Completed</h2>
+        <p class="celebration-text">
+          Congratulations on completing the Attack Targets module! You've gained valuable knowledge about different cybersecurity targets and their vulnerabilities.
+        </p>
+        <div class="celebration-stats">
+          <div class="stat-item">
+            <div class="stat-value">5/5</div>
+            <div class="stat-label">Topics Completed</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">100%</div>
+            <div class="stat-label">Module Progress</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">5/5</div>
+            <div class="stat-label">Knowledge Checks</div>
+          </div>
+        </div>
+        <button class="celebration-btn">Continue Learning</button>
+      </div>
+    </div>
+
+    <header>
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="logo-text">
+          <span class="cyber">CYBER</span><span class="sec">SEC</span>
+          <span class="academy">Academy</span>
+        </div>
+      </div>
+      <nav>
+        <div class="hamburger-menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <ul class="nav-links">
+          <li>
+            <a href="index.html" class="nav-link"
+              ><i class="fas fa-home"></i> Home</a
+            >
+          </li>
+          <li>
+            <a href="learn.html" class="nav-link"
+              ><i class="fas fa-graduation-cap"></i> Learn</a
+            >
+          </li>
+          <li>
+            <a href="about-us.html" class="nav-link"
+              ><i class="fas fa-info-circle"></i> About Us</a
+            >
+          </li>
+          <li id="auth-nav-item">
+            <a href="login.html" class="nav-link" id="login-link">
+              <i class="fas fa-user"></i> Login
+            </a>
+            <div
+              class="profile-container"
+              id="profile-container"
+              style="display: none"
+            >
+              <div class="profile-link">
+                <div class="profile-avatar" id="profile-avatar">
+                  <span id="profile-initial"></span>
+                </div>
+                <span class="profile-name" id="profile-name"></span>
+              </div>
+              <div class="profile-dropdown">
+                <a href="profile.html"
+                  ><i class="fas fa-user-circle"></i> View Profile</a
+                >
+                <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                <a href="#" class="logout-link" id="logout-btn"
+                  ><i class="fas fa-sign-out-alt"></i> Logout</a
+                >
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1>Attack Targets</h1>
+        <p>
+          Understanding potential cybersecurity targets and implementing
+          effective security measures
+        </p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Add TryHackMe-style progress tracker -->
+      <div class="progress-tracker">
+        <div
+          class="progress-node active"
+          data-topic="individuals"
+          data-tooltip="Individuals"
+        >
+          <i class="fas fa-user-shield"></i>
+        </div>
+        <div class="progress-line"></div>
+        <div
+          class="progress-node locked"
+          data-topic="businesses"
+          data-tooltip="Businesses & Organizations"
+        >
+          <i class="fas fa-building"></i>
+        </div>
+        <div class="progress-line"></div>
+        <div
+          class="progress-node locked"
+          data-topic="government"
+          data-tooltip="Government Entities"
+        >
+          <i class="fas fa-landmark"></i>
+        </div>
+        <div class="progress-line"></div>
+        <div
+          class="progress-node locked"
+          data-topic="infrastructure"
+          data-tooltip="Critical Infrastructure"
+        >
+          <i class="fas fa-industry"></i>
+        </div>
+        <div class="progress-line"></div>
+        <div
+          class="progress-node locked"
+          data-topic="financial"
+          data-tooltip="Financial Institutions"
+        >
+          <i class="fas fa-university"></i>
+        </div>
+      </div>
+
+      <div class="progress-container">
+        <h3>Module Progress</h3>
+        <div class="progress-bar">
+          <div class="progress" id="module-progress"></div>
+        </div>
+        <div
+          style="display: flex; justify-content: space-between; margin-top: 5px"
+        >
+          <span>0%</span>
+          <span>100%</span>
+        </div>
+        <div class="progress-controls">
+          <button id="reset-progress" class="btn btn-danger">
+            Reset Progress
+          </button>
+        </div>
+      </div>
+
+      <section class="overview">
+        <h2><i class="fas fa-info-circle"></i> Overview</h2>
+        <br />
+        <p>
+          Cyberattacks pose significant threats to individuals, businesses,
+          governments, and critical infrastructure. Attackers often exploit
+          vulnerabilities in digital systems to gain unauthorized access, steal
+          information, disrupt services, or demand ransom. Understanding these
+          attack targets and their potential risks helps in implementing
+          effective cybersecurity measures to mitigate potential damages.
+        </p>
+
+        <div class="instruction-box">
+          <h3><i class="fas fa-graduation-cap"></i> How to Progress</h3>
+          <p>
+            To advance through this module, you must correctly answer each
+            topic's quiz before unlocking the next section. Topics are
+            sequentially unlocked as you demonstrate your understanding of the
+            material. Start with "Individuals" and work your way through all
+            five topics to complete the module.
+          </p>
+        </div>
+      </section>
+
+      <h2>
+        <i class="fas fa-bullseye"></i> Types of Cybersecurity Attack Targets
+      </h2>
+
+      <div class="target-grid">
+        <div class="target-card" data-target="individuals">
+          <span class="difficulty easy">Easy</span>
+          <div class="target-icon">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <h2>1. Individuals</h2>
+          <br />
+          <p>
+            Individuals are often targeted by cybercriminals seeking financial
+            gain, identity theft, or unauthorized access to personal devices.
+            These attacks exploit human errors and weak security practices.
+          </p>
+
+          <div class="attack-list">
+            <div class="attack-item">
+              <h3>Phishing and Social Engineering</h3>
+              <div class="attack-detail">
+                <p>
+                  Cybercriminals use deceptive emails, messages, or websites to
+                  trick individuals into providing sensitive information such as
+                  passwords and credit card details.
+                </p>
+
+                <div class="practical-exercise">
+                  <h4>Practical Exercise: Identifying Phishing Emails</h4>
+                  <p>
+                    Review this sample phishing email and identify the red
+                    flags:
+                  </p>
+                  <div class="terminal">
+                    <pre><span class="output">From: security@amaz0n-support.com
+Subject: Urgent: Your Account Has Been Compromised
+ 
+Dear Valued Customer,
+ 
+We have detected suspicious activity on your account. Your account will be suspended in 24 hours if you do not verify your information immediately.
+ 
+Click here to verify: http://amazn-verify.hk/account
+ 
+Amazon Security Team</span></pre>
+                  </div>
+                  <p>
+                    Red flags include: non-official email domain, urgency
+                    tactics, suspicious link URL, lack of personalization.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Identity Theft</h3>
+              <div class="attack-detail">
+                <p>
+                  Attackers steal personal data (e.g., Social Security numbers,
+                  bank details) to impersonate victims and conduct fraudulent
+                  activities.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Identity Theft Prevention</h4>
+                  <p>
+                    Use these tools to check if your information has been
+                    compromised:
+                  </p>
+                  <ul>
+                    <li>
+                      HaveIBeenPwned - Check if your email has been in a data
+                      breach
+                    </li>
+                    <li>Credit monitoring services</li>
+                    <li>Password managers to maintain unique passwords</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Device Hijacking</h3>
+              <div class="attack-detail">
+                <p>
+                  Malware and spyware can be installed to monitor, steal, or
+                  lock a user's data (e.g., ransomware attacks).
+                </p>
+                <div class="practical-exercise">
+                  <h4>Analyzing Ransomware Behavior</h4>
+                  <p>Common ransomware attack flow:</p>
+                  <div class="terminal">
+                    <pre><span class="prompt"></span> <span class="command"></span>
+<span class="output">1. Initial Access (phishing, RDP, exploit)
+2. Privilege Escalation 
+3. Lateral Movement across network
+4. Data Exfiltration
+5. Encryption of files
+6. Ransom demand</span></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="protection-heading">Protection Measures:</h3>
+          <ul class="protection-list">
+            <li>
+              Education and Awareness: Learn to recognize phishing attempts and
+              suspicious links.
+            </li>
+            <li>
+              Strong Authentication: Use complex passwords and enable
+              multi-factor authentication (MFA).
+            </li>
+            <li>
+              Regular Software Updates: Keep operating systems, apps, and
+              antivirus software updated to patch security vulnerabilities.
+            </li>
+          </ul>
+
+          <!-- Add mini-quiz here -->
+          <div class="topic-quiz">
+            <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
+            <div class="question">
+              <p>Which of these is a common indicator of a phishing attempt?</p>
+              <div class="options">
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Email from a colleague with your company's domain</span>
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Urgency to act immediately to avoid consequences</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Link that points to your bank's official website</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Email addressed to you by your correct name</span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-quiz-results" style="display: none">
+              <p class="correct-answer" style="display: none">
+                Correct! Urgency is a common tactic used in phishing attempts to
+                prevent the victim from carefully analyzing the message.
+              </p>
+              <p class="incorrect-answer" style="display: none">Incorrect.</p>
+            </div>
+            <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
+          </div>
+        </div>
+
+        <div class="target-card" data-target="businesses">
+          <span class="difficulty medium">Medium</span>
+          <div class="target-icon">
+            <i class="fas fa-building"></i>
+          </div>
+          <h2>2. Businesses and Organizations</h2>
+          <br />
+          <p>
+            Companies are attractive targets due to their valuable customer
+            data, financial assets, and operational reliance on digital systems.
+          </p>
+
+          <div class="attack-list">
+            <div class="attack-item">
+              <h3>Ransomware</h3>
+              <div class="attack-detail">
+                <p>
+                  Attackers encrypt organizational data and demand payment to
+                  restore access.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Examining Ransomware Impact</h4>
+                  <p>
+                    Analyze this ransomware notification from an actual attack:
+                  </p>
+                  <div class="terminal">
+                    <pre><span class="output">ALL YOUR FILES HAVE BEEN ENCRYPTED!
+                                        
+Don't worry, you can return all your files!
+All your files documents, photos, databases and other important files are encrypted with strongest encryption and unique key.
+The only method of recovering files is to purchase decrypt tool and unique key for you.
+                                        
+To decrypt your files, you need to pay $300,000 in Bitcoin.
+                                        
+Contact us at: darknet-decrypt@protonmail.com with your unique ID: AB137D2E
+                                        
+WARNING: Do not attempt to decrypt with third party software as this may cause permanent data loss.</span></pre>
+                  </div>
+                  <p>
+                    Note how ransomware operators create urgency and fear to
+                    pressure victims into paying.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Data Breaches</h3>
+              <div class="attack-detail">
+                <p>
+                  Unauthorized access to sensitive customer or corporate
+                  information leading to financial and reputational losses.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Data Breach Investigation</h4>
+                  <p>
+                    Examine this database query log showing signs of SQL
+                    injection:
+                  </p>
+                  <div class="terminal">
+                    <pre><span class="prompt">mysql></span> <span class="command">SELECT * FROM users WHERE username = 'admin' OR 1=1; --' AND password = 'password';</span>
+<span class="output">ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '--' AND password = 'password'' at line 1</span></pre>
+                  </div>
+                  <p>
+                    The attacker is using the OR 1=1 clause to make the WHERE
+                    condition always evaluate to true, bypassing authentication.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Denial-of-Service (DoS) Attacks</h3>
+              <div class="attack-detail">
+                <p>
+                  Attackers overload a company's servers, disrupting business
+                  operations.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Analyzing DoS Traffic</h4>
+                  <p>
+                    Examine this network traffic pattern during a DDoS attack:
+                  </p>
+                  <div class="terminal">
+                    <pre><span class="prompt">admin@server:~$</span> <span class="command">netstat -ant | grep SYN | wc -l</span>
+<span class="output">12683</span>
+
+<span class="prompt">admin@server:~$</span> <span class="command">tcpdump -n -i eth0 | grep SYN</span>
+<span class="output">13:42:21.123456 IP 203.0.113.1.12345 > 192.168.1.100.80: Flags [S], seq 1234567890, win 8192, length 0
+13:42:21.123457 IP 203.0.113.2.12346 > 192.168.1.100.80: Flags [S], seq 1234567891, win 8192, length 0
+13:42:21.123458 IP 203.0.113.3.12347 > 192.168.1.100.80: Flags [S], seq 1234567892, win 8192, length 0
+13:42:21.123459 IP 203.0.113.4.12348 > 192.168.1.100.80: Flags [S], seq 1234567893, win 8192, length 0
+13:42:21.123460 IP 203.0.113.5.12349 > 192.168.1.100.80: Flags [S], seq 1234567894, win 8192, length 0</span></pre>
+                  </div>
+                  <p>
+                    This shows a SYN flood attack with thousands of connection
+                    requests overwhelming the server.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="protection-heading">Protection Measures:</h3>
+          <ul class="protection-list">
+            <li>
+              Regular Backups: Maintain offline, encrypted backups of critical
+              data to aid recovery.
+            </li>
+            <li>
+              Segmentation: Separate networks to prevent lateral movement by
+              attackers.
+            </li>
+            <li>
+              Multi-factor Authentication: Require additional verification
+              beyond passwords.
+            </li>
+          </ul>
+
+          <!-- Add mini-quiz here -->
+          <div class="topic-quiz">
+            <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
+            <div class="question">
+              <p>
+                What is the best practice for organizations to prepare for
+                ransomware attacks?
+              </p>
+              <div class="options">
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Save cryptocurrency to pay ransoms quickly</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Use only cloud storage for all company data</span>
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Maintain isolated, offline backups of critical data</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Keep all systems on a single network for centralized management</span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-quiz-results" style="display: none">
+              <p class="correct-answer" style="display: none">
+                Correct! Isolated, offline backups are essential for recovering
+                from ransomware attacks without paying the ransom.
+              </p>
+              <p class="incorrect-answer" style="display: none">Incorrect.</p>
+            </div>
+            <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
+          </div>
+        </div>
+
+        <div class="target-card" data-target="government">
+          <span class="difficulty hard">Hard</span>
+          <div class="target-icon">
+            <i class="fas fa-landmark"></i>
+          </div>
+          <h2>3. Government Entities</h2>
+          <br />
+          <p>
+            Governments manage national security, confidential data, and
+            critical public services, making them prime targets for cyber
+            espionage and sabotage.
+          </p>
+
+          <div class="attack-list">
+            <div class="attack-item">
+              <h3>Espionage</h3>
+              <div class="attack-detail">
+                <p>
+                  State-sponsored attacks aimed at stealing confidential
+                  government intelligence.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Advanced Persistent Threat Analysis</h4>
+                  <p>
+                    Examine this network traffic log showing signs of an APT
+                    attack:
+                  </p>
+                  <div class="terminal">
+                    <pre><span class="prompt">analyst@soc:~$</span> <span class="command">grep -i unusual /var/log/network.log | tail -10</span>
+<span class="output">2023-03-22 02:14:22 INFO Connection from 203.0.113.45 to internal server 192.168.15.20 on unusual port 4782
+2023-03-22 02:15:03 WARNING Data exfiltration attempt detected: 89MB transferred to external IP 203.0.113.45
+2023-03-22 02:17:45 WARNING Command and control traffic detected to known malicious domain apt-c-31.examplec2.com
+2023-03-22 02:18:12 ALERT Unusual PowerShell execution with Base64 encoded command
+2023-03-22 03:45:22 WARNING Lateral movement detected from compromised host 192.168.15.20 to 192.168.15.30
+2023-03-22 04:12:31 ALERT New administrator account "sysadmin_backup" created outside normal hours
+2023-03-22 04:18:45 WARNING Credentials harvesting tool detected on host 192.168.15.30
+2023-03-22 05:02:17 ALERT Sensitive document server accessed from host 192.168.15.30
+2023-03-22 05:22:45 WARNING Large encrypted archive sent to external IP 203.0.113.45
+2023-03-22 06:14:22 INFO Persistent access mechanism established via scheduled task on domain controller</span></pre>
+                  </div>
+                  <p>
+                    This shows a classic APT attack pattern with initial access,
+                    lateral movement, privilege escalation, and data
+                    exfiltration stages - typical of nation-state attackers.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Critical Infrastructure Sabotage</h3>
+              <div class="attack-detail">
+                <p>
+                  Cyberattacks targeting power grids, communication networks,
+                  and water supply systems to cause widespread disruption.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Analyzing SCADA System Attacks</h4>
+                  <p>
+                    Review this simplified industrial control system attack
+                    sequence:
+                  </p>
+                  <div class="terminal">
+                    <pre><span class="prompt">attacker@apt:~$</span> <span class="command">cat stuxnet_analysis.txt</span>
+<span class="output">SCADA/ICS Attack Sequence:
+1. Initial compromise via USB drive with zero-day exploit
+2. Propagation through internal network via SMB vulnerability
+3. Fingerprinting of Siemens Step7 software
+4. Modification of PLC programming to alter centrifuge speeds
+5. Reporting false readings to monitoring systems
+6. Physical damage to equipment through speed variations
+7. Maintaining persistence using rootkits
+
+Impact: Physical destruction of 1,000+ uranium enrichment centrifuges</span></pre>
+                  </div>
+                  <p>
+                    This is based on the infamous Stuxnet attack, showing how
+                    cyber attacks can cause physical damage to critical
+                    infrastructure.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Election Interference</h3>
+              <div class="attack-detail">
+                <p>
+                  Hackers manipulate digital voting systems or spread
+                  misinformation to influence public opinion.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Election System Vulnerability Assessment</h4>
+                  <p>
+                    Examine this excerpt from a voting machine security audit
+                    report:
+                  </p>
+                  <div class="terminal">
+                    <pre><span class="output">VULNERABILITY ASSESSMENT REPORT - CONFIDENTIAL
+Model: ElectroVote-3000
+Firmware Version: 2.1.5
+
+CRITICAL VULNERABILITIES:
+- Default administrator credentials not changed (admin/admin)
+- Unencrypted database of voter records accessible via USB port
+- Outdated OpenSSL version vulnerable to CVE-2018-0737
+- Ballot tabulation database uses SQL without prepared statements
+- Remote access enabled on administrative interface
+- Physical ports (USB, Ethernet) not secured
+- Audit logs can be cleared by administrator without backup
+- No certificate validation for software updates
+
+RECOMMENDATIONS:
+- Implement proper authentication with strong passwords
+- Encrypt all voter data at rest and in transit
+- Update system software to address known vulnerabilities
+- Disable remote access capabilities
+- Physically secure all external ports
+- Implement tamper-evident seals
+- Establish immutable audit logging system</span></pre>
+                  </div>
+                  <p>
+                    This demonstrates the common security vulnerabilities in
+                    electronic voting systems that could be exploited for
+                    election interference.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="protection-heading">Protection Measures:</h3>
+          <ul class="protection-list">
+            <li>
+              Sophisticated Security Measures: Implement advanced defensive
+              tools to counter well-funded threat actors.
+            </li>
+            <li>
+              International Cooperation: Collaborate with global entities to
+              address attacks that cross national boundaries.
+            </li>
+            <li>
+              Intelligence Sharing: Create systems to share threat intelligence
+              with affected organizations.
+            </li>
+          </ul>
+
+          <!-- Add mini-quiz here -->
+          <div class="topic-quiz">
+            <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
+            <div class="question">
+              <p>
+                Which type of attack is most commonly directed at government
+                entities?
+              </p>
+              <div class="options">
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Basic phishing campaigns</span>
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Advanced Persistent Threats (APTs)</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Denial of Service attacks</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Supply chain compromises</span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-quiz-results" style="display: none">
+              <p class="correct-answer" style="display: none">
+                Correct! APTs are sophisticated, long-term attacks typically
+                launched by nation-states against government targets.
+              </p>
+              <p class="incorrect-answer" style="display: none">Incorrect.</p>
+            </div>
+            <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
+          </div>
+        </div>
+
+        <div class="target-card" data-target="infrastructure">
+          <span class="difficulty hard">Hard</span>
+          <div class="target-icon">
+            <i class="fas fa-industry"></i>
+          </div>
+          <h2>4. Critical Infrastructure</h2>
+          <br />
+          <p>
+            Essential services like energy, healthcare, transportation, and
+            water systems face unique cybersecurity challenges due to their
+            critical importance and the potentially severe consequences of
+            successful attacks.
+          </p>
+
+          <div class="attack-list">
+            <div class="attack-item">
+              <h3>Industrial Control System Attacks</h3>
+              <div class="attack-detail">
+                <p>
+                  Cybercriminals target industrial networks to disrupt
+                  operations, causing significant economic damage.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Analyzing Water Treatment System Vulnerabilities</h4>
+                  <p>
+                    Review this incident report from a water treatment facility
+                    breach:
+                  </p>
+                  <div class="terminal">
+                    <pre><span class="output">INCIDENT REPORT: WATER TREATMENT SYSTEM BREACH
+Date: February, 2021
+Location: Florida water treatment facility
+
+INCIDENT TIMELINE:
+08:30 - Operator notices TeamViewer session active on control system
+08:33 - Remote actor accesses HMI (Human-Machine Interface)
+08:34 - Remote actor increases sodium hydroxide (lye) levels from 100ppm to 11,100ppm
+08:35 - Operator immediately notices change and reverts settings
+08:36 - Operator disables TeamViewer and notifies supervisor
+
+SYSTEM VULNERABILITIES:
+- Outdated Windows 7 operating system on control workstation
+- Single shared password for TeamViewer remote access
+- No multi-factor authentication implemented
+- Direct internet-accessibility of critical control systems
+- No network segmentation between IT and OT systems
+- Insufficient monitoring of control system parameters
+
+REMEDIATION ACTIONS:
+- Disable remote access software on all OT systems
+- Implement proper network segmentation with DMZ
+- Deploy monitoring software with alerting for critical parameter changes
+- Update all control systems with security patches
+- Implement multi-factor authentication</span></pre>
+                  </div>
+                  <p>
+                    This real-world incident shows how vulnerabilities in
+                    critical infrastructure can be exploited, potentially
+                    causing physical harm to the public.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Supply Chain Attacks</h3>
+              <div class="attack-detail">
+                <p>
+                  Attackers compromise suppliers to infiltrate broader networks.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Analyzing the SolarWinds Attack</h4>
+                  <p>Examine this breakdown of a major supply chain attack:</p>
+                  <div class="terminal">
+                    <pre><span class="prompt">security@dfir:~$</span> <span class="command">cat solarwinds_timeline.txt</span>
+<span class="output">SOLARWINDS SUPPLY CHAIN ATTACK TIMELINE:
+
+September 2019 - Initial access to SolarWinds development environment
+February 2020 - Test code injected into Orion software build
+March 2020 - Backdoor code deployed in official software update (Orion Platform 2019.4 HF 5, 2020.2 with no hotfix, and 2020.2 HF 1)
+April-November 2020 - ~18,000 organizations download the compromised update
+December 2020 - Attack discovered when security firm Fireye finds unusual activity
+December 2020 - Emergency directive issued to disconnect affected SolarWinds products
+
+ATTACK MECHANICS:
+1. Attackers compromised build system for SolarWinds Orion Platform
+2. Malicious code (SUNBURST) injected during build process
+3. Signed with legitimate SolarWinds digital certificate
+4. Backdoor remained dormant for up to two weeks
+5. Malware validated targets before activating command and control
+6. Leveraged multiple domains for C2 traffic
+7. Used IP addresses matching victim's geography to avoid detection
+
+VICTIMS:
+- Multiple U.S. government agencies
+- Critical infrastructure organizations
+- Fortune 500 companies
+- Security companies
+
+IMPACT:
+- Extensive data theft
+- Extended dwell time (8+ months)
+- Erosion of trust in supply chain
+- Millions of dollars in remediation costs</span></pre>
+                  </div>
+                  <p>
+                    This supply chain attack demonstrates how compromising a
+                    single vendor can lead to breaches at thousands of
+                    organizations, including critical infrastructure.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="protection-heading">Protection Measures:</h3>
+          <br />
+          <ul class="protection-list">
+            <li>
+              Network Segmentation: Isolate operational systems from public
+              networks to limit exposure.
+            </li>
+            <li>
+              Continuous Monitoring: Deploy real-time security monitoring tools
+              to detect anomalies.
+            </li>
+            <li>
+              Incident Response Planning: Prepare contingency plans to mitigate
+              attack impacts.
+            </li>
+          </ul>
+
+          <!-- Add mini-quiz here -->
+          <div class="topic-quiz">
+            <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
+            <div class="question">
+              <p>
+                Why is air-gapping particularly important for critical
+                infrastructure systems?
+              </p>
+              <div class="options">
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text">It improves system processing speed</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">B</span>
+                  <span class="option-text">It reduces power consumption</span>
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">It prevents direct network-based attacks from reaching critical systems</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">It simplifies the maintenance process</span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-quiz-results" style="display: none">
+              <p class="correct-answer" style="display: none">
+                Correct! Air-gapping physically isolates critical systems from
+                public networks, making them much more difficult to attack
+                remotely.
+              </p>
+              <p class="incorrect-answer" style="display: none">Incorrect.</p>
+            </div>
+            <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
+          </div>
+        </div>
+
+        <div class="target-card" data-target="financial">
+          <span class="difficulty medium">Medium</span>
+          <div class="target-icon">
+            <i class="fas fa-university"></i>
+          </div>
+          <h2>5. Financial Institutions</h2>
+          <p>
+            Banks, stock markets, and cryptocurrency platforms are frequent
+            cyberattack targets due to their financial assets and transactional
+            nature.
+          </p>
+
+          <div class="attack-list">
+            <div class="attack-item">
+              <h3>Financial Fraud</h3>
+              <div class="attack-detail">
+                <p>
+                  Hackers use stolen credentials to conduct fraudulent
+                  transactions.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Analyzing Banking Trojan Behavior</h4>
+                  <p>Examine this analysis of a banking trojan's operation:</p>
+                  <div class="terminal">
+                    <pre><span class="prompt">analyst@sandbox:~$</span> <span class="command">cat banking_trojan_analysis.log</span>
+<span class="output">BANKING TROJAN: TrickBot Analysis
+Sample Hash: 8a7fb3433e0fd4a79c44fadfc314cb45
+
+INFECTION VECTOR:
+- Phishing email with malicious Excel attachment
+- Macro code triggers PowerShell download of executable
+
+BEHAVIOR ANALYSIS:
+1. Initial PowerShell execution downloads TrickBot payload
+2. Establishes persistence via scheduled task: "WindowsUpdate"
+3. Collects system information (OS version, installed software)
+4. Modifies browser settings to disable security warnings
+5. Injects malicious code into browser processes
+6. Hooks browser API calls to intercept banking credentials
+7. Implements web injection to modify banking pages in real-time
+8. Creates fake input fields to capture additional data (2FA codes)
+9. Captures screenshots during banking sessions
+10. Exfiltrates data to C2 server: 185.159.82[.]212
+
+TARGETED FINANCIAL INSTITUTIONS:
+- Bank of America
+- Wells Fargo
+- Chase
+- Citibank
+- PayPal
+- Multiple cryptocurrency exchanges
+
+EVASION TECHNIQUES:
+- Encrypted communication with C2 server
+- Anti-VM detection
+- Delayed execution to avoid sandbox analysis
+- Process injection to hide malicious activity</span></pre>
+                  </div>
+                  <p>
+                    This shows how banking trojans operate to steal financial
+                    credentials and perform fraudulent transactions.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Denial-of-Service (DoS) Attacks</h3>
+              <div class="attack-detail">
+                <p>
+                  Overwhelming banking servers, disrupting customer services.
+                </p>
+                <div class="practical-exercise">
+                  <h4>DDoS Attack on Financial Services</h4>
+                  <p>
+                    Review this incident report from a DDoS attack on a banking
+                    platform:
+                  </p>
+                  <div class="terminal">
+                    <pre><span class="output">INCIDENT REPORT: DDOS ATTACK ON ONLINE BANKING PLATFORM
+Date: September 2022
+
+ATTACK DETAILS:
+- Type: Distributed Denial of Service (DDoS)
+- Duration: 36 hours (intermittent)
+- Peak Traffic: 620 Gbps
+- Attack Vector: Multi-vector (UDP flood, TCP SYN flood, HTTP GET flood)
+- Botnet Size: Estimated 145,000 compromised IoT devices
+- Source IPs: Distributed across 43 countries
+
+TIMELINE:
+09:15 - Initial increase in traffic detected
+09:22 - Alert triggered for abnormal traffic patterns
+09:30 - First customer reports of slow website response
+09:45 - Complete unavailability of online banking services
+10:15 - DDoS mitigation activated
+10:45 - Partial restoration of services
+12:30 - Second wave of attacks begins
+14:20 - Attack traffic peaks at 620 Gbps
+18:45 - Stable mitigation achieved
+
+IMPACT:
+- Online banking unavailable for 4.5 hours
+- Mobile banking app affected for 6 hours
+- Payment processing delays up to 3 hours
+- Estimated financial loss: $1.2M (operational + reputational)
+- ~1.4 million customers affected
+
+MITIGATION MEASURES EMPLOYED:
+- Traffic scrubbing via cloud-based DDoS protection
+- BGP routing adjustments
+- Rate limiting
+- Geographic blocking of suspicious traffic sources
+- Scaling up infrastructure</span></pre>
+                  </div>
+                  <p>
+                    This demonstrates how DDoS attacks can severely impact
+                    financial services and cause significant financial losses.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="attack-item">
+              <h3>Cryptocurrency Theft</h3>
+              <div class="attack-detail">
+                <p>
+                  Targeting cryptocurrency exchanges and wallets to steal
+                  digital assets.
+                </p>
+                <div class="practical-exercise">
+                  <h4>Exchange Breach Analysis</h4>
+                  <p>
+                    Examine this cryptocurrency exchange breach investigation:
+                  </p>
+                  <div class="terminal">
+                    <pre><span class="prompt">investigator@blockchain:~$</span> <span class="command">cat crypto_exchange_breach.txt</span>
+<span class="output">CRYPTOCURRENCY EXCHANGE BREACH ANALYSIS
+Exchange: [REDACTED]
+Date: December 2021
+Cryptocurrency Stolen: Approximately $196 million in various tokens
+
+ATTACK VECTOR:
+- Compromised private keys for hot wallets
+- Targeted spear-phishing of exchange administrators
+- Social engineering to bypass 2FA mechanisms
+
+TRANSACTION ANALYSIS:
+1. Funds moved from exchange hot wallets to new addresses
+2. Initial consolidation into 6 main wallet addresses
+3. Use of coin mixing/tumbling services to obscure trail
+4. Conversion of stolen assets to privacy coins (Monero)
+5. Some funds moved to decentralized exchanges (DEX)
+6. Laundering through multiple chains using cross-chain bridges
+
+BLOCKCHAIN FORENSICS:
+Bitcoin transaction: 3b5e91d24baf8a91b4f7e44d3f3bcabedc2013ad934a1d0d414f56c7befda61a
+Ethereum transaction: 0x4a7902b93c1304669a5e47b70283be0fa0d38d095d135382ec91545ae858644
+Tether transaction: 0x999a6d7179bc333f6a3a6e03395992f1c28310d3f64f15e21d38e176a3a5214e
+
+SECURITY FAILURES:
+- Insufficient private key management
+- Lack of proper cold storage procedures
+- No multi-signature authorization for hot wallet transfers
+- Delayed transaction monitoring
+- Inadequate employee security training</span></pre>
+                  </div>
+                  <p>
+                    This demonstrates how attackers target cryptocurrency
+                    exchanges to steal digital assets worth millions of dollars.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="protection-heading">Protection Measures:</h3>
+          <ul class="protection-list">
+            <li>
+              Multi-Layered Defense: Implement defense-in-depth security
+              architecture.
+            </li>
+            <li>
+              Transaction Monitoring: Deploy AI-powered fraud detection systems.
+            </li>
+            <li>
+              Customer Authentication: Implement robust identity verification
+              protocols.
+            </li>
+          </ul>
+
+          <!-- Add mini-quiz here -->
+          <div class="topic-quiz">
+            <h4><i class="fas fa-brain"></i> Knowledge Check</h4>
+            <div class="question">
+              <p>
+                Which security measure is most effective against banking
+                trojans?
+              </p>
+              <div class="options">
+                <div class="option" data-correct="false">
+                  <span class="option-letter">A</span>
+                  <span class="option-text">Basic password authentication</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">B</span>
+                  <span class="option-text">Email filtering</span>
+                </div>
+                <div class="option" data-correct="true">
+                  <span class="option-letter">C</span>
+                  <span class="option-text">Multi-factor authentication with out-of-band verification</span>
+                </div>
+                <div class="option" data-correct="false">
+                  <span class="option-letter">D</span>
+                  <span class="option-text">Antivirus software alone</span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-quiz-results" style="display: none">
+              <p class="correct-answer" style="display: none">
+                Correct! Out-of-band verification (like using a separate device
+                for authentication) helps prevent banking trojans from
+                intercepting authentication codes.
+              </p>
+              <p class="incorrect-answer" style="display: none">Incorrect.</p>
+            </div>
+            <button class="btn btn-primary topic-quiz-btn">Check Answer</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="conclusion">
+        <h2>Conclusion</h2>
+        <p>
+          By understanding the diverse targets of cyberattacks and implementing
+          tailored protective measures, individuals, businesses, governments,
+          and financial institutions can significantly reduce their
+          vulnerability to cyber threats. Cybersecurity is a shared
+          responsibility that requires proactive measures, continuous
+          monitoring, and collaboration between different entities.
+        </p>
+      </div>
+
+      <div class="lesson-navigation" style="margin-top: 32px;">
+        <div class="nav-container">
+          <a href="intro-cybersec.html" class="nav-button back">
+            <i class="fas fa-arrow-left"></i> Back to Introduction to Cybersecurity
+          </a>
+          <a href="phishing-attack.html" class="nav-button next">
+            Next Lesson: Phishing Attacks <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2025 Cybersecurity Academy</p>
+    </footer>
+
+    <!-- Module Completion Celebration Modal -->
+    <div class="celebration-container">
+      <div class="celebration-content">
+        <div class="achievement-unlocked">Achievement Unlocked!</div>
+        <div class="trophy-animation">
+          <div class="trophy">
+            <i class="fas fa-trophy"></i>
+            <div class="trophy-sparkle" id="trophy-sparkle"></div>
+          </div>
+        </div>
+        <h2 class="celebration-title">Module Completed</h2>
+        <p class="celebration-text">
+          Congratulations on completing the Attack Targets module! You've gained
+          critical knowledge about cybersecurity vulnerabilities across
+          different sectors, enhancing your ability to defend against
+          sophisticated threats.
+        </p>
+
+        <div class="celebration-stats">
+          <div class="stat-item">
+            <div class="stat-value">5/5</div>
+            <div class="stat-label">Topics Completed</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">100%</div>
+            <div class="stat-label">Module Progress</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">5/5</div>
+            <div class="stat-label">Quizzes Passed</div>
+          </div>
+        </div>
+
+        <div class="celebration-badge">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+
+        <button class="celebration-btn">Continue Learning</button>
+      </div>
+    </div>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="js/attack-targets.js"></script>
+    <script src="js/mobile-menu.js"></script>
+  </body>
+</html>

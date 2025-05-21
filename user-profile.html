@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profile | Cybersec Academy</title>
+    <link rel="stylesheet" href="cyberindex.css" />
+    <link rel="stylesheet" href="css/user-profile.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="icon" type="image/png" href="/img/favicon.png" />
+    <link rel="stylesheet" href="css/responsive.css" />
+  </head>
+  <body>
+    <div class="scanner-lines"></div>
+    <div class="noise-overlay"></div>
+
+    <header>
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="logo-text">
+          <span class="cyber">CYBER</span><span class="sec">SEC</span>
+          <span class="academy">Academy</span>
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li>
+            <a href="index.html" class="nav-link">
+              <i class="fas fa-home"></i> Home
+            </a>
+          </li>
+          <li>
+            <a href="learn.html" class="nav-link">
+              <i class="fas fa-graduation-cap"></i> Learn
+            </a>
+          </li>
+          <li>
+            <a href="about-us.html" class="nav-link">
+              <i class="fas fa-info-circle"></i> About Us
+            </a>
+          </li>
+          <li>
+            <a href="login.html" class="nav-link">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <!-- User Profile Hero Banner -->
+      <section id="profile-banner">
+        <div class="profile-summary">
+          <div class="user-avatar-container">
+            <div class="user-avatar">
+              <i class="fas fa-user-shield"></i>
+            </div>
+            <div class="avatar-level">7</div>
+          </div>
+          <div class="user-info">
+            <h1 id="username">CyberExplorer</h1>
+            <div class="join-date">
+              Member since <span id="join-date">May 2023</span>
+            </div>
+
+            <div class="user-stats">
+              <div class="stat">
+                <div class="stat-value" id="modules-completed">12</div>
+                <div class="stat-label">Modules Completed</div>
+              </div>
+              <div class="stat">
+                <div class="stat-value" id="badges-earned">8</div>
+                <div class="stat-label">Badges Earned</div>
+              </div>
+              <div class="stat">
+                <div class="stat-value" id="user-rank">Intermediate</div>
+                <div class="stat-label">Rank</div>
+              </div>
+            </div>
+          </div>
+          <div class="profile-controls">
+            <button class="btn btn-primary" id="edit-profile-btn">
+              <i class="fas fa-edit"></i> Edit Profile
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <div class="profile-content-container">
+        <div class="profile-sidebar">
+          <div class="sidebar-panel settings-navigation">
+            <ul>
+              <li class="active" data-panel="overview">
+                <i class="fas fa-th-large"></i> Overview
+              </li>
+              <li data-panel="badges">
+                <i class="fas fa-award"></i> Badges & Achievements
+              </li>
+              <li data-panel="progress">
+                <i class="fas fa-chart-line"></i> Learning Progress
+              </li>
+              <li data-panel="settings">
+                <i class="fas fa-cog"></i> Account Settings
+              </li>
+            </ul>
+          </div>
+
+          <div class="sidebar-panel level-progress">
+            <h3><i class="fas fa-level-up-alt"></i> Level Progress</h3>
+            <div class="level-bar-container">
+              <div class="level-bar">
+                <div class="level-progress" style="width: 70%"></div>
+              </div>
+              <div class="level-labels">
+                <span>Level 7</span>
+                <span>2,100 / 3,000 XP</span>
+              </div>
+            </div>
+            <div class="next-level-info">
+              <p>900 XP until level 8</p>
+            </div>
+          </div>
+
+          <div class="sidebar-panel streak-container">
+            <h3><i class="fas fa-fire"></i> Learning Streak</h3>
+            <div class="streak-counter">
+              <span class="streak-value">12</span>
+              <span class="streak-label">days</span>
+            </div>
+            <div class="streak-calendar">
+              <div class="calendar-day completed">M</div>
+              <div class="calendar-day completed">T</div>
+              <div class="calendar-day completed">W</div>
+              <div class="calendar-day completed">T</div>
+              <div class="calendar-day">F</div>
+              <div class="calendar-day">S</div>
+              <div class="calendar-day">S</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-main-content">
+          <!-- Overview Panel (default visible) -->
+          <div class="profile-panel active" id="overview-panel">
+            <div class="panel-header">
+              <h2><i class="fas fa-th-large"></i> Profile Overview</h2>
+            </div>
+
+            <div class="recent-activity">
+              <h3><i class="fas fa-history"></i> Recent Activity</h3>
+              <div class="activity-timeline">
+                <div class="activity-item">
+                  <div class="activity-icon completed">
+                    <i class="fas fa-shield-alt"></i>
+                  </div>
+                  <div class="activity-details">
+                    <div class="activity-title">
+                      Completed Phishing Attacks Module
+                    </div>
+                    <div class="activity-time">2 hours ago</div>
+                  </div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-icon achieved">
+                    <i class="fas fa-award"></i>
+                  </div>
+                  <div class="activity-details">
+                    <div class="activity-title">
+                      Earned "Defense Specialist" Badge
+                    </div>
+                    <div class="activity-time">Yesterday</div>
+                  </div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-icon completed">
+                    <i class="fas fa-graduation-cap"></i>
+                  </div>
+                  <div class="activity-details">
+                    <div class="activity-title">
+                      Completed "Types of Malware" Quiz
+                    </div>
+                    <div class="activity-time">3 days ago</div>
+                  </div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-icon completed">
+                    <i class="fas fa-shield-alt"></i>
+                  </div>
+                  <div class="activity-details">
+                    <div class="activity-title">
+                      Started Malware Analysis Module
+                    </div>
+                    <div class="activity-time">5 days ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="top-modules">
+              <h3><i class="fas fa-star"></i> Progress Highlights</h3>
+              <div class="modules-grid">
+                <div class="module-highlight">
+                  <div class="module-icon completed">
+                    <i class="fas fa-book"></i>
+                  </div>
+                  <div class="module-details">
+                    <div class="module-title">
+                      Introduction to Cybersecurity
+                    </div>
+                    <div class="module-progress">
+                      <div class="progress-bar">
+                        <div class="progress" style="width: 100%"></div>
+                      </div>
+                      <span>100%</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="module-highlight">
+                  <div class="module-icon completed">
+                    <i class="fas fa-anchor"></i>
+                  </div>
+                  <div class="module-details">
+                    <div class="module-title">Phishing Attacks</div>
+                    <div class="module-progress">
+                      <div class="progress-bar">
+                        <div class="progress" style="width: 100%"></div>
+                      </div>
+                      <span>100%</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="module-highlight">
+                  <div class="module-icon in-progress">
+                    <i class="fas fa-bug"></i>
+                  </div>
+                  <div class="module-details">
+                    <div class="module-title">Malware Analysis</div>
+                    <div class="module-progress">
+                      <div class="progress-bar">
+                        <div class="progress" style="width: 60%"></div>
+                      </div>
+                      <span>60%</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="module-highlight">
+                  <div class="module-icon not-started">
+                    <i class="fas fa-key"></i>
+                  </div>
+                  <div class="module-details">
+                    <div class="module-title">Account Security</div>
+                    <div class="module-progress">
+                      <div class="progress-bar">
+                        <div class="progress" style="width: 0%"></div>
+                      </div>
+                      <span>0%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="suggested-next">
+              <h3><i class="fas fa-lightbulb"></i> Suggested Next Steps</h3>
+              <div class="next-steps-grid">
+                <div class="next-step-card">
+                  <div class="step-icon"><i class="fas fa-bug"></i></div>
+                  <div class="step-content">
+                    <h4>Continue Malware Analysis</h4>
+                    <p>
+                      You're making great progress. Complete the Ransomware
+                      section to unlock advanced topics.
+                    </p>
+                    <button
+                      class="btn btn-primary"
+                      onclick="window.location.href='malware.html'"
+                    >
+                      Continue Learning
+                    </button>
+                  </div>
+                </div>
+                <div class="next-step-card">
+                  <div class="step-icon">
+                    <i class="fas fa-user-friends"></i>
+                  </div>
+                  <div class="step-content">
+                    <h4>Invite Your Friends</h4>
+                    <p>
+                      Learning is better together. Invite friends to join
+                      Cybersec Academy.
+                    </p>
+                    <button class="btn btn-secondary">Invite Friends</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Badges Panel -->
+          <div class="profile-panel" id="badges-panel">
+            <div class="panel-header">
+              <h2><i class="fas fa-award"></i> Badges & Achievements</h2>
+            </div>
+
+            <div class="badges-grid">
+              <div class="badge-card earned">
+                <div class="badge-icon">
+                  <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="badge-details">
+                  <h3>Cybersecurity Novice</h3>
+                  <p>Completed your first module</p>
+                  <div class="badge-date">Earned on May 20, 2023</div>
+                </div>
+              </div>
+
+              <div class="badge-card earned">
+                <div class="badge-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <div class="badge-details">
+                  <h3>Knowledge Seeker</h3>
+                  <p>Completed 5 quizzes with perfect scores</p>
+                  <div class="badge-date">Earned on June 12, 2023</div>
+                </div>
+              </div>
+
+              <div class="badge-card earned">
+                <div class="badge-icon">
+                  <i class="fas fa-fire"></i>
+                </div>
+                <div class="badge-details">
+                  <h3>Week Warrior</h3>
+                  <p>Maintained a 7-day learning streak</p>
+                  <div class="badge-date">Earned on June 18, 2023</div>
+                </div>
+              </div>
+
+              <div class="badge-card earned">
+                <div class="badge-icon">
+                  <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="badge-details">
+                  <h3>Module Master</h3>
+                  <p>Completed all sections of a module</p>
+                  <div class="badge-date">Earned on June 25, 2023</div>
+                </div>
+              </div>
+
+              <div class="badge-card earned">
+                <div class="badge-icon">
+                  <i class="fas fa-anchor"></i>
+                </div>
+                <div class="badge-details">
+                  <h3>Phishing Expert</h3>
+                  <p>Completed the Phishing Attacks module</p>
+                  <div class="badge-date">Earned on July 2, 2023</div>
+                </div>
+              </div>
+
+              <div class="badge-card locked">
+                <div class="badge-icon">
+                  <i class="fas fa-bug"></i>
+                </div>
+                <div class="badge-details">
+                  <h3>Malware Analyst</h3>
+                  <p>Complete the Malware Analysis module</p>
+                  <div class="badge-progress">
+                    <div class="progress-bar">
+                      <div class="progress" style="width: 60%"></div>
+                    </div>
+                    <span>60% Complete</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="badge-card locked">
+                <div class="badge-icon">
+                  <i class="fas fa-network-wired"></i>
+                </div>
+                <div class="badge-details">
+                  <h3>Network Defender</h3>
+                  <p>Complete the Network Security module</p>
+                  <div class="badge-progress">
+                    <div class="progress-bar">
+                      <div class="progress" style="width: 0%"></div>
+                    </div>
+                    <span>0% Complete</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="badge-card locked">
+                <div class="badge-icon">
+                  <i class="fas fa-key"></i>
+                </div>
+                <div class="badge-details">
+                  <h3>Authentication Guardian</h3>
+                  <p>Complete the Account Security module</p>
+                  <div class="badge-progress">
+                    <div class="progress-bar">
+                      <div class="progress" style="width: 0%"></div>
+                    </div>
+                    <span>0% Complete</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress Panel -->
+          <div class="profile-panel" id="progress-panel">
+            <div class="panel-header">
+              <h2><i class="fas fa-chart-line"></i> Learning Progress</h2>
+            </div>
+
+            <div class="progress-overview">
+              <div class="progress-metric">
+                <div class="metric-value">12/20</div>
+                <div class="metric-label">Modules Completed</div>
+                <div class="progress-bar">
+                  <div class="progress" style="width: 60%"></div>
+                </div>
+              </div>
+              <div class="progress-metric">
+                <div class="metric-value">36/50</div>
+                <div class="metric-label">Quizzes Passed</div>
+                <div class="progress-bar">
+                  <div class="progress" style="width: 72%"></div>
+                </div>
+              </div>
+              <div class="progress-metric">
+                <div class="metric-value">25/30</div>
+                <div class="metric-label">Days Active</div>
+                <div class="progress-bar">
+                  <div class="progress" style="width: 83%"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="progress-detail">
+              <h3>Module Completion</h3>
+              <div class="module-progress-list">
+                <div class="module-progress-item completed">
+                  <div class="module-info">
+                    <div class="module-icon"><i class="fas fa-book"></i></div>
+                    <div class="module-name">Introduction to Cybersecurity</div>
+                  </div>
+                  <div class="progress-info">
+                    <div class="progress-bar">
+                      <div class="progress" style="width: 100%"></div>
+                    </div>
+                    <div class="progress-percentage">100%</div>
+                  </div>
+                  <div class="module-date">Completed June 15, 2023</div>
+                </div>
+
+                <div class="module-progress-item completed">
+                  <div class="module-info">
+                    <div class="module-icon">
+                      <i class="fas fa-crosshairs"></i>
+                    </div>
+                    <div class="module-name">Attack Targets</div>
+                  </div>
+                  <div class="progress-info">
+                    <div class="progress-bar">
+                      <div class="progress" style="width: 100%"></div>
+                    </div>
+                    <div class="progress-percentage">100%</div>
+                  </div>
+                  <div class="module-date">Completed June 28, 2023</div>
+                </div>
+
+                <div class="module-progress-item completed">
+                  <div class="module-info">
+                    <div class="module-icon"><i class="fas fa-anchor"></i></div>
+                    <div class="module-name">Phishing Attacks</div>
+                  </div>
+                  <div class="progress-info">
+                    <div class="progress-bar">
+                      <div class="progress" style="width: 100%"></div>
+                    </div>
+                    <div class="progress-percentage">100%</div>
+                  </div>
+                  <div class="module-date">Completed July 2, 2023</div>
+                </div>
+
+                <div class="module-progress-item in-progress">
+                  <div class="module-info">
+                    <div class="module-icon"><i class="fas fa-bug"></i></div>
+                    <div class="module-name">Malware Analysis</div>
+                  </div>
+                  <div class="progress-info">
+                    <div class="progress-bar">
+                      <div class="progress" style="width: 60%"></div>
+                    </div>
+                    <div class="progress-percentage">60%</div>
+                  </div>
+                  <div class="module-date">Started July 5, 2023</div>
+                </div>
+
+                <div class="module-progress-item not-started">
+                  <div class="module-info">
+                    <div class="module-icon"><i class="fas fa-key"></i></div>
+                    <div class="module-name">Account Security</div>
+                  </div>
+                  <div class="progress-info">
+                    <div class="progress-bar">
+                      <div class="progress" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-percentage">0%</div>
+                  </div>
+                  <div class="module-date">Not started</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Settings Panel -->
+          <div class="profile-panel" id="settings-panel">
+            <div class="panel-header">
+              <h2><i class="fas fa-cog"></i> Account Settings</h2>
+            </div>
+
+            <div class="settings-section">
+              <h3>Profile Information</h3>
+              <form id="profile-form" class="settings-form">
+                <div class="form-group">
+                  <label for="display-name">Display Name</label>
+                  <input type="text" id="display-name" value="CyberExplorer" />
+                </div>
+
+                <div class="form-group">
+                  <label for="email">Email Address</label>
+                  <input
+                    type="email"
+                    id="email"
+                    value="cyber.explorer@example.com"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="bio">About Me</label>
+                  <textarea id="bio" rows="3">
+Cybersecurity enthusiast with a passion for learning ethical hacking and defensive security techniques.</textarea
+                  >
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                  Save Changes
+                </button>
+              </form>
+            </div>
+
+            <div class="settings-section">
+              <h3>Password</h3>
+              <form id="password-form" class="settings-form">
+                <div class="form-group">
+                  <label for="current-password">Current Password</label>
+                  <input type="password" id="current-password" />
+                </div>
+
+                <div class="form-group">
+                  <label for="new-password">New Password</label>
+                  <input type="password" id="new-password" />
+                </div>
+
+                <div class="form-group">
+                  <label for="confirm-password">Confirm New Password</label>
+                  <input type="password" id="confirm-password" />
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                  Update Password
+                </button>
+              </form>
+            </div>
+
+            <div class="settings-section">
+              <h3>Notification Preferences</h3>
+              <form id="notifications-form" class="settings-form">
+                <div class="form-check">
+                  <input type="checkbox" id="email-notifications" checked />
+                  <label for="email-notifications">Email Notifications</label>
+                </div>
+
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    id="achievement-notifications"
+                    checked
+                  />
+                  <label for="achievement-notifications"
+                    >Achievement Notifications</label
+                  >
+                </div>
+
+                <div class="form-check">
+                  <input type="checkbox" id="progress-reminders" checked />
+                  <label for="progress-reminders">Progress Reminders</label>
+                </div>
+
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    id="new-content-notifications"
+                    checked
+                  />
+                  <label for="new-content-notifications"
+                    >New Content Alerts</label
+                  >
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                  Save Preferences
+                </button>
+              </form>
+            </div>
+
+            <div class="settings-section danger-zone">
+              <h3>Danger Zone</h3>
+              <div class="danger-zone-options">
+                <div class="danger-option">
+                  <div class="danger-info">
+                    <h4>Reset Progress</h4>
+                    <p>
+                      This will reset all your learning progress, but keep your
+                      account.
+                    </p>
+                  </div>
+                  <button class="btn btn-warning">Reset Progress</button>
+                </div>
+
+                <div class="danger-option">
+                  <div class="danger-info">
+                    <h4>Delete Account</h4>
+                    <p>
+                      This will permanently delete your account and all
+                      associated data.
+                    </p>
+                  </div>
+                  <button class="btn btn-danger">Delete Account</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="modal" id="edit-profile-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Edit Profile</h2>
+          <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+          <div class="avatar-selector">
+            <h3>Select Avatar</h3>
+            <div class="avatar-options">
+              <div class="avatar-option selected">
+                <i class="fas fa-user-shield"></i>
+              </div>
+              <div class="avatar-option">
+                <i class="fas fa-user-ninja"></i>
+              </div>
+              <div class="avatar-option">
+                <i class="fas fa-user-astronaut"></i>
+              </div>
+              <div class="avatar-option">
+                <i class="fas fa-user-graduate"></i>
+              </div>
+              <div class="avatar-option">
+                <i class="fas fa-user-secret"></i>
+              </div>
+              <div class="avatar-option">
+                <i class="fas fa-user-tie"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-edit-form">
+            <div class="form-group">
+              <label for="modal-display-name">Display Name</label>
+              <input
+                type="text"
+                id="modal-display-name"
+                value="CyberExplorer"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="modal-bio">Bio</label>
+              <textarea id="modal-bio" rows="3">
+Cybersecurity enthusiast with a passion for learning ethical hacking and defensive security techniques.</textarea
+              >
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="cancel-edit">Cancel</button>
+          <button class="btn btn-primary" id="save-profile">
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h3>CYBERSEC ACADEMY</h3>
+          <p>Next-generation cybersecurity education platform</p>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h4>Learning</h4>
+          <ul>
+            <li><a href="#">Courses</a></li>
+            <li><a href="#">Certifications</a></li>
+            <li><a href="#">Labs</a></li>
+            <li><a href="#">Challenges</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">Glossary</a></li>
+            <li><a href="#">Tools</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Cybersec Academy. All rights reserved.</p>
+        <div class="tech-badges">
+          <span>Built with:</span>
+          <i class="fab fa-html5"></i>
+          <i class="fab fa-css3-alt"></i>
+          <i class="fab fa-js"></i>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="js/user-profile.js"></script>
+  </body>
+</html>

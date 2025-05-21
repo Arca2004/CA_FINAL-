@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us | Cybersec Academy</title>
+    <link rel="stylesheet" href="cyberindex.css" />
+    <link rel="stylesheet" href="about-us.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="icon" type="image/png" href="img/favicon.png" />
+    <link rel="stylesheet" href="css/profile-dropdown.css" />
+    <link rel="stylesheet" href="css/about-us.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+  </head>
+  <body>
+    <div class="scanner-lines"></div>
+    <div class="noise-overlay"></div>
+
+    <header>
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="logo-text">
+          <span class="cyber">CYBER</span><span class="sec">SEC</span>
+          <span class="academy">Academy</span>
+        </div>
+      </div>
+      <nav>
+        <div class="hamburger-menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <ul class="nav-links">
+          <li>
+            <a href="index.html" class="nav-link"
+              ><i class="fas fa-home"></i> Home</a
+            >
+          </li>
+          <li>
+            <a href="learn.html" class="nav-link"
+              ><i class="fas fa-graduation-cap"></i> Learn</a
+            >
+          </li>
+          <li>
+            <a href="about-us.html" class="nav-link active"
+              ><i class="fas fa-info-circle"></i> About Us</a
+            >
+          </li>
+          <li id="auth-nav-item">
+            <a href="login.html" class="nav-link" id="login-link">
+              <i class="fas fa-user"></i> Login
+            </a>
+            <div
+              class="profile-container"
+              id="profile-container"
+              style="display: none"
+            >
+              <div class="profile-avatar" id="profile-avatar">
+                <span id="profile-initial"></span>
+              </div>
+              <div class="profile-dropdown">
+                <a href="profile.html"
+                  ><i class="fas fa-user-circle"></i> View Profile</a
+                >
+                <a href="profile.html#settings-content" class="quiz-settings"
+                  ><i class="fas fa-tasks"></i> Quiz Settings</a
+                >
+                <a href="#" id="logout-btn"
+                  ><i class="fas fa-sign-out-alt"></i> Logout</a
+                >
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section id="about-hero">
+        <div class="about-hero-container">
+          <div class="particle-container">
+            <div id="particles-js"></div>
+          </div>
+
+          <div class="about-hero-content">
+            <div class="glitch-text">
+              <h1 class="glitch" data-text="MEET THE TEAM">MEET THE TEAM</h1>
+              <h2
+                class="sub-glitch"
+                data-text="The Minds Behind Cybersec Academy"
+              >
+                The Minds Behind Cybersec Academy
+              </h2>
+            </div>
+
+            <p class="about-description">
+              We are a passionate team of students dedicated to enhancing
+              cybersecurity education. Our mission is to make cybersecurity
+              knowledge accessible to everyone through engaging, interactive,
+              and innovative learning experiences.
+            </p>
+
+            <div class="tech-stack">
+              <div class="tech-title">Our Tech Stack</div>
+              <div class="tech-icons">
+                <div class="tech-icon">
+                  <i class="fab fa-html5"></i><span>HTML5</span>
+                </div>
+                <div class="tech-icon">
+                  <i class="fab fa-css3-alt"></i><span>CSS3</span>
+                </div>
+                <div class="tech-icon">
+                  <i class="fab fa-js"></i><span>JavaScript</span>
+                </div>
+                <div class="tech-icon">
+                  <i class="fab fa-github"></i><span>GitHub</span>
+                </div>
+                <div class="tech-icon">
+                  <i class="fas fa-fire"></i><span>Firebase</span>
+                </div>
+                <div class="tech-icon">
+                  <i class="fas fa-database"></i><span>localStorage</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Team Members Section -->
+      <section id="team-members">
+        <h2 class="section-title">
+          Our Team | <span class="highlight"> E.R.A</span>
+        </h2>
+
+        <div class="team-grid">
+          <!-- Team Member 1 -->
+          <div class="team-card" data-member="member1">
+            <div class="profile-img-container">
+              <div
+                class="profile-img"
+                style="background-image: url('img/ellaine.jfif')"
+              ></div>
+              <div class="profile-glow"></div>
+            </div>
+            <div class="team-content">
+              <h3>Ma. Ellaine G. Florece</h3>
+              
+              <div class="social-links">
+                <a
+                  href="https://www.facebook.com/maellainegarlandoflorece"
+                  class="social-link"
+                  ><i class="fab fa-facebook"></i
+                ></a>
+              </div>
+            </div>
+            <div class="team-decoration">
+              <div class="decoration-circle"></div>
+              <div class="decoration-line"></div>
+            </div>
+            <div class="card-blur"></div>
+          </div>
+
+          <!-- Team Member 2 -->
+          <div class="team-card" data-member="member2">
+            <div class="profile-img-container">
+              <div
+                class="profile-img"
+                style="background-image: url('img/ryan.jfif')"
+              ></div>
+              <div class="profile-glow"></div>
+            </div>
+            <div class="team-content">
+              <h3>Ryan Romwell M. Ty</h3>
+              
+              <div class="social-links">
+                <a
+                  href="https://www.facebook.com/ryanromwell.ty"
+                  class="social-link"
+                  ><i class="fab fa-facebook"></i
+                ></a>
+              </div>
+            </div>
+            <div class="team-decoration">
+              <div class="decoration-circle"></div>
+              <div class="decoration-line"></div>
+            </div>
+            <div class="card-blur"></div>
+          </div>
+
+          <!-- Team Member 3 -->
+          <div class="team-card" data-member="member3">
+            <div class="profile-img-container">
+              <div
+                class="profile-img"
+                style="background-image: url('img/arjay.jpg')"
+              ></div>
+              <div class="profile-glow"></div>
+            </div>
+            <div class="team-content">
+              <h3>Arjay R. Cabrillas</h3>
+              
+              <div class="social-links">
+                <a
+                  href="https://www.facebook.com/arjay.cabrillas.2024"
+                  class="social-link"
+                  ><i class="fab fa-facebook"></i
+                ></a>
+              </div>
+            </div>
+            <div class="team-decoration">
+              <div class="decoration-circle"></div>
+              <div class="decoration-line"></div>
+            </div>
+            <div class="card-blur"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Our Story Section -->
+      <section id="our-story">
+        <div class="story-container">
+          <div class="story-content">
+            <h2 class="section-title">
+              Our <span class="highlight">Story</span>
+            </h2>
+
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-point"></div>
+                <div class="timeline-content">
+                  <h3>The Inception</h3>
+                  <div class="timeline-date">January 2025</div>
+                  <p>
+                    It all began in our cybersecurity course, serving as the
+                    foundation for both our midterm and final projects. Our
+                    objective was to develop an e-learning website that
+                    facilitates the exploration of key cybersecurity concepts.
+                  </p>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-point"></div>
+                <div class="timeline-content">
+                  <h3>The Development</h3>
+                  <div class="timeline-date">March 2025</div>
+                  <p>
+                    We began building Cybersec Academy as a project, focusing on
+                    creating an interface that would make learning about
+                    cybersecurity both accessible and engaging.
+                  </p>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-point"></div>
+                <div class="timeline-content">
+                  <h3>The Progress</h3>
+                  <div class="timeline-date">March 2024</div>
+                  <p>
+                    After making a progress of our project, we are proud to
+                    present the early version of Cybersec Academy. With
+                    approximately 50% of the platform completed, it features
+                    initial interactive modules on basic security concepts, with
+                    more enhancements on the way.
+                  </p>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-point"></div>
+                <div class="timeline-content">
+                  <h3>Project Completion</h3>
+                  <div class="timeline-date">May 2025</div>
+                  <p>
+                    We've successfully completed the Cybersec Academy platform with all planned modules. Our comprehensive learning platform now includes interactive content on Password Theft, Network Security, Cloud Security, and many other critical cybersecurity topics. The learning experience is enhanced with progress tracking, quizzes, and a user-friendly interface.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="vision-mission">
+            <div class="vm-card mission">
+              <div class="vm-icon">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <h3>Midterm Project</h3>
+              <p>
+                Cybersecurity Tips Website Part 1 – Create a website providing
+                information about cybersecurity, including a landing page and
+                navigation pages for Attack Targets, Phishing Attacks, and
+                Malware Infections. The website includes an overview of each
+                topic, how they are used, and protection methods against these
+                attacks.
+              </p>
+              <div class="timeline-date">January – March 2025</div>
+            </div>
+
+            <div class="vm-card vision">
+              <div class="vm-icon">
+                <i class="fas fa-tasks"></i>
+              </div>
+              <h3>Final Project</h3>
+              <p>
+                Cybersecurity Tips Website Part 2 – Complete the Cybersecurity
+                Tips Website by adding more topics, specifically Password
+                Thefts, Account Access Tips, Network Tapping, Wireless Network
+                Pirating, Attacks in the Cloud, and Encryption Cracking.
+              </p>
+              <div class="timeline-date">March – May 2025</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Section removed -->
+    </main>
+
+    <footer>
+      <div class="redesigned-footer">
+        <div class="footer-main">
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <div class="logo-icon">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <div>
+                <span class="cyber">CYBER</span><span class="sec">SEC</span>
+                <span class="academy">Academy</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="footer-nav">
+            <div class="footer-nav-section">
+              <h4>Navigation</h4>
+              <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="learn.html"
+                  ><i class="fas fa-graduation-cap"></i> Learn</a
+                >
+                <a href="about-us.html"
+                  ><i class="fas fa-info-circle"></i> About Us</a
+                >
+              </div>
+            </div>
+
+            <div class="footer-nav-section">
+              <h4>Learning Paths</h4>
+              <div class="nav-links">
+                <a href="learn.html#beginner-content"
+                  ><i class="fas fa-shield-alt"></i> Beginner</a
+                >
+                <a href="learn.html#intermediate-content"
+                  ><i class="fas fa-user-shield"></i> Intermediate</a
+                >
+                <a href="learn.html#advanced-content"
+                  ><i class="fas fa-shield-virus"></i> Advanced</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-bottom">
+          <p class="copyright">
+            &copy; 2025 Cybersec Academy. All rights reserved.
+          </p>
+          <div class="tech-icons">
+            <span><i class="fab fa-html5"></i> HTML5</span>
+            <span><i class="fab fa-css3-alt"></i> CSS3</span>
+            <span><i class="fab fa-js"></i> JavaScript</span>
+            <span><i class="fab fa-github"></i> GitHub</span>
+            <span><i class="fas fa-fire"></i> Firebase</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="js/about-us.js"></script>
+    <script src="js/mobile-menu.js"></script>
+  </body>
+
+  <style>
+    /* Redesigned Footer Styles - Isolated to avoid conflicts */
+    footer .redesigned-footer {
+      padding: 40px 30px 20px;
+      background: var(--secondary-dark);
+      color: var(--text-secondary);
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    footer .footer-main {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-bottom: 25px;
+    }
+
+    footer .footer-brand {
+      flex: 1;
+      min-width: 220px;
+      max-width: 350px;
+    }
+
+    footer .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    footer .footer-nav {
+      display: flex;
+      flex: 2;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    footer .footer-nav-section {
+      min-width: 160px;
+    }
+
+    footer .footer-nav-section h4 {
+      color: var(--text-light);
+      margin-bottom: 15px;
+      font-size: 1rem;
+      position: relative;
+      padding-bottom: 8px;
+    }
+
+    footer .footer-nav-section h4:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 30px;
+      height: 2px;
+      background: var(--cyber-blue);
+    }
+
+    footer .nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    footer .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      opacity: 0.8;
+      font-size: 0.95rem;
+    }
+
+    footer .nav-links a:hover {
+      color: var(--cyber-blue);
+      transform: translateX(3px);
+      opacity: 1;
+    }
+
+    footer .nav-links a i {
+      font-size: 0.85rem;
+      width: 18px;
+    }
+
+    footer .footer-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+      margin: 15px 0;
+    }
+
+    footer .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      padding-top: 15px;
+    }
+
+    footer .copyright {
+      font-size: 0.85rem;
+      opacity: 0.7;
+    }
+
+    footer .tech-icons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    footer .tech-icons span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    footer .tech-icons i {
+      color: var(--cyber-blue);
+      font-size: 1rem;
+    }
+
+    /* Enhanced Team Card Styles */
+    .team-card {
+      position: relative;
+      background: rgba(28, 32, 38, 0.8);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      z-index: 1;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 20px;
+    }
+
+    .team-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(92, 219, 149, 0.3);
+    }
+
+    .profile-img-container {
+      position: relative;
+      height: 250px;
+      width: 250px;
+      overflow: hidden;
+      border-radius: 50%;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      margin: 20px auto;
+      border: 3px solid rgba(92, 219, 149, 0.3);
+    }
+
+    .team-card:hover .profile-img-container {
+      box-shadow: 0 0 30px rgba(92, 219, 149, 0.5);
+    }
+
+    .profile-img {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.5s ease;
+    }
+
+    .team-card:hover .profile-img {
+      transform: scale(1.08);
+    }
+
+    .team-quote {
+      font-style: italic;
+      color: var(--cyber-green);
+      text-align: center;
+      margin: 15px 0;
+      font-size: 0.95rem;
+      position: relative;
+      padding: 0 15px;
+    }
+
+    .team-quote::before,
+    .team-quote::after {
+      content: '"';
+      font-size: 1.5rem;
+      color: rgba(92, 219, 149, 0.5);
+      position: absolute;
+    }
+
+    .team-quote::before {
+      left: 0;
+      top: -5px;
+    }
+
+    .team-quote::after {
+      right: 0;
+      bottom: -15px;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .social-link {
+      width: 45px;
+      height: 45px;
+      background: rgba(28, 42, 58, 0.8);
+      color: var(--text-secondary);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      border: 2px solid rgba(92, 219, 149, 0.2);
+    }
+
+    .social-link:hover {
+      background: var(--cyber-green);
+      color: var(--primary-dark);
+      transform: translateY(-5px) scale(1.1);
+      box-shadow: 0 5px 15px rgba(92, 219, 149, 0.5);
+    }
+
+    .team-decoration {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: -1;
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
+    }
+
+    .team-card:hover .team-decoration {
+      opacity: 1;
+    }
+
+    .decoration-circle {
+      width: 40px;
+      height: 40px;
+      border: 2px dashed var(--cyber-green);
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .decoration-circle::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: var(--cyber-green);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .decoration-line {
+      width: 2px;
+      height: 80px;
+      background: linear-gradient(to bottom, var(--cyber-green), transparent);
+      margin-left: 19px;
+      margin-top: 5px;
+    }
+
+    @keyframes pulse {
+      0%, 100% { 
+        transform: scale(1);
+        opacity: 0.7;
+      }
+      50% { 
+        transform: scale(1.05);
+        opacity: 1;
+      }
+    }
+
+    .team-card[data-member="member1"] .decoration-circle {
+      animation: pulse 3s infinite;
+    }
+
+    .team-card[data-member="member2"] .decoration-circle {
+      animation: pulse 3s infinite 1s;
+    }
+
+    .team-card[data-member="member3"] .decoration-circle {
+      animation: pulse 3s infinite 2s;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      footer .footer-main {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      footer .footer-nav {
+        width: 100%;
+      }
+
+      footer .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .team-card {
+        padding: 15px;
+      }
+      
+      .profile-img-container {
+        height: 200px;
+        width: 200px;
+      }
+      
+      .team-content h3 {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</html>
